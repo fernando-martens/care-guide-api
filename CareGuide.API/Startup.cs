@@ -1,4 +1,6 @@
-﻿using CareGuide.Infra.CrossCutting;
+﻿using CareGuide.Data;
+using CareGuide.Infra.CrossCutting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace CareGuide.API
@@ -19,7 +21,7 @@ namespace CareGuide.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
             });
-            //services.AddDbContext<ApplicationContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DatabaseConnection")).EnableSensitiveDataLogging());
+            services.AddDbContext<DatabaseContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DatabaseConnection")).EnableSensitiveDataLogging());
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAnyOrigin", builder =>
