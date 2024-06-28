@@ -1,7 +1,7 @@
 ﻿using CareGuide.Data;
 using CareGuide.Infra.CrossCutting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareGuide.API
 {

@@ -1,9 +1,10 @@
-﻿using CareGuide.Models.Models;
+﻿using CareGuide.Models.Tables;
 
 namespace CareGuide.Core.Interfaces
 {
     public interface IWeatherForecastService
     {
-        List<WeatherForecastModel> ListAll();
+        void Insert();
+        List<WeatherForecastTable> ListAll();
     }
 }

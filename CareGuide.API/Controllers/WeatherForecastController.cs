@@ -15,10 +15,19 @@ namespace CareGuide.API.Controllers
             weatherForecastService = _weatherForecastService;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IActionResult Get()
+        [HttpGet]
+        [Route("List")]
+        public IActionResult List()
         {
             return Ok(weatherForecastService.ListAll());
+        }
+
+        [HttpPost]
+        [Route("Insert")]
+        public IActionResult Insert()
+        {
+            weatherForecastService.Insert();
+            return Ok();
         }
     }
 }

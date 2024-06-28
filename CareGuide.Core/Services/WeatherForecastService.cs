@@ -1,6 +1,6 @@
 ﻿using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
-using CareGuide.Models.Models;
+using CareGuide.Models.Tables;
 
 namespace CareGuide.Core.Services
 {
@@ -14,7 +14,17 @@ namespace CareGuide.Core.Services
             weatherForecastRepository = _weatherForecastRepository;
         }
 
-        public List<WeatherForecastModel> ListAll()
+        public void Insert()
+        {
+            weatherForecastRepository.Insert(new WeatherForecastTable()
+            {
+                Id = Guid.NewGuid(),
+                Date = DateTime.Now.ToUniversalTime(),
+                Summary = "Test"
+            });
+        }
+
+        public List<WeatherForecastTable> ListAll()
         {
             return weatherForecastRepository.ListAll();
         }
