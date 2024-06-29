@@ -1,35 +1,25 @@
 ﻿using CareGuide.Data.Interfaces;
-using CareGuide.Models.Models;
+using CareGuide.Models.Tables;
+using System.Linq;
 
 namespace CareGuide.Data.Repositories
 {
-    public class WeatherForecastRepository: IWeatherForecastRepository
+    public class WeatherForecastRepository: BaseRepository, IWeatherForecastRepository 
     {
-        public WeatherForecastRepository()
+        public WeatherForecastRepository(DatabaseContext context) : base(context)
         {
         }
 
-        public List<WeatherForecastModel> ListAll()
+        public void Insert(WeatherForecastTable table)
         {
-
-            List<WeatherForecastModel> list = new List<WeatherForecastModel>()
-            {
-                new WeatherForecastModel()
-                {
-                    Date = DateTime.Now.Date,
-                    Summary = "Test 1 "
-                },
-                new WeatherForecastModel()
-                {
-                    Date = DateTime.Now.Date.AddDays(20),
-                    Summary = "Test 2 "
-                }
-            };
-
-            return list;
-
+            _context.Set<WeatherForecastTable>().Add(table);
+            _context.SaveChanges();
         }
-      
+
+        public List<WeatherForecastTable> ListAll()
+        {
+            return _context.Set<WeatherForecastTable>().ToList();
+        }  
 
     }
 }
