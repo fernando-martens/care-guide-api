@@ -2,6 +2,7 @@
 using CareGuide.Core.Interfaces;
 using CareGuide.Models.Tables;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareGuide.API.Controllers
 {
@@ -11,7 +12,7 @@ namespace CareGuide.API.Controllers
 
         private readonly IUserService userService;
 
-        public UserController(IUserService _userService)
+        public UserController(ILogger<BaseApiController> logger, IUserService _userService) : base(logger)
         {
             userService = _userService;
         }
@@ -19,18 +20,32 @@ namespace CareGuide.API.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            return Ok(userService.ListAll());
+            try
+            {
+                return Ok(userService.ListAll());
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex, ex.Message, 500);
+            }
         }
 
         [HttpPost]
         public IActionResult Insert([FromBody] User user)
         {
-            if (user == null)
+            try
             {
-                throw new ArgumentNullException(nameof(user));
+                return Ok(userService.Insert(user));
             }
-
-            return Ok(userService.Insert(user));
+            catch (DbUpdateException dbEx)
+            {
+                return HandleException(dbEx, dbEx.InnerException?.Message ?? dbEx.Message, 400);
+            }
+            catch (Exception ex) {
+                return HandleException(ex, ex.Message, 500);
+            }
         }
+
+
     }
 }
