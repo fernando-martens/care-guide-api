@@ -12,11 +12,11 @@ namespace CareGuide.Data
 
         }
 
-        public DbSet<WeatherForecastTable> WeatherForecasts { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new WeatherForecastMapping());
+            modelBuilder.ApplyConfiguration(new UserMapping());
 
             base.OnModelCreating(modelBuilder);
         }

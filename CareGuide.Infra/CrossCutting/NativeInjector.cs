@@ -13,13 +13,13 @@ namespace CareGuide.Infra.CrossCutting
         {
             #region Core
 
-            services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+            services.AddScoped<IUserService, UserService>();
 
             #endregion
 
             #region Repository
 
-            services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion
 

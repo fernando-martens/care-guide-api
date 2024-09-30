@@ -1,6 +1,5 @@
 ﻿using CareGuide.Data.Interfaces;
 using CareGuide.Models.Tables;
-using System.Linq;
 
 namespace CareGuide.Data.Repositories
 {
