@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareGuide.Models", "CareGui
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareGuide.Infra", "CareGuide.Infra\CareGuide.Infra.csproj", "{1C0A0AE5-EF53-4E2A-9802-B220F21F82B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareGuide.Security", "CareGuide.Security\CareGuide.Security.csproj", "{3914CB58-390D-4CD2-934E-C31D8C409E87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareGuide.Security", "CareGuide.Security\CareGuide.Security.csproj", "{3914CB58-390D-4CD2-934E-C31D8C409E87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
