@@ -1,22 +1,41 @@
-#### CareGuide.API 
-- Aonde ficam as controllers
+# Care Guide (Backend)
 
-#### CareGuide.Core
-- Regras de negocio
+## Objetivo do Projeto
 
-#### CareGuide.Data
-- Acesso ao banco
+Esta solução tem como objetivo permitir que pacientes oncológicos consigam centralizar todas as informações pertinentes ao seu tratamento em um único local. Isso inclui os detalhes de seus médicos e especialistas, a lista de medicamentos que eles precisam tomar, os exames que precisam realizar, as cirurgias e procedimentos médicos que foram ou serão realizados, os endereços e coordenadas dos hospitais e clínicas que eles frequentam, a evolução dos seus sintomas e os detalhes dos tratamentos que estão recebendo, entre outras informações vitais.
 
-#### CareGuide.Infra 
-- Injeção de dependecia
+## Principais Funcionalidades
 
-#### CareGuide.Models
-- Models e DTOs 
+- **Gerenciar Usuários**: Cadastro de informações e login;
+- **Gerenciar Médicos**: Cadastro de médicos;
+- **Gerenciar Anotações**: Cadastro de anotações importantes;
+- **Agenda/Calendário**: Cadastro de eventos em uma agenda/calendário;
 
+## Tecnologias Utilizadas
 
-![image](https://github.com/fernando-martens/care-guide-api/assets/63741837/e8e8096d-21a9-46a9-bcdb-9512aa0598da)
+- .NET 8.0;
+- Entity Framework 8.0.8;
+- PostgreSQL;
+- Docker;
 
+## Diagrama Entidade-Relacionamento do Banco de Dados
 
-Add-Migration InitialCreate
+- [Diagrama ER](https://miro.com/app/board/uXjVNh5qees=/)
 
-Update-Database
+## Estrutura
+
+Para mais informações referente a estrutura da Solução, acesse a seguinte [documentação](docs/ESTRUTURA.md).
+
+## Execução
+
+Para executar a aplicação, acesse a seguinte [documentação](docs/EXECUCAO.md).
+
+## Endpoints
+
+Esta API fornece documentação no padrão OpenAPI através do Swagger.
+Os endpoints disponíveis, suas descrições e dados necessários para requisição podem ser consultados e testados em `/swagger`.
+
+## Participantes do Projeto
+
+- Amanda Maschio
+- Fernando Waldow Martens
