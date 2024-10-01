@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\IWeatherForecastService.cs" />
+    <Compile Remove="Services\WeatherForecastService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CareGuide.Data\CareGuide.Data.csproj" />
     <ProjectReference Include="..\CareGuide.Models\CareGuide.Models.csproj" />
+    <ProjectReference Include="..\CareGuide.Security\CareGuide.Security.csproj" />
   </ItemGroup>
 
 </Project>
