@@ -1,7 +1,9 @@
 ﻿using CareGuide.Core.Interfaces;
 using CareGuide.Core.Services;
-using CareGuide.Data.Repositories;
 using CareGuide.Data.Interfaces;
+using CareGuide.Data.Repositories;
+using CareGuide.Security;
+using CareGuide.Security.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CareGuide.Infra.CrossCutting
@@ -14,6 +16,7 @@ namespace CareGuide.Infra.CrossCutting
             #region Core
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             #endregion
 
