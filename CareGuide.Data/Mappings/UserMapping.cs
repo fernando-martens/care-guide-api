@@ -14,7 +14,7 @@ namespace CareGuide.Data.Mappings
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.Email).IsRequired().HasMaxLength(255).HasColumnName("email");
             builder.Property(x => x.Password).IsRequired().HasMaxLength(255).HasColumnName("password");
-            builder.Property(x => x.SessionToken).HasMaxLength(255).HasColumnName("session_token");
+            builder.Property(x => x.SessionToken).HasColumnType("TEXT").HasColumnName("session_token");
             builder.Property(x => x.Register).IsRequired().HasColumnName("register");
 
             builder.HasIndex(x => x.Email).IsUnique();

@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CareGuide.Models\CareGuide.Models.csproj" />
+    <ProjectReference Include="..\CareGuide.Security\CareGuide.Security.csproj" />
   </ItemGroup>
 
 </Project>

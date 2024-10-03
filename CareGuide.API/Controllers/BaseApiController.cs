@@ -15,7 +15,7 @@ namespace CareGuide.API.Controllers
             logger = _logger;
         }
 
-        protected IActionResult HandleException(Exception ex, string exMessage, int statusCode)
+        protected ActionResult HandleException(Exception ex, string exMessage, int statusCode)
         {
             logger.LogError(ex, "An error occurred.");
             return StatusCode(statusCode, exMessage);
