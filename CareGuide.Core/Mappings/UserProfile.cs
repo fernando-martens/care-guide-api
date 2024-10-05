@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using CareGuide.Models.DTOs.User;
+using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.Tables;
 
-public class UserProfile : Profile
+public class PersonProfile : Profile
 {
-    public UserProfile()
+    public PersonProfile()
     {
-        CreateMap<User, UserResponseDto>();
+        CreateMap<Person, PersonResponseDto>();
     }
 }

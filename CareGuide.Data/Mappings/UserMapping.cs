@@ -18,6 +18,8 @@ namespace CareGuide.Data.Mappings
             builder.Property(x => x.Register).IsRequired().HasColumnName("register");
 
             builder.HasIndex(x => x.Email).IsUnique();
+
+            builder.HasOne(u => u.Person).WithOne(p => p.User).HasForeignKey<Person>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

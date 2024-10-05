@@ -11,22 +11,22 @@ namespace CareGuide.Core.Services
     {
 
         private readonly IJwtService _jwtService;
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IJwtService jwtService, IUserRepository _userRepository)
+        public UserService(IJwtService jwtService, IUserRepository userRepository)
         {
             _jwtService = jwtService;
-            userRepository = _userRepository;
+            _userRepository = userRepository;
         }
 
         public List<User> ListAll()
         {
-            return userRepository.ListAll();
+            return _userRepository.ListAll();
         }
 
         public User ListById(Guid id)
         {
-            return userRepository.ListById(id);
+            return _userRepository.ListById(id);
         }
 
         public User Insert(UserRequestDto user)
@@ -39,53 +39,44 @@ namespace CareGuide.Core.Services
                 Password = PasswordManager.HashPassword(user.Password)
             };
 
-            return userRepository.Insert(userToCreate);
+            return _userRepository.Insert(userToCreate);
         }
 
         public void UpdatePassword(Guid id, UserUpdatePasswordDto user)
         {
-            User userToUpdate = new User
-            {
-                Id = id,
-                Register = DateTime.UtcNow,
-                Password = user.Password
-            };
+            User existingUser = _userRepository.ListById(id);
 
-            userRepository.UpdatePassword(userToUpdate);
+            if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
+            {
+                throw new InvalidOperationException("The new password cannot be the same as the current password.");
+            }
+
+            existingUser.Password = PasswordManager.HashPassword(user.Password);
+            existingUser.Register = DateTime.UtcNow;
+
+            _userRepository.Update(existingUser);
         }
 
         public void Remove(Guid id)
         {
-            userRepository.Remove(id);
+            User existingUser = _userRepository.ListById(id);
+            _userRepository.Remove(existingUser);
         }
 
         public User Login(UserRequestDto user)
         {
-            User userValidated = ValidateUser(user.Email, user.Password);
+            User existingUser = _userRepository.ListByEmail(user.Email);
 
-            if (userValidated == null)
+            if (existingUser == null || !PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
 
-            string token = _jwtService.GenerateToken(userValidated.Id, userValidated.Email);
-            userValidated.Register = DateTime.UtcNow;
+            existingUser.SessionToken = _jwtService.GenerateToken(existingUser.Id, existingUser.Email);
+            existingUser.Register = DateTime.UtcNow;
 
-            return userRepository.UpdateSessionToken(userValidated, token);
+            return _userRepository.Update(existingUser);
         }
-
-        private User ValidateUser(string email, string password)
-        {
-            User user = userRepository.ListByEmail(email);
-
-            if (user == null || !PasswordManager.ValidatePassword(password, user.Password))
-            {
-                return null;
-            }
-
-            return user;
-        }
-
     }
 
 }

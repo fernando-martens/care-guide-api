@@ -3,6 +3,7 @@ using CareGuide.Infra.CrossCutting;
 using CareGuide.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace CareGuide.API
 {
@@ -17,7 +18,7 @@ namespace CareGuide.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserProfile));
+            ConfigureAutoMapper(services);
 
             ConfigureSecuritySettings(services);
 
@@ -26,6 +27,8 @@ namespace CareGuide.API
             ConfigureCors(services);
 
             ConfigureSwagger(services);
+
+            ConfigureJsonSerializer(services);
 
             NativeInjector.Register(services);
 
@@ -69,6 +72,12 @@ namespace CareGuide.API
 
         }
 
+        private void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(UserProfile));
+            services.AddAutoMapper(typeof(PersonProfile));
+        }
+
         private void ConfigureSecuritySettings(IServiceCollection services)
         {
             var securitySettings = new SecuritySettings();
@@ -109,7 +118,16 @@ namespace CareGuide.API
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CareGuideAPI", Version = "v1" });
+            });
+        }
+
+        private void ConfigureJsonSerializer(IServiceCollection services)
+        {
+            services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
         }
     }

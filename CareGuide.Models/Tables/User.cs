@@ -7,5 +7,7 @@
         public string Password { get; set; }
         public string? SessionToken { get; set; }
         public DateTime Register { get; set; }
+
+        public Person? Person { get; set; }
     }
 }
