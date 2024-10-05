@@ -1,7 +1,7 @@
 
 using AutoMapper;
 using CareGuide.Core.Interfaces;
-using CareGuide.Models.DTOs.User;
+using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.Tables;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,26 +9,26 @@ using Microsoft.EntityFrameworkCore;
 namespace CareGuide.API.Controllers
 {
 
-    public class UserController : BaseApiController
+    public class PersonController : BaseApiController
     {
 
-        private readonly IUserService _userService;
+        private readonly IPersonService _personService;
         private readonly IMapper _mapper;
 
-        public UserController(ILogger<BaseApiController> logger, IUserService userService, IMapper mapper) : base(logger)
+        public PersonController(ILogger<BaseApiController> logger, IPersonService personService, IMapper mapper) : base(logger)
         {
-            _userService = userService;
+            _personService = personService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<UserResponseDto[]> List()
+        public ActionResult<PersonResponseDto[]> List()
         {
             try
             {
-                List<User> users = _userService.ListAll();
-                List<UserResponseDto> userDtos = _mapper.Map<List<UserResponseDto>>(users);
-                return Ok(userDtos);
+                List<Person> persons = _personService.ListAll();
+                List<PersonResponseDto> personDtos = _mapper.Map<List<PersonResponseDto>>(persons);
+                return Ok(personDtos);
             }
             catch (Exception ex)
             {
@@ -37,13 +37,13 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<UserResponseDto> ListById(Guid id)
+        public ActionResult<PersonResponseDto> ListById(Guid id)
         {
             try
             {
-                User user = _userService.ListById(id);
-                UserResponseDto userDto = _mapper.Map<UserResponseDto>(user);
-                return Ok(userDto);
+                Person person = _personService.ListById(id);
+                PersonResponseDto personDto = _mapper.Map<PersonResponseDto>(person);
+                return Ok(personDto);
             }
             catch (InvalidOperationException ex)
             {
@@ -56,13 +56,13 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UserResponseDto> Insert([FromBody] UserRequestDto user)
+        public ActionResult<PersonResponseDto> Insert([FromBody] PersonRequestDto person)
         {
             try
             {
-                User createdUser = _userService.Insert(user);
-                UserResponseDto userDto = _mapper.Map<UserResponseDto>(createdUser);
-                return Ok(userDto);
+                Person personCreated = _personService.Insert(person);
+                PersonResponseDto personDto = _mapper.Map<PersonResponseDto>(personCreated);
+                return Ok(personDto);
             }
             catch (DbUpdateException ex)
             {
@@ -74,13 +74,14 @@ namespace CareGuide.API.Controllers
             }
         }
 
-        [HttpPut("UpdatePassword/{id}")]
-        public ActionResult<string> UpdatePassword(Guid id, [FromBody] UserUpdatePasswordDto user)
+        [HttpPut("{id}")]
+        public ActionResult<PersonResponseDto> Update(Guid id, [FromBody] PersonRequestDto person)
         {
             try
             {
-                _userService.UpdatePassword(id, user);
-                return Ok("Password changed successfully.");
+                Person personCreated = _personService.Update(id, person);
+                PersonResponseDto personDto = _mapper.Map<PersonResponseDto>(personCreated);
+                return Ok(personDto);
             }
             catch (InvalidOperationException ex)
             {
@@ -101,8 +102,8 @@ namespace CareGuide.API.Controllers
         {
             try
             {
-                _userService.Remove(id);
-                return Ok("User successfully deleted.");
+                _personService.Remove(id);
+                return Ok("Person successfully deleted.");
             }
             catch (InvalidOperationException ex)
             {
@@ -113,25 +114,5 @@ namespace CareGuide.API.Controllers
                 return HandleException(ex, ex.Message, 500);
             }
         }
-
-        [HttpPost("Login")]
-        public ActionResult<UserResponseDto> Login([FromBody] UserRequestDto user)
-        {
-            try
-            {
-                User updatedUser = _userService.Login(user);
-                UserResponseDto userDto = _mapper.Map<UserResponseDto>(updatedUser);
-                return Ok(userDto);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return HandleException(ex, ex.Message, 401);
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex, ex.Message, 500);
-            }
-        }
-
     }
 }

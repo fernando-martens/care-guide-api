@@ -1,6 +1,5 @@
 ﻿using CareGuide.Data.Interfaces;
 using CareGuide.Models.Tables;
-using CareGuide.Security;
 
 namespace CareGuide.Data.Repositories
 {
@@ -34,39 +33,16 @@ namespace CareGuide.Data.Repositories
             return user;
         }
 
-        public void UpdatePassword(User user)
+        public User Update(User user)
         {
-            User existingUser = ListById(user.Id);
-
-            if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
-            {
-                throw new InvalidOperationException("The new password cannot be the same as the current password.");
-            }
-
-            existingUser.Password = PasswordManager.HashPassword(user.Password);
-            existingUser.Register = user.Register;
-
             _context.SaveChanges();
+            return user;
         }
 
-        public void Remove(Guid id)
+        public void Remove(User user)
         {
-            User existingUser = ListById(id);
-
-            _context.Set<User>().Remove(existingUser);
+            _context.Set<User>().Remove(user);
             _context.SaveChanges();
-        }
-
-        public User UpdateSessionToken(User user, string token)
-        {
-            User existingUser = ListById(user.Id);
-
-            existingUser.SessionToken = token;
-            existingUser.Register = user.Register;
-
-            _context.SaveChanges();
-
-            return existingUser;
         }
     }
 }

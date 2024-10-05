@@ -9,8 +9,7 @@ namespace CareGuide.Data.Interfaces
         User ListById(Guid id);
         User ListByEmail(string email);
         User Insert(User user);
-        void UpdatePassword(User user);
-        void Remove(Guid id);
-        User UpdateSessionToken(User user, string token);
+        User Update(User user);
+        void Remove(User id);
     }
 }

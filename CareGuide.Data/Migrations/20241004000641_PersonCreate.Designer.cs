@@ -3,6 +3,7 @@ using System;
 using CareGuide.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareGuide.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241004000641_PersonCreate")]
+    partial class PersonCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,12 +33,12 @@ namespace CareGuide.Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("Birthday")
-                        .HasColumnType("date")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("birthday");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("char(1)")
+                        .HasColumnType("text")
                         .HasColumnName("gender");
 
                     b.Property<string>("Name")
@@ -57,10 +60,7 @@ namespace CareGuide.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("person", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Person_Gender", "gender IN ('M', 'F', 'O')");
-                        });
+                    b.ToTable("person", (string)null);
                 });
 
             modelBuilder.Entity("CareGuide.Models.Tables.User", b =>
@@ -111,7 +111,8 @@ namespace CareGuide.Data.Migrations
 
             modelBuilder.Entity("CareGuide.Models.Tables.User", b =>
                 {
-                    b.Navigation("Person");
+                    b.Navigation("Person")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,7 @@ namespace CareGuide.Infra.CrossCutting
             #region Core
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IJwtService, JwtService>();
 
             #endregion
@@ -23,6 +24,7 @@ namespace CareGuide.Infra.CrossCutting
             #region Repository
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
 
             #endregion
 
