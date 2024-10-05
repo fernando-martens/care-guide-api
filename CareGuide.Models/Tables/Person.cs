@@ -11,6 +11,6 @@ namespace CareGuide.Models.Tables
         public DateOnly Birthday { get; set; }
         public DateTime Register { get; set; }
 
-        public User? User { get; set; }
+        public User User { get; set; }
     }
 }
