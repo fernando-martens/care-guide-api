@@ -1,4 +1,5 @@
-﻿using CareGuide.Data;
+﻿using CareGuide.API.Middlewares;
+using CareGuide.Data;
 using CareGuide.Infra.CrossCutting;
 using CareGuide.Security;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,8 @@ namespace CareGuide.API
             ConfigureSwagger(services);
 
             ConfigureJsonSerializer(services);
+
+            ConfigureMiddlewares(services);
 
             NativeInjector.Register(services);
 
@@ -63,6 +66,9 @@ namespace CareGuide.API
             });
 
             app.UseRouting();
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
             app.UseCors("AllowAnyOrigin");
 
             app.UseEndpoints(endpoints =>
@@ -129,6 +135,11 @@ namespace CareGuide.API
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+        }
+
+        private void ConfigureMiddlewares(IServiceCollection services)
+        {
+            services.AddTransient<ErrorHandlerMiddleware>();
         }
     }
 }
