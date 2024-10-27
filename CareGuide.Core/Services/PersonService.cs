@@ -31,15 +31,7 @@ namespace CareGuide.Core.Services
         {
             _userService.ListById(person.UserId);
 
-            Person personToCreate = new Person
-            {
-                Id = Guid.NewGuid(),
-                UserId = person.UserId,
-                Name = person.Name,
-                Gender = person.Gender,
-                Birthday = person.Birthday,
-                Register = DateTime.UtcNow
-            };
+            Person personToCreate = new Person(person);
 
             return _personRepository.Insert(personToCreate);
         }
