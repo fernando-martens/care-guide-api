@@ -1,4 +1,5 @@
-﻿using CareGuide.Core.Interfaces;
+﻿using AutoMapper;
+using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.Tables;
@@ -10,49 +11,53 @@ namespace CareGuide.Core.Services
 
         private readonly IUserService _userService;
         private readonly IPersonRepository _personRepository;
+        private readonly IMapper _mapper;
 
-        public PersonService(IUserService userService, IPersonRepository personRepository)
+        public PersonService(IUserService userService, IPersonRepository personRepository, IMapper mapper)
         {
             _userService = userService;
             _personRepository = personRepository;
+            _mapper = mapper;
         }
 
-        public List<Person> ListAll()
+        public List<PersonDto> ListAll()
         {
-            return _personRepository.ListAll();
+            List<PersonTable> list = _personRepository.ListAll();
+            return _mapper.Map<List<PersonDto>>(list);
         }
 
-        public Person ListById(Guid id)
+        public PersonDto Select(Guid id)
         {
-            return _personRepository.ListById(id);
+            PersonTable person =_personRepository.ListById(id);
+            return _mapper.Map<PersonDto>(person);
         }
 
-        public Person Insert(PersonRequestDto person)
+        public PersonDto Create(CreatePersonDto createPerson)
         {
-            _userService.ListById(person.UserId);
-
-            Person personToCreate = new Person(person);
-
-            return _personRepository.Insert(personToCreate);
+            PersonTable person = _personRepository.Insert(new PersonTable(createPerson));
+            return _mapper.Map<PersonDto>(person);
         }
 
-        public Person Update(Guid id, PersonRequestDto person)
+        public PersonDto Update(Guid id, PersonDto updatePerson)
         {
-            Person existingPerson = _personRepository.ListById(id);
-            existingPerson.UserId = person.UserId;
-            existingPerson.Name = person.Name;
-            existingPerson.Gender = person.Gender;
-            existingPerson.Birthday = person.Birthday;
-            existingPerson.Register = DateTime.UtcNow;
+            PersonTable existingPerson = _personRepository.ListById(id);
 
-            return _personRepository.Update(existingPerson);
+            existingPerson.Name = updatePerson.Name;
+            existingPerson.Gender = updatePerson.Gender;
+            existingPerson.Birthday = updatePerson.Birthday;
+            existingPerson.Picture = updatePerson.Picture;
+
+            PersonTable person = _personRepository.Update(existingPerson);
+
+            return _mapper.Map<PersonDto>(person);
         }
 
-        public void Remove(Guid id)
+        public void Delete(Guid id)
         {
-            Person existingPerson = _personRepository.ListById(id);
+            PersonTable existingPerson = _personRepository.ListById(id);
             _personRepository.Remove(existingPerson);
         }
+
     }
 
 }

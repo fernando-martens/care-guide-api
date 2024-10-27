@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CareGuide.Data.Mappings
 {
-    public class PersonMapping : IEntityTypeConfiguration<Person>
+    public class PersonMapping : IEntityTypeConfiguration<PersonTable>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<PersonTable> builder)
         {
             builder.ToTable("person", p =>
             {
@@ -16,14 +16,10 @@ namespace CareGuide.Data.Mappings
 
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).HasColumnName("id");
-            builder.Property(p => p.UserId).HasColumnName("user_id");
             builder.Property(p => p.Name).IsRequired().HasMaxLength(255).HasColumnName("name");
             builder.Property(p => p.Gender).IsRequired().HasColumnType("char(1)").HasConversion(v => v.ToString(), v => (Gender)Enum.Parse(typeof(Gender), v)).HasColumnName("gender");
             builder.Property(p => p.Birthday).IsRequired().HasColumnType("date").HasConversion(v => v.ToDateTime(TimeOnly.MinValue), v => DateOnly.FromDateTime(v)).HasColumnName("birthday");
-            builder.Property(p => p.Register).IsRequired().HasColumnName("register");
             builder.Property(p => p.Picture).IsRequired().HasColumnName("picture");
-
-            builder.HasOne(p => p.User).WithOne(u => u.Person).HasForeignKey<Person>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

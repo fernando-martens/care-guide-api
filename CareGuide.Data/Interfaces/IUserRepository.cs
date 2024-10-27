@@ -5,11 +5,11 @@ namespace CareGuide.Data.Interfaces
 {
     public interface IUserRepository
     {
-        List<User> ListAll();
-        User ListById(Guid id);
-        User ListByEmail(string email);
-        User Insert(User user);
-        User Update(User user);
-        void Remove(User id);
+        List<UserTable> ListAll();
+        UserTable ListById(Guid id);
+        UserTable ListByEmail(string email);
+        UserTable Insert(UserTable user);
+        UserTable Update(UserTable user);
+        void Remove(UserTable id);
     }
 }

@@ -9,39 +9,39 @@ namespace CareGuide.Data.Repositories
         {
         }
 
-        public List<User> ListAll()
+        public List<UserTable> ListAll()
         {
-            return _context.Set<User>().ToList();
+            return _context.Set<UserTable>().ToList();
         }
 
-        public User ListById(Guid id)
+        public UserTable ListById(Guid id)
         {
-            return _context.Set<User>().Find(id)
+            return _context.Set<UserTable>().Find(id)
                    ?? throw new InvalidOperationException($"User with ID {id} was not found.");
         }
 
-        public User ListByEmail(string email)
+        public UserTable ListByEmail(string email)
         {
-            return _context.Set<User>().FirstOrDefault(u => u.Email == email)
+            return _context.Set<UserTable>().FirstOrDefault(u => u.Email == email)
                    ?? throw new InvalidOperationException($"User with E-mail {email} was not found.");
         }
 
-        public User Insert(User user)
+        public UserTable Insert(UserTable user)
         {
-            _context.Set<User>().Add(user);
+            _context.Set<UserTable>().Add(user);
             _context.SaveChanges();
             return user;
         }
 
-        public User Update(User user)
+        public UserTable Update(UserTable user)
         {
             _context.SaveChanges();
             return user;
         }
 
-        public void Remove(User user)
+        public void Remove(UserTable user)
         {
-            _context.Set<User>().Remove(user);
+            _context.Set<UserTable>().Remove(user);
             _context.SaveChanges();
         }
     }

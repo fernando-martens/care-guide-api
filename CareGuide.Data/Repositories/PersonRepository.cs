@@ -9,33 +9,33 @@ namespace CareGuide.Data.Repositories
         {
         }
 
-        public List<Person> ListAll()
+        public List<PersonTable> ListAll()
         {
-            return _context.Set<Person>().ToList();
+            return _context.Set<PersonTable>().ToList();
         }
 
-        public Person ListById(Guid id)
+        public PersonTable ListById(Guid id)
         {
-            return _context.Set<Person>().Find(id)
+            return _context.Set<PersonTable>().Find(id)
                    ?? throw new InvalidOperationException($"Person with ID {id} was not found.");
         }
 
-        public Person Insert(Person person)
+        public PersonTable Insert(PersonTable person)
         {
-            _context.Set<Person>().Add(person);
+            _context.Set<PersonTable>().Add(person);
             _context.SaveChanges();
             return person;
         }
 
-        public Person Update(Person person)
+        public PersonTable Update(PersonTable person)
         {
             _context.SaveChanges();
             return person;
         }
 
-        public void Remove(Person person)
+        public void Remove(PersonTable person)
         {
-            _context.Set<Person>().Remove(person);
+            _context.Set<PersonTable>().Remove(person);
             _context.SaveChanges();
         }
     }

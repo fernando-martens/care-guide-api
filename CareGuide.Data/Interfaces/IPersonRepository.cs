@@ -5,10 +5,10 @@ namespace CareGuide.Data.Interfaces
 {
     public interface IPersonRepository
     {
-        List<Person> ListAll();
-        Person ListById(Guid id);
-        Person Insert(Person person);
-        Person Update(Person person);
-        void Remove(Person person);
+        List<PersonTable> ListAll();
+        PersonTable ListById(Guid id);
+        PersonTable Insert(PersonTable person);
+        PersonTable Update(PersonTable person);
+        void Remove(PersonTable person);
     }
 }

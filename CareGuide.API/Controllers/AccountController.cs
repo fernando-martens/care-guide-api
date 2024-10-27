@@ -17,13 +17,13 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpPost("Create")]
-        public ActionResult<UserResponseDto> Create([FromBody] CreateAccountDto createAccount)
+        public ActionResult<UserDto> Create([FromBody] CreateAccountDto createAccount)
         {
             return Ok(_accountService.CreateAccount(createAccount));
         }
 
         [HttpPost("Login")]
-        public ActionResult<UserResponseDto> Login([FromBody] LoginAccountDto loginAccount)
+        public ActionResult<UserDto> Login([FromBody] LoginAccountDto loginAccount)
         {
             return Ok(_accountService.LoginAccount(loginAccount));
         }

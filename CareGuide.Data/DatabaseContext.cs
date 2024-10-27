@@ -12,8 +12,8 @@ namespace CareGuide.Data
 
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Person> Persons { get; set; }
+        public DbSet<UserTable> Users { get; set; }
+        public DbSet<PersonTable> Persons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
