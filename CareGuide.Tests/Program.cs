@@ -5,8 +5,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace CareGuide.Tests
 {
-    public class Program : IDisposable
+    public class Program
     {
+        public ServiceProvider serviceProvider;
 
         public Program()
         {
@@ -15,13 +16,13 @@ namespace CareGuide.Tests
                        .AddEnvironmentVariables()
                        .Build();
 
-            IServiceCollection services = new ServiceCollection();
-
             Startup startup = new Startup(configuration);
-            startup.ConfigureServices(services);
-            ServiceProvider provider = services.BuildServiceProvider();
 
-            using (var scope = provider.CreateScope())
+            IServiceCollection services = new ServiceCollection();
+            startup.ConfigureServices(services);
+            serviceProvider = services.BuildServiceProvider();
+
+            using (var scope = serviceProvider.CreateScope())
             {
                 try
                 {
@@ -34,20 +35,6 @@ namespace CareGuide.Tests
                 }
             }
 
-            //try
-            //{
-            //    PopulateSharedDataBetweenTests();
-            //}
-            //catch (Exception)
-            //{
-            //    CleanUpSharedDataBetweenTests();
-            //    throw new ApplicationException();
-            //}
-        }
-
-        public void Dispose()
-        {
-            // CleanUpSharedDataBetweenTests();
         }
     }
 

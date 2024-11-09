@@ -16,8 +16,7 @@ namespace CareGuide.Tests
         
         public void ConfigureServices(IServiceCollection services)
         {
-            CommomStartupMethods.ConfigureServices(Configuration, services);
-            NativeInjector.Register(services);
+            CommomStartupMethods.ConfigureServices(Configuration, services);  
         }
     }
 }

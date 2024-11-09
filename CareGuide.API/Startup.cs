@@ -1,7 +1,6 @@
 ﻿using CareGuide.API.Middlewares;
 using CareGuide.Infra;
 using CareGuide.Infra.CrossCutting;
-using CareGuide.Security;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -20,8 +19,6 @@ namespace CareGuide.API
         {
             CommomStartupMethods.ConfigureServices(Configuration, services);
 
-            ConfigureSecuritySettings(services);
-
             ConfigureCors(services);
 
             ConfigureSwagger(services);
@@ -29,8 +26,6 @@ namespace CareGuide.API
             ConfigureJsonSerializer(services);
 
             ConfigureMiddlewares(services);
-
-            NativeInjector.Register(services);
 
             services.AddControllers();
         }
@@ -73,20 +68,6 @@ namespace CareGuide.API
                 endpoints.MapControllers();
             });
 
-        }
-
-        private void ConfigureSecuritySettings(IServiceCollection services)
-        {
-            var securitySettings = new SecuritySettings();
-            Configuration.Bind("SecuritySettings", securitySettings);
-
-            if (string.IsNullOrWhiteSpace(securitySettings.SecretKey) ||
-                securitySettings.SecretKey == "defaultKey")
-            {
-                throw new InvalidOperationException("Security key is not configured properly in appsettings.json.");
-            }
-
-            services.AddSingleton(securitySettings);
         }
 
         private void ConfigureCors(IServiceCollection services)

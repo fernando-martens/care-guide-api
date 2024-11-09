@@ -10,4 +10,8 @@
     <Compile Remove="Tables\WeatherForecastTable.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CareGuide.Security\CareGuide.Security.csproj" />
+  </ItemGroup>
+
 </Project>
