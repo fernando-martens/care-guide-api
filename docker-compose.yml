@@ -33,9 +33,29 @@ services:
     networks:
       - care-guide-api-network
 
+  db_test:
+    image: postgres
+    container_name: careguide_db_tests
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: careguide
+      POSTGRES_DB: careguide_tests
+    volumes:
+      - postgres-tests-data:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - care-guide-api-network
+
 networks:
   care-guide-api-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  postgres-tests-data:

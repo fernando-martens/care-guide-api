@@ -1,8 +1,7 @@
 ﻿using CareGuide.API.Middlewares;
-using CareGuide.Data;
+using CareGuide.Infra;
 using CareGuide.Infra.CrossCutting;
 using CareGuide.Security;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -19,11 +18,9 @@ namespace CareGuide.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureAutoMapper(services);
+            CommomStartupMethods.ConfigureServices(Configuration, services);
 
             ConfigureSecuritySettings(services);
-
-            ConfigureDatabase(services);
 
             ConfigureCors(services);
 
@@ -78,12 +75,6 @@ namespace CareGuide.API
 
         }
 
-        private void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(UserProfile));
-            services.AddAutoMapper(typeof(PersonProfile));
-        }
-
         private void ConfigureSecuritySettings(IServiceCollection services)
         {
             var securitySettings = new SecuritySettings();
@@ -96,15 +87,6 @@ namespace CareGuide.API
             }
 
             services.AddSingleton(securitySettings);
-        }
-
-        private void ConfigureDatabase(IServiceCollection services)
-        {
-            services.AddDbContext<DatabaseContext>(opt =>
-            {
-                var connectionString = Configuration.GetConnectionString("DatabaseConnection");
-                opt.UseNpgsql(connectionString).EnableSensitiveDataLogging();
-            });
         }
 
         private void ConfigureCors(IServiceCollection services)
