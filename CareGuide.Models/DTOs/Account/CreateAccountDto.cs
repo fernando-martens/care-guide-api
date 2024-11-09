@@ -1,10 +1,11 @@
 ﻿using CareGuide.Models.Enums;
 
-namespace CareGuide.Models.DTOs.Person
+namespace CareGuide.Models.DTOs.Auth
 {
-    public class PersonRequestDto
+    public class CreateAccountDto
     {
-        public Guid UserId { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public string Name { get; set; }
         public Gender Gender { get; set; }
         public DateOnly Birthday { get; set; }

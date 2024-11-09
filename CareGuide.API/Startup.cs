@@ -1,8 +1,6 @@
 ﻿using CareGuide.API.Middlewares;
-using CareGuide.Data;
+using CareGuide.Infra;
 using CareGuide.Infra.CrossCutting;
-using CareGuide.Security;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -19,11 +17,7 @@ namespace CareGuide.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureAutoMapper(services);
-
-            ConfigureSecuritySettings(services);
-
-            ConfigureDatabase(services);
+            CommomStartupMethods.ConfigureServices(Configuration, services);
 
             ConfigureCors(services);
 
@@ -32,8 +26,6 @@ namespace CareGuide.API
             ConfigureJsonSerializer(services);
 
             ConfigureMiddlewares(services);
-
-            NativeInjector.Register(services);
 
             services.AddControllers();
         }
@@ -76,35 +68,6 @@ namespace CareGuide.API
                 endpoints.MapControllers();
             });
 
-        }
-
-        private void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(UserProfile));
-            services.AddAutoMapper(typeof(PersonProfile));
-        }
-
-        private void ConfigureSecuritySettings(IServiceCollection services)
-        {
-            var securitySettings = new SecuritySettings();
-            Configuration.Bind("SecuritySettings", securitySettings);
-
-            if (string.IsNullOrWhiteSpace(securitySettings.SecretKey) ||
-                securitySettings.SecretKey == "defaultKey")
-            {
-                throw new InvalidOperationException("Security key is not configured properly in appsettings.json.");
-            }
-
-            services.AddSingleton(securitySettings);
-        }
-
-        private void ConfigureDatabase(IServiceCollection services)
-        {
-            services.AddDbContext<DatabaseContext>(opt =>
-            {
-                var connectionString = Configuration.GetConnectionString("DatabaseConnection");
-                opt.UseNpgsql(connectionString).EnableSensitiveDataLogging();
-            });
         }
 
         private void ConfigureCors(IServiceCollection services)

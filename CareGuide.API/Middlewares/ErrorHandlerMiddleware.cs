@@ -15,7 +15,7 @@ namespace CareGuide.API.Middlewares
             }
             catch (UnauthorizedAccessException ex)
             {
-                return HandleExceptionAsync(context, ex.Message, 401);
+                await HandleExceptionAsync(context, ex.Message, 401);
             }
             catch (InvalidOperationException ex)
             {

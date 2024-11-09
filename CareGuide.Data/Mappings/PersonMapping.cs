@@ -5,24 +5,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CareGuide.Data.Mappings
 {
-    public class PersonMapping : IEntityTypeConfiguration<Person>
+    public class PersonMapping : IEntityTypeConfiguration<PersonTable>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<PersonTable> builder)
         {
-            builder.ToTable("person", t =>
+            builder.ToTable("person", p =>
             {
-                t.HasCheckConstraint("CK_Person_Gender", "gender IN ('M', 'F', 'O')");
+                p.HasCheckConstraint("CK_Person_Gender", "gender IN ('M', 'F', 'O')");
             });
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasColumnName("id");
-            builder.Property(p => p.UserId).HasColumnName("user_id");
+            builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).HasColumnName("id");
             builder.Property(p => p.Name).IsRequired().HasMaxLength(255).HasColumnName("name");
             builder.Property(p => p.Gender).IsRequired().HasColumnType("char(1)").HasConversion(v => v.ToString(), v => (Gender)Enum.Parse(typeof(Gender), v)).HasColumnName("gender");
             builder.Property(p => p.Birthday).IsRequired().HasColumnType("date").HasConversion(v => v.ToDateTime(TimeOnly.MinValue), v => DateOnly.FromDateTime(v)).HasColumnName("birthday");
-            builder.Property(x => x.Register).IsRequired().HasColumnName("register");
-
-            builder.HasOne(p => p.User).WithOne(u => u.Person).HasForeignKey<Person>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.Picture).IsRequired().HasColumnName("picture");
         }
     }
 }

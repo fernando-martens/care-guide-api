@@ -1,15 +1,14 @@
-﻿using CareGuide.Models.DTOs.User;
-using CareGuide.Models.Tables;
+﻿using CareGuide.Models.DTOs.Person;
+using CareGuide.Models.DTOs.User;
 
 namespace CareGuide.Core.Interfaces
 {
     public interface IUserService
     {
-        List<User> ListAll();
-        User ListById(Guid id);
-        User Insert(UserRequestDto user);
+        List<UserDto> ListAll();
+        UserDto Select(Guid id);
+        UserDto Create(PersonDto person, CreateUserDto user);
         void UpdatePassword(Guid id, UserUpdatePasswordDto user);
-        void Remove(Guid id);
-        User Login(UserRequestDto user);
+        void Delete(Guid id);
     }
 }

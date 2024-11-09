@@ -1,5 +1,7 @@
-﻿using CareGuide.Core.Interfaces;
+﻿using AutoMapper;
+using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
+using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
 using CareGuide.Models.Tables;
 using CareGuide.Security;
@@ -12,39 +14,38 @@ namespace CareGuide.Core.Services
 
         private readonly IJwtService _jwtService;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserService(IJwtService jwtService, IUserRepository userRepository)
+        public UserService(IJwtService jwtService, IUserRepository userRepository, IMapper mapper)
         {
             _jwtService = jwtService;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public List<User> ListAll()
+        public List<UserDto> ListAll()
         {
-            return _userRepository.ListAll();
+            List<UserTable> list = _userRepository.ListAll();
+            return _mapper.Map<List<UserDto>>(list);
         }
 
-        public User ListById(Guid id)
+        public UserDto Select(Guid id)
         {
-            return _userRepository.ListById(id);
+            UserTable userTable = _userRepository.ListById(id);
+            return _mapper.Map<UserDto>(userTable);
         }
 
-        public User Insert(UserRequestDto user)
+        public UserDto Create(PersonDto person, CreateUserDto createUser)
         {
-            User userToCreate = new User
-            {
-                Id = Guid.NewGuid(),
-                Register = DateTime.UtcNow,
-                Email = user.Email,
-                Password = PasswordManager.HashPassword(user.Password)
-            };
+            // To-do: check if email already exists
 
-            return _userRepository.Insert(userToCreate);
+            UserTable user = _userRepository.Insert(new UserTable(person, createUser));
+            return _mapper.Map<UserDto>(user);
         }
 
         public void UpdatePassword(Guid id, UserUpdatePasswordDto user)
         {
-            User existingUser = _userRepository.ListById(id);
+            UserTable existingUser = _userRepository.ListById(id);
 
             if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {
@@ -57,26 +58,12 @@ namespace CareGuide.Core.Services
             _userRepository.Update(existingUser);
         }
 
-        public void Remove(Guid id)
+        public void Delete(Guid id)
         {
-            User existingUser = _userRepository.ListById(id);
+            UserTable existingUser = _userRepository.ListById(id);
             _userRepository.Remove(existingUser);
         }
 
-        public User Login(UserRequestDto user)
-        {
-            User existingUser = _userRepository.ListByEmail(user.Email);
-
-            if (existingUser == null || !PasswordManager.ValidatePassword(user.Password, existingUser.Password))
-            {
-                throw new UnauthorizedAccessException("Invalid credentials");
-            }
-
-            existingUser.SessionToken = _jwtService.GenerateToken(existingUser.Id, existingUser.Email);
-            existingUser.Register = DateTime.UtcNow;
-
-            return _userRepository.Update(existingUser);
-        }
     }
 
 }
