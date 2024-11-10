@@ -2,6 +2,7 @@
 using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
 using CareGuide.Models.DTOs.Person;
+using CareGuide.Models.Exceptions;
 using CareGuide.Models.Tables;
 
 namespace CareGuide.Core.Services
@@ -28,7 +29,7 @@ namespace CareGuide.Core.Services
 
         public PersonDto Select(Guid id)
         {
-            PersonTable person =_personRepository.ListById(id);
+            PersonTable person =_personRepository.SelectById(id) ?? throw new NotFoundException();
             return _mapper.Map<PersonDto>(person);
         }
 
@@ -40,7 +41,7 @@ namespace CareGuide.Core.Services
 
         public PersonDto Update(Guid id, PersonDto updatePerson)
         {
-            PersonTable existingPerson = _personRepository.ListById(id);
+            PersonTable existingPerson = _personRepository.SelectById(id) ?? throw new NotFoundException();
 
             existingPerson.Name = updatePerson.Name;
             existingPerson.Gender = updatePerson.Gender;
@@ -54,7 +55,7 @@ namespace CareGuide.Core.Services
 
         public void Delete(Guid id)
         {
-            PersonTable existingPerson = _personRepository.ListById(id);
+            PersonTable existingPerson = _personRepository.SelectById(id) ?? throw new NotFoundException();
             _personRepository.Remove(existingPerson);
         }
 

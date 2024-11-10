@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CareGuide.Models.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CareGuide.API.Middlewares
@@ -24,6 +25,10 @@ namespace CareGuide.API.Middlewares
             catch (DbUpdateException ex)
             {
                 await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, 400);
+            }
+            catch (NotFoundException ex)
+            {
+                await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, ex.StatusCode);
             }
             catch (Exception ex)
             {

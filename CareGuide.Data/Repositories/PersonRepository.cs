@@ -14,10 +14,9 @@ namespace CareGuide.Data.Repositories
             return _context.Set<PersonTable>().ToList();
         }
 
-        public PersonTable ListById(Guid id)
+        public PersonTable? SelectById(Guid id)
         {
-            return _context.Set<PersonTable>().Find(id)
-                   ?? throw new InvalidOperationException($"Person with ID {id} was not found.");
+            return _context.Set<PersonTable>().Find(id);
         }
 
         public PersonTable Insert(PersonTable person)
