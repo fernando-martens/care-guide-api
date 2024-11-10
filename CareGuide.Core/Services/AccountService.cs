@@ -1,4 +1,5 @@
 ﻿using CareGuide.Core.Interfaces;
+using CareGuide.Data.TransactionManagement;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
@@ -9,21 +10,33 @@ namespace CareGuide.Core.Services
     {
         private readonly IUserService _userService;
         private readonly IPersonService _personService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountService(IUserService userService, IPersonService personService) 
+        public AccountService(IUserService userService, IPersonService personService, IUnitOfWork unitOfWork)
         {
             _userService = userService;
             _personService = personService;
+            _unitOfWork = unitOfWork;
         }
 
         public AccountDto CreateAccount(CreateAccountDto createAccount)
         {
-            // To-do: rollback in case of error
+            _unitOfWork.BeginTransaction();
 
-            PersonDto person = _personService.Create(new CreatePersonDto(createAccount));
-            UserDto user = _userService.Create(person, new CreateUserDto(createAccount));
+            try
+            {
+                PersonDto person = _personService.Create(new CreatePersonDto(createAccount));
+                UserDto user = _userService.Create(person, new CreateUserDto(createAccount));
 
-            return new AccountDto(user, person);
+                _unitOfWork.CommitTransaction();
+
+                return new AccountDto(user, person);
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.RollbackTransaction();
+                throw new Exception(ex.Message);
+            }
         }
 
         public void DeleteAccount(Guid id)

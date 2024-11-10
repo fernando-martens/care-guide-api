@@ -2,6 +2,7 @@
 using CareGuide.Core.Services;
 using CareGuide.Data.Interfaces;
 using CareGuide.Data.Repositories;
+using CareGuide.Data.TransactionManagement;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ namespace CareGuide.Infra.CrossCutting
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             #endregion
 
