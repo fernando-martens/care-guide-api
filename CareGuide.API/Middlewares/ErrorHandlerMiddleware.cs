@@ -1,4 +1,5 @@
 ﻿using CareGuide.Models.Exceptions;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -30,6 +31,16 @@ namespace CareGuide.API.Middlewares
             {
                 await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, ex.StatusCode);
             }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(error => new
+                {
+                    Field = error.PropertyName,
+                    Error = error.ErrorMessage
+                });
+
+                await HandleValidationExceptionAsync(context, errors, 400);
+            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex.Message, 500);
@@ -43,5 +54,15 @@ namespace CareGuide.API.Middlewares
             await context.Response.WriteAsync(message);
         }
 
+        private async Task HandleValidationExceptionAsync(HttpContext context, object errors, int statusCode = 400)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = statusCode;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                Message = "Validation failed",
+                Errors = errors
+            });
+        }
     }
 }

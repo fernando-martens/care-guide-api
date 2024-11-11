@@ -1,5 +1,8 @@
 ﻿using CareGuide.API.Middlewares;
 using CareGuide.Infra;
+using CareGuide.Models.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -25,6 +28,8 @@ namespace CareGuide.API
             ConfigureJsonSerializer(services);
 
             ConfigureMiddlewares(services);
+
+            ConfigureValidators(services);
 
             services.AddControllers();
         }
@@ -69,7 +74,7 @@ namespace CareGuide.API
 
         }
 
-        private void ConfigureCors(IServiceCollection services)
+        private static void ConfigureCors(IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -82,7 +87,7 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureSwagger(IServiceCollection services)
+        private static void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -90,7 +95,7 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureJsonSerializer(IServiceCollection services)
+        private static void ConfigureJsonSerializer(IServiceCollection services)
         {
             services.AddControllers()
             .AddJsonOptions(options =>
@@ -99,9 +104,16 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureMiddlewares(IServiceCollection services)
+        private static void ConfigureMiddlewares(IServiceCollection services)
         {
             services.AddTransient<ErrorHandlerMiddleware>();
+        }
+
+        private static void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateAccountDtoValidator>();
         }
     }
 }
