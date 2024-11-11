@@ -1,6 +1,5 @@
 ﻿using CareGuide.API.Middlewares;
 using CareGuide.Infra;
-using CareGuide.Infra.CrossCutting;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 

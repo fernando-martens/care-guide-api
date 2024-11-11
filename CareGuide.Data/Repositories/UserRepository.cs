@@ -14,16 +14,14 @@ namespace CareGuide.Data.Repositories
             return _context.Set<UserTable>().ToList();
         }
 
-        public UserTable ListById(Guid id)
+        public UserTable? SelectById(Guid id)
         {
-            return _context.Set<UserTable>().Find(id)
-                   ?? throw new InvalidOperationException($"User with ID {id} was not found.");
+            return _context.Set<UserTable>().Find(id);
         }
 
-        public UserTable ListByEmail(string email)
+        public UserTable? SelectByEmail(string email)
         {
-            return _context.Set<UserTable>().FirstOrDefault(u => u.Email == email)
-                   ?? throw new InvalidOperationException($"User with E-mail {email} was not found.");
+            return _context.Set<UserTable>().FirstOrDefault(u => u.Email == email);
         }
 
         public UserTable Insert(UserTable user)

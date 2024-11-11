@@ -3,6 +3,7 @@ using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
+using CareGuide.Models.Exceptions;
 using CareGuide.Models.Tables;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
@@ -31,13 +32,14 @@ namespace CareGuide.Core.Services
 
         public UserDto Select(Guid id)
         {
-            UserTable userTable = _userRepository.ListById(id);
+            UserTable userTable = _userRepository.SelectById(id) ?? throw new NotFoundException();
             return _mapper.Map<UserDto>(userTable);
         }
 
         public UserDto Create(PersonDto person, CreateUserDto createUser)
         {
-            // To-do: check if email already exists
+            if (_userRepository.SelectByEmail(createUser.Email) != null)
+                throw new InvalidOperationException("Email already registered");
 
             UserTable user = _userRepository.Insert(new UserTable(person, createUser));
             return _mapper.Map<UserDto>(user);
@@ -45,7 +47,7 @@ namespace CareGuide.Core.Services
 
         public void UpdatePassword(Guid id, UserUpdatePasswordDto user)
         {
-            UserTable existingUser = _userRepository.ListById(id);
+            UserTable existingUser = _userRepository.SelectById(id) ?? throw new NotFoundException();
 
             if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {
@@ -60,7 +62,7 @@ namespace CareGuide.Core.Services
 
         public void Delete(Guid id)
         {
-            UserTable existingUser = _userRepository.ListById(id);
+            UserTable existingUser = _userRepository.SelectById(id) ?? throw new NotFoundException();
             _userRepository.Remove(existingUser);
         }
 

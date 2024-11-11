@@ -1,5 +1,4 @@
 ﻿using CareGuide.Infra;
-using CareGuide.Infra.CrossCutting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
