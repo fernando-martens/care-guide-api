@@ -1,8 +1,5 @@
 ﻿using CareGuide.API.Middlewares;
 using CareGuide.Infra;
-using CareGuide.Models.Validators;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -28,8 +25,6 @@ namespace CareGuide.API
             ConfigureJsonSerializer(services);
 
             ConfigureMiddlewares(services);
-
-            ConfigureValidators(services);
 
             services.AddControllers();
         }
@@ -107,13 +102,6 @@ namespace CareGuide.API
         private static void ConfigureMiddlewares(IServiceCollection services)
         {
             services.AddTransient<ErrorHandlerMiddleware>();
-        }
-
-        private static void ConfigureValidators(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-            services.AddValidatorsFromAssemblyContaining<CreateAccountDtoValidator>();
         }
     }
 }
