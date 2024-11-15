@@ -39,17 +39,17 @@ namespace CareGuide.Core.Services
             }
         }
 
+        public void UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount)
+        {
+            _userService.UpdatePassword(id, updatePasswordAccount);
+        }
+
         public void DeleteAccount(Guid id)
         {
             throw new NotImplementedException();
         }
 
         public AccountDto LoginAccount(LoginAccountDto loginAccount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AccountDto UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount)
         {
             throw new NotImplementedException();
         }

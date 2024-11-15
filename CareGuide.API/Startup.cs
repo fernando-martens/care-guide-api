@@ -69,7 +69,7 @@ namespace CareGuide.API
 
         }
 
-        private void ConfigureCors(IServiceCollection services)
+        private static void ConfigureCors(IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -82,7 +82,7 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureSwagger(IServiceCollection services)
+        private static void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -90,7 +90,7 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureJsonSerializer(IServiceCollection services)
+        private static void ConfigureJsonSerializer(IServiceCollection services)
         {
             services.AddControllers()
             .AddJsonOptions(options =>
@@ -99,7 +99,7 @@ namespace CareGuide.API
             });
         }
 
-        private void ConfigureMiddlewares(IServiceCollection services)
+        private static void ConfigureMiddlewares(IServiceCollection services)
         {
             services.AddTransient<ErrorHandlerMiddleware>();
         }

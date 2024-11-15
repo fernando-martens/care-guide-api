@@ -6,7 +6,7 @@ namespace CareGuide.Core.Interfaces
     {
         AccountDto CreateAccount(CreateAccountDto createAccount);
         AccountDto LoginAccount(LoginAccountDto loginAccount);
-        AccountDto UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount);
+        void UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount);
         void DeleteAccount(Guid id);
     }
 }

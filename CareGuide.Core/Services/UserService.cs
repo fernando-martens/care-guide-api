@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
+using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
 using CareGuide.Models.Exceptions;
@@ -30,10 +31,15 @@ namespace CareGuide.Core.Services
             return _mapper.Map<List<UserDto>>(list);
         }
 
-        public UserDto Select(Guid id)
+        public UserDto SelectByIdAsDto(Guid id)
         {
-            UserTable userTable = _userRepository.SelectById(id) ?? throw new NotFoundException();
+            UserTable userTable = SelectById(id);
             return _mapper.Map<UserDto>(userTable);
+        }
+
+        public UserTable SelectById(Guid id)
+        {
+            return _userRepository.SelectById(id) ?? throw new NotFoundException();
         }
 
         public UserDto Create(PersonDto person, CreateUserDto createUser)
@@ -45,7 +51,7 @@ namespace CareGuide.Core.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public void UpdatePassword(Guid id, UserUpdatePasswordDto user)
+        public void UpdatePassword(Guid id, UpdatePasswordAccountDto user)
         {
             UserTable existingUser = _userRepository.SelectById(id) ?? throw new NotFoundException();
 

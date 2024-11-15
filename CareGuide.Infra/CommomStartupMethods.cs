@@ -1,6 +1,9 @@
 ﻿using CareGuide.Data;
 using CareGuide.Infra.CrossCutting;
+using CareGuide.Models.Validators;
 using CareGuide.Security;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,13 +12,12 @@ namespace CareGuide.Infra
 {
     public static class CommomStartupMethods
     {
-
-
         public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             ConfigureDatabase(configuration, services);
             ConfigureAutoMapper(services);
             ConfigureSecuritySettings(configuration, services);
+            ConfigureValidators(services);
             NativeInjector.Register(services);
         }
 
@@ -48,6 +50,10 @@ namespace CareGuide.Infra
             services.AddSingleton(securitySettings);
         }
 
-
+        private static void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateAccountDtoValidator>();
+        }
     }
 }
