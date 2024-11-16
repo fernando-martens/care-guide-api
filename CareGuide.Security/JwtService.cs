@@ -48,6 +48,7 @@ namespace CareGuide.Security
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidIssuer = _issuer,
