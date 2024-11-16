@@ -39,7 +39,7 @@ namespace CareGuide.Security
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public bool ValidateToken(string token)
+        public JwtSecurityToken? ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_secretKey);
@@ -57,11 +57,12 @@ namespace CareGuide.Security
                     ValidateLifetime = false,
                 }, out SecurityToken validatedToken);
 
-                return true;
+                return new JwtSecurityTokenHandler().ReadJwtToken(token);
+
             }
             catch
             {
-                return false;
+                return null;
             }
         }
     }

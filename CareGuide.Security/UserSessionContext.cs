@@ -1,7 +1,7 @@
 ﻿using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace CareGuide.Security
 {
@@ -10,12 +10,20 @@ namespace CareGuide.Security
         public readonly Guid? _userId;
         public Guid? UserId => _userId;
 
-        public UserSessionContext(IHttpContextAccessor httpContextAccessor)
+        public UserSessionContext(IHttpContextAccessor httpContextAccessor, IJwtService jwtService)
         {
-            Claim? userIdClaim = httpContextAccessor.HttpContext?.User.Claims?.ToList().Find((e) => e.Type == JwtRegisteredClaimNames.Sub);  
-            
-            if(userIdClaim != null) 
-                _userId = new Guid(userIdClaim.Value);
+            if (httpContextAccessor.HttpContext?.Request.Headers.TryGetValue("Authorization", out StringValues headerAuth) == true)
+            {
+                JwtSecurityToken? token = jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", ""));
+
+                if (token != null)
+                {
+                    string? claimValue = token.Claims.ToList().Find((e) => e.Type == "sub")?.Value;
+                    if(claimValue != null) _userId = Guid.Parse(claimValue);
+                }
+
+            }
+
         }
 
     }

@@ -1,5 +1,4 @@
-﻿using CareGuide.API.Attributes;
-using CareGuide.Security.Interfaces;
+﻿using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Controllers
@@ -15,10 +14,9 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpGet("Health")]
-        [IgnoreSessionMiddleware]
         public ActionResult HealthStatus()
         {
-            return Ok();
+            return Ok(_userSessionContext.UserId);
         }
 
     }

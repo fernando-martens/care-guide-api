@@ -23,7 +23,7 @@ namespace CareGuide.API.Middlewares
   
             if (context.Request.Headers.TryGetValue("Authorization", out StringValues headerAuth))
             {
-                if(!_jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", "")))
+                if(_jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", "")) == null)
                     throw new UnauthorizedAccessException("invalid token");
             }
             else
