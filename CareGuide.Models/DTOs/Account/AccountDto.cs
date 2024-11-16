@@ -6,11 +6,11 @@ namespace CareGuide.Models.DTOs.Auth
 {
     public class AccountDto
     {
-        public AccountDto(UserDto user, PersonDto person)
+        public AccountDto(UserDto user, PersonDto person, string token)
         {
             Id = user.Id;
             Email = user.Email;
-            SessionToken = user.SessionToken;
+            SessionToken = token;
             Name = person.Name;
             Gender = person.Gender;
             Birthday = person.Birthday;
