@@ -2,6 +2,6 @@
 {
     public interface IUserSessionContext
     {
-        Guid? UserId { get; }
+        Guid UserId { get; }
     }
 }

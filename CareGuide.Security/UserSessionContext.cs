@@ -8,7 +8,11 @@ namespace CareGuide.Security
     public class UserSessionContext: IUserSessionContext
     {
         public readonly Guid? _userId;
-        public Guid? UserId => _userId;
+        public Guid UserId { 
+            get { 
+                return _userId ?? throw new UnauthorizedAccessException();
+            } 
+        }
 
         public UserSessionContext(IHttpContextAccessor httpContextAccessor, IJwtService jwtService)
         {
