@@ -44,7 +44,6 @@ namespace CareGuide.Infra
         private static void ConfigureSecuritySettings(IConfiguration configuration, IServiceCollection services)
         {
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IUserSessionContext, UserSessionContext>();
 
             SecuritySettings securitySettings = new SecuritySettings();
             configuration.Bind("SecuritySettings", securitySettings);

@@ -1,5 +1,7 @@
 ﻿using CareGuide.API.Middlewares;
 using CareGuide.Infra;
+using CareGuide.Security.Interfaces;
+using CareGuide.Security;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -17,6 +19,8 @@ namespace CareGuide.API
         public void ConfigureServices(IServiceCollection services)
         {
             CommomStartupMethods.ConfigureServices(Configuration, services);
+
+            services.AddScoped<IUserSessionContext, UserSessionContext>();
 
             ConfigureCors(services);
 
