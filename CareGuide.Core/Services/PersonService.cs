@@ -29,7 +29,7 @@ namespace CareGuide.Core.Services
 
         public PersonDto Select(Guid id)
         {
-            PersonTable person =_personRepository.SelectById(id) ?? throw new NotFoundException();
+            PersonTable person = _personRepository.SelectById(id) ?? throw new NotFoundException();
             return _mapper.Map<PersonDto>(person);
         }
 
