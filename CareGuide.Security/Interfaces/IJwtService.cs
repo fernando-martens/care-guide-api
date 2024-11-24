@@ -1,8 +1,10 @@
-﻿namespace CareGuide.Security.Interfaces
+﻿using System.IdentityModel.Tokens.Jwt;
+
+namespace CareGuide.Security.Interfaces
 {
     public interface IJwtService
     {
         string GenerateToken(Guid userId, string email);
-        bool ValidateToken(string token);
+        JwtSecurityToken? ValidateToken(string token);
     }
 }

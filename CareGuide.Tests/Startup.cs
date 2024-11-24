@@ -1,6 +1,8 @@
 ﻿using CareGuide.Infra;
+using CareGuide.Security.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using CareGuide.Tests.Context;
 
 namespace CareGuide.Tests
 {
@@ -15,7 +17,8 @@ namespace CareGuide.Tests
         
         public void ConfigureServices(IServiceCollection services)
         {
-            CommomStartupMethods.ConfigureServices(Configuration, services);  
+            CommomStartupMethods.ConfigureServices(Configuration, services);
+            services.AddScoped<IUserSessionContext, UserSessionContextTests>();
         }
     }
 }

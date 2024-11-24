@@ -1,3 +1,4 @@
+using CareGuide.API.Attributes;
 using CareGuide.Core.Interfaces;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.User;
@@ -17,12 +18,14 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpPost("Create")]
+        [IgnoreSessionMiddleware]
         public ActionResult<UserDto> Create([FromBody] CreateAccountDto createAccount)
         {
             return Ok(_accountService.CreateAccount(createAccount));
         }
-
+         
         [HttpPost("Login")]
+        [IgnoreSessionMiddleware]
         public ActionResult<UserDto> Login([FromBody] LoginAccountDto loginAccount)
         {
             return Ok(_accountService.LoginAccount(loginAccount));
