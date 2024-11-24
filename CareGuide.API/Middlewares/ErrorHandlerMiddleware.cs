@@ -29,7 +29,11 @@ namespace CareGuide.API.Middlewares
             }
             catch (NotFoundException ex)
             {
-                await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, ex.StatusCode);
+                await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, 404);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                await HandleExceptionAsync(context, ex.InnerException?.Message ?? ex.Message, 404);
             }
             catch (ValidationException ex)
             {

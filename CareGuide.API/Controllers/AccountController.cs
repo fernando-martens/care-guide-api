@@ -17,13 +17,13 @@ namespace CareGuide.API.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         [IgnoreSessionMiddleware]
         public ActionResult<UserDto> Create([FromBody] CreateAccountDto createAccount)
         {
             return Ok(_accountService.CreateAccount(createAccount));
         }
-         
+
         [HttpPost("Login")]
         [IgnoreSessionMiddleware]
         public ActionResult<UserDto> Login([FromBody] LoginAccountDto loginAccount)
@@ -38,7 +38,7 @@ namespace CareGuide.API.Controllers
             return Ok("Password changed successfully.");
         }
 
-        [HttpDelete("DeleteAccount/{id}")]
+        [HttpDelete("{id}")]
         public ActionResult<string> DeleteAccount(Guid id)
         {
             _accountService.DeleteAccount(id);

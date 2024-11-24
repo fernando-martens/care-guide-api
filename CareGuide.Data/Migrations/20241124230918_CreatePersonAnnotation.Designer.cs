@@ -3,6 +3,7 @@ using System;
 using CareGuide.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareGuide.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241124230918_CreatePersonAnnotation")]
+    partial class CreatePersonAnnotation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,32 +29,26 @@ namespace CareGuide.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("details");
+                        .HasColumnType("text");
 
                     b.Property<string>("FileUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("file_url");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("person_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Register")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("register");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("person_annotation", (string)null);
+                    b.ToTable("PersonAnnotations");
                 });
 
             modelBuilder.Entity("CareGuide.Models.Tables.PersonTable", b =>
@@ -132,8 +129,7 @@ namespace CareGuide.Data.Migrations
                         .WithMany("PersonAnnotations")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_person_annotation_person");
+                        .IsRequired();
 
                     b.Navigation("Person");
                 });

@@ -7,7 +7,7 @@ namespace CareGuide.Models.Tables
     public class UserTable
     {
         public UserTable() { }
-        public UserTable(PersonDto person, CreateUserDto createUser) 
+        public UserTable(PersonDto person, CreateUserDto createUser)
         {
             Id = Guid.NewGuid();
             Register = DateTime.UtcNow;

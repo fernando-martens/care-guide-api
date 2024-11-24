@@ -14,11 +14,13 @@ namespace CareGuide.Data
 
         public DbSet<UserTable> Users { get; set; }
         public DbSet<PersonTable> Persons { get; set; }
+        public DbSet<PersonAnnotationTable> PersonAnnotations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserMapping());
             modelBuilder.ApplyConfiguration(new PersonMapping());
+            modelBuilder.ApplyConfiguration(new PersonAnnotationMapping());
 
             base.OnModelCreating(modelBuilder);
         }

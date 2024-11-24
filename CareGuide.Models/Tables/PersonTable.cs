@@ -20,5 +20,6 @@ namespace CareGuide.Models.Tables
         public Gender Gender { get; set; }
         public DateOnly Birthday { get; set; }
         public string Picture { get; set; }
+        public ICollection<PersonAnnotationTable> PersonAnnotations { get; set; }
     }
 }
