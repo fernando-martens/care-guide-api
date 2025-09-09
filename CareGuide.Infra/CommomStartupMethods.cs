@@ -37,8 +37,11 @@ namespace CareGuide.Infra
 
         private static void ConfigureAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserProfile));
-            services.AddAutoMapper(typeof(PersonProfile));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<PersonProfile>();
+            });
         }
 
         private static void ConfigureSecuritySettings(IConfiguration configuration, IServiceCollection services)
