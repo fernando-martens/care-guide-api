@@ -1,4 +1,4 @@
-name: .NET 9 Build Check
+name: ".NET 9 Build Check"
 
 on:
   push:
@@ -22,6 +22,11 @@ jobs:
 
       - name: Build project
         run: dotnet build --configuration Release
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       - name: Validate Dockerfile (build image)
         run: docker build -t careguide_api:ci -f Dockerfile .
