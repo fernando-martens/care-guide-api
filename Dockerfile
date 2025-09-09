@@ -1,8 +1,7 @@
-# Etapa 1: Build da aplicação
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
 
-# Copiar arquivos .csproj e restaurar as dependências
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
 COPY CareGuide.API/CareGuide.API.csproj CareGuide.API/
 COPY CareGuide.Core/CareGuide.Core.csproj CareGuide.Core/
 COPY CareGuide.Data/CareGuide.Data.csproj CareGuide.Data/
@@ -12,22 +11,16 @@ COPY CareGuide.Security/CareGuide.Security.csproj CareGuide.Security/
 
 RUN dotnet restore CareGuide.API/CareGuide.API.csproj
 
-# Copiar todo o código para o container e compilar
 COPY . .
-WORKDIR /app/CareGuide.API
+WORKDIR /src/CareGuide.API
 
-# Publicar o projeto
-RUN dotnet publish -c Release -o /app/out
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
-# Etapa 2: Executar a aplicação usando a imagem Runtime do .NET
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 
-# Copiar os arquivos publicados da etapa de build
-COPY --from=build /app/out .
+COPY --from=build /app/publish .
 
-# Expor porta
-EXPOSE 8080     
+EXPOSE 8080
 
-# Definir o ponto de entrada para rodar a aplicação
 ENTRYPOINT ["dotnet", "CareGuide.API.dll"]
