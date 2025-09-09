@@ -14,7 +14,7 @@ RUN dotnet restore CareGuide.API/CareGuide.API.csproj
 COPY . .
 WORKDIR /src/CareGuide.API
 
-RUN dotnet publish -c Release -o /app/publish --no-restore
+RUN dotnet publish -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
