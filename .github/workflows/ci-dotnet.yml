@@ -1,40 +1,36 @@
-name: CI Pipeline
+name: .NET 9 Build Check
 
 on:
-  pull_request:
-    branches:
-      - development
   push:
     branches:
       - master
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Prevent direct commits to master
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          echo "Direct commits to 'master' are not allowed. Use pull requests to 'development'."
-          exit 1
-
-      - name: Prevent pull requests to master
-        if: github.event_name == 'pull_request' && github.base_ref == 'master'
-        run: |
-          echo "Pull requests to 'master' are not allowed. Please target 'development'."
-          exit 1
-
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET
+      - name: Setup .NET 9
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build project
         run: dotnet build --configuration Release
+
+      - name: Validate Dockerfile (build image)
+        run: docker build -t careguide_api:ci -f Dockerfile .
+
+      - name: Validate docker-compose syntax
+        run: docker-compose -f docker-compose.yml config
+
+      - name: Test docker-compose up/down
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          sleep 10
+          docker-compose -f docker-compose.yml down
