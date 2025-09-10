@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CareGuide.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route(CareGuide.Models.Constants.ApiConstants.VersionPrefix + "/[controller]")]
     public class HealthCheckController : ControllerBase
     {
         private readonly IUserSessionContext _userSessionContext;
