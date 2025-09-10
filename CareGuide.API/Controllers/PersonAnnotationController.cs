@@ -15,23 +15,23 @@ namespace CareGuide.API.Controllers
             _personAnnotationService = personAnnotationService;
         }
 
-        [HttpGet("SelectAllByPerson/{personId}")]
-        public IResult SelectAllByPerson([FromRoute] Guid personId)
+        [HttpGet("person/{personId}")]
+        public IResult GetAllByPerson([FromRoute] Guid personId)
         {
-            return Results.Ok(_personAnnotationService.SelectAllByPerson(personId));
+            return Results.Ok(_personAnnotationService.GetAllByPerson(personId));
         }
 
         [HttpGet("{id}")]
-        public IResult SelectById([FromRoute] Guid id)
+        public IResult GetById([FromRoute] Guid id)
         {
-            return Results.Ok(_personAnnotationService.SelectById(id));
+            return Results.Ok(_personAnnotationService.GetById(id));
         }
 
         [HttpPost]
         public IResult Create([FromBody] CreatePersonAnnotationDto createPersonAnnotation)
         {
             var created = _personAnnotationService.Create(createPersonAnnotation);
-            return Results.Created($"/PersonAnnotations/{created.Id}", created);
+            return Results.Created($"/personAnnotation/{created.Id}", created);
         }
 
         [HttpPut("{id}")]
@@ -40,14 +40,14 @@ namespace CareGuide.API.Controllers
             return Results.Ok(_personAnnotationService.Update(id, updatePersonAnnotation));
         }
 
-        [HttpDelete("DeleteAllByPerson/{personId}")]
+        [HttpDelete("person/{personId}")]
         public IResult DeleteAllByPerson([FromRoute] Guid personId)
         {
             _personAnnotationService.DeleteAllByPerson(personId);
             return Results.NoContent();
         }
 
-        [HttpDelete("DeleteByIds")]
+        [HttpDelete]
         public IResult DeleteByIds([FromBody] List<Guid> ids)
         {
             _personAnnotationService.DeleteByIds(ids);

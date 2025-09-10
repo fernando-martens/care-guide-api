@@ -4,8 +4,8 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IPersonAnnotationService
     {
-        List<PersonAnnotationDto> SelectAllByPerson(Guid personId);
-        PersonAnnotationDto SelectById(Guid id);
+        List<PersonAnnotationDto> GetAllByPerson(Guid personId);
+        PersonAnnotationDto GetById(Guid id);
         PersonAnnotationDto Create(CreatePersonAnnotationDto personAnnotation);
         PersonAnnotationDto Update(Guid id, UpdatePersonAnnotationDto personAnnotation);
         void DeleteAllByPerson(Guid personId);

@@ -5,7 +5,7 @@ namespace CareGuide.Data.Repositories
 {
     public class PersonAnnotationRepository(DatabaseContext context) : BaseRepository<PersonAnnotation>(context), IPersonAnnotationRepository
     {
-        public List<PersonAnnotation> ListAllByPerson(Guid personId)
+        public List<PersonAnnotation> GetAllByPerson(Guid personId)
         {
             return context.Set<PersonAnnotation>()
                 .Where(p => p.PersonId == personId)

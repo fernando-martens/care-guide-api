@@ -15,13 +15,13 @@ namespace CareGuide.API.Controllers
             _userSessionContext = userSessionContext;
         }
 
-        [HttpGet("HealthPrivate")]
+        [HttpGet("private")]
         public IResult HealthPrivateStatus()
         {
             return Results.Ok(_userSessionContext.UserId);
         }
 
-        [HttpGet("Health")]
+        [HttpGet]
         [IgnoreSessionMiddleware]
         public IResult HealthStatus()
         {

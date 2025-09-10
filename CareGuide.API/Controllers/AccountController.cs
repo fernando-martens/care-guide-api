@@ -23,14 +23,14 @@ namespace CareGuide.API.Controllers
             return Results.Ok(_accountService.CreateAccount(createAccount));
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [IgnoreSessionMiddleware]
         public IResult Login([FromBody] LoginAccountDto loginAccount)
         {
             return Results.Ok(_accountService.LoginAccount(loginAccount));
         }
 
-        [HttpPut("UpdatePassword/{id}")]
+        [HttpPut("{id}/password")]
         public IResult UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
         {
             _accountService.UpdatePasswordAccount(id, user);

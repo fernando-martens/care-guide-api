@@ -27,13 +27,13 @@ namespace CareGuide.Core.Services
             return _mapper.Map<List<UserDto>>(list);
         }
 
-        public UserDto SelectByIdAsDto(Guid id)
+        public UserDto GetByIdDto(Guid id)
         {
-            User userTable = SelectById(id);
+            User userTable = GetById(id);
             return _mapper.Map<UserDto>(userTable);
         }
 
-        public User SelectById(Guid id)
+        public User GetById(Guid id)
         {
             return _userRepository.Get(id) ?? throw new KeyNotFoundException();
         }

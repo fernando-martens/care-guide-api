@@ -24,7 +24,7 @@ namespace CareGuide.Core.Services
             return _mapper.Map<List<PersonDto>>(list);
         }
 
-        public PersonDto Select(Guid id)
+        public PersonDto Get(Guid id)
         {
             Person person = _personRepository.Get(id) ?? throw new KeyNotFoundException();
             return _mapper.Map<PersonDto>(person);

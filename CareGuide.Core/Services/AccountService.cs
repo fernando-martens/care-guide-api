@@ -59,8 +59,8 @@ namespace CareGuide.Core.Services
 
             string token = _jwtService.GenerateToken(user.Id, loginAccount.Email);
 
-            UserDto userDto = _userService.SelectByIdAsDto(user.Id);
-            PersonDto personDto = _personService.Select(userDto.PersonId);
+            UserDto userDto = _userService.GetByIdDto(user.Id);
+            PersonDto personDto = _personService.Get(userDto.PersonId);
 
             return new AccountDto(userDto, personDto, token);
         }

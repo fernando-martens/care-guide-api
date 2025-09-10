@@ -17,16 +17,16 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public List<PersonAnnotationDto> SelectAllByPerson(Guid personId)
+        public List<PersonAnnotationDto> GetAllByPerson(Guid personId)
         {
             if (personId == Guid.Empty)
                 throw new ArgumentException("The personId cannot be empty.", nameof(personId));
 
-            List<PersonAnnotation> list = _personAnnotationRepository.ListAllByPerson(personId);
+            List<PersonAnnotation> list = _personAnnotationRepository.GetAllByPerson(personId);
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 
-        public PersonAnnotationDto SelectById(Guid id)
+        public PersonAnnotationDto GetById(Guid id)
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("The id cannot be empty.", nameof(id));
