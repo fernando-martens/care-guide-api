@@ -26,19 +26,14 @@ jobs:
       - name: Build project
         run: dotnet build --configuration Release
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Validate Dockerfile (build image)
         run: docker build -t careguide_api:ci -f Dockerfile .
 
       - name: Validate docker-compose syntax
-        run: docker-compose -f docker-compose.yml config
+        run: docker compose -f docker-compose.yml config
 
       - name: Test docker-compose up/down
         run: |
-          docker-compose -f docker-compose.yml up -d
+          docker compose -f docker-compose.yml up -d
           sleep 10
-          docker-compose -f docker-compose.yml down
+          docker compose -f docker-compose.yml down
