@@ -5,10 +5,10 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IPersonService
     {
-        Task<List<PersonDto>> GetAllAsync(int page, int pageSize);
-        Task<PersonDto> GetAsync(Guid id);
-        Task<PersonDto> CreateAsync(CreatePersonDto createPerson);
-        Task<PersonDto> UpdateAsync(Guid id, PersonDto updatePerson);
-        Task DeleteAsync(Guid id);
+        Task<List<PersonDto>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken);
+        Task<PersonDto> GetAsync(Guid id, CancellationToken cancellationToken);
+        Task<PersonDto> CreateAsync(CreatePersonDto createPerson, CancellationToken cancellationToken);
+        Task<PersonDto> UpdateAsync(Guid id, PersonDto updatePerson, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

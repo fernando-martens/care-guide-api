@@ -13,21 +13,21 @@ namespace CareGuide.Data.Repositories
             _context = context;
         }
 
-        public async Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId)
+        public async Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId, CancellationToken cancellationToken = default)
         {
             return await _context.Set<PersonAnnotation>()
                 .Where(p => p.PersonId == personId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task RemoveAllByPersonAsync(Guid personId)
+        public async Task RemoveAllByPersonAsync(Guid personId, CancellationToken cancellationToken = default)
         {
             var annotations = await _context.Set<PersonAnnotation>()
                 .Where(p => p.PersonId == personId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             _context.Set<PersonAnnotation>().RemoveRange(annotations);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

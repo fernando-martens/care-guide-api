@@ -14,7 +14,7 @@ namespace CareGuide.Tests.Context
             {
                 Email = "test123@domaintest.com.br",
                 Password = "Test123"
-            }).Result;
+            }, CancellationToken.None).Result;
 
             UserId = account.Id;
         }

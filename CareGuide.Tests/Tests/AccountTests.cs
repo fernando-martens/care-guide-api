@@ -23,7 +23,7 @@ namespace CareGuide.Tests.Tests
                 Birthday = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            AccountDto account = await _accountService.CreateAccountAsync(createAccount);
+            AccountDto account = await _accountService.CreateAccountAsync(createAccount, CancellationToken.None);
 
             Assert.Equal(createAccount.Name, account.Name);
             Assert.Equal(createAccount.Email, account.Email);
@@ -32,12 +32,12 @@ namespace CareGuide.Tests.Tests
 
             var ex = await Assert.ThrowsAsync<Exception>(async () =>
             {
-                await _accountService.CreateAccountAsync(createAccount);
+                await _accountService.CreateAccountAsync(createAccount, CancellationToken.None);
             });
             Assert.Equal("Email already registered", ex.Message);
 
             createAccount.Email = generateFakeEmail();
-            await _accountService.CreateAccountAsync(createAccount);
+            await _accountService.CreateAccountAsync(createAccount, CancellationToken.None);
         }
     }
 }
