@@ -20,10 +20,17 @@ namespace CareGuide.API.Middlewares
                 await next(context);
                 return;
             }
-  
+
+            var path = context.Request.Path.Value?.ToLower();
+            if (path != null && (path.StartsWith("/scalar") || path.StartsWith("/api-reference") || path.StartsWith("/api-docs") || path.StartsWith("/openapi")))
+            {
+                await next(context);
+                return;
+            }
+
             if (context.Request.Headers.TryGetValue("Authorization", out StringValues headerAuth))
             {
-                if(_jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", "")) == null)
+                if (_jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", "")) == null)
                     throw new UnauthorizedAccessException("invalid token");
             }
             else

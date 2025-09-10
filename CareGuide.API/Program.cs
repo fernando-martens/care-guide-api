@@ -6,6 +6,7 @@ using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -75,7 +78,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetService<ILogger<Program>>();
-        logger?.LogError(ex, "Erro ao migrar o banco de dados");
+        logger?.LogError(ex, "Error migrating the database");
     }
 }
 
@@ -87,10 +90,11 @@ app.Run();
 
 void ConfigurePipeline(WebApplication app)
 {
+    app.MapSwagger("/openapi/{documentName}.json");
+    app.MapScalarApiReference();
+
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
         app.UseDeveloperExceptionPage();
     }
     else
@@ -105,7 +109,6 @@ void ConfigurePipeline(WebApplication app)
     app.Use(async (context, next) =>
     {
         context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-        context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self'; object-src 'none';");
         context.Response.Headers.Append("Referrer-Policy", "no-referrer");
         context.Response.Headers.Append("X-Frame-Options", "DENY");
         await next();
