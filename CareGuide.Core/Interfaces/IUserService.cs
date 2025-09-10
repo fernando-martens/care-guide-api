@@ -7,9 +7,9 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IUserService
     {
-        List<UserDto> ListAll();
+        List<UserDto> GetAll(int page, int pageSize);
         UserDto SelectByIdAsDto(Guid id);
-        UserTable SelectById(Guid id);
+        User SelectById(Guid id);
         UserDto Create(PersonDto person, CreateUserDto user);
         void UpdatePassword(Guid id, UpdatePasswordAccountDto user);
         void Delete(Guid id);

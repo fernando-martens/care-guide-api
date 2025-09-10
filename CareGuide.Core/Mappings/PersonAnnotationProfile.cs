@@ -8,7 +8,7 @@ namespace CareGuide.Core.Mappings
     {
         public PersonAnnotationProfile()
         {
-            CreateMap<PersonAnnotationTable, PersonAnnotationDto>();
+            CreateMap<PersonAnnotation, PersonAnnotationDto>();
         }
     }
 }

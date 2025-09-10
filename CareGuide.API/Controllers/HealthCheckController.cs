@@ -4,27 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Controllers
 {
-    public class HealthCheckController : BaseApiController
+    [ApiController]
+    [Route("[controller]")]
+    public class HealthCheckController : ControllerBase
     {
-
         private readonly IUserSessionContext _userSessionContext;
 
-        public HealthCheckController(ILogger<BaseApiController> _logger, IUserSessionContext userSessionContext) : base(_logger)
+        public HealthCheckController(IUserSessionContext userSessionContext)
         {
             _userSessionContext = userSessionContext;
         }
 
         [HttpGet("HealthPrivate")]
-        public ActionResult HealthPrivateStatus()
+        public IResult HealthPrivateStatus()
         {
-            return Ok(_userSessionContext.UserId);
+            return Results.Ok(_userSessionContext.UserId);
         }
 
         [HttpGet("Health")]
         [IgnoreSessionMiddleware]
-        public ActionResult HealthStatus()
+        public IResult HealthStatus()
         {
-            return Ok();
+            return Results.NoContent();
         }
 
     }

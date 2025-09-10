@@ -1,8 +1,7 @@
-﻿using System.Net;
-using CareGuide.Models.Exceptions;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace CareGuide.API.Middlewares
 {
@@ -45,11 +44,6 @@ namespace CareGuide.API.Middlewares
             {
                 _logger.LogError(tex, "Operation timeout");
                 await HandleTimeoutExceptionAsync(context, tex);
-            }
-            catch (NotFoundException nfex)
-            {
-                _logger.LogWarning(nfex, "Resource not found");
-                await HandleNotFoundExceptionAsync(context, nfex);
             }
             catch (KeyNotFoundException kex)
             {

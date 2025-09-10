@@ -1,62 +1,60 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
+using CareGuide.Models.Constants;
 using CareGuide.Models.DTOs.Person;
-using CareGuide.Models.Exceptions;
 using CareGuide.Models.Tables;
 
 namespace CareGuide.Core.Services
 {
     public class PersonService : IPersonService
     {
-
-        private readonly IUserService _userService;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
-        public PersonService(IUserService userService, IPersonRepository personRepository, IMapper mapper)
+        public PersonService(IPersonRepository personRepository, IMapper mapper)
         {
-            _userService = userService;
             _personRepository = personRepository;
             _mapper = mapper;
         }
 
-        public List<PersonDto> ListAll()
+        public List<PersonDto> GetAll(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
         {
-            List<PersonTable> list = _personRepository.ListAll();
+            List<Person> list = _personRepository.GetAll(page, pageSize);
             return _mapper.Map<List<PersonDto>>(list);
         }
 
         public PersonDto Select(Guid id)
         {
-            PersonTable person = _personRepository.SelectById(id) ?? throw new NotFoundException();
+            Person person = _personRepository.Get(id) ?? throw new KeyNotFoundException();
             return _mapper.Map<PersonDto>(person);
         }
 
         public PersonDto Create(CreatePersonDto createPerson)
         {
-            PersonTable person = _personRepository.Insert(new PersonTable(createPerson));
+            Person person = _mapper.Map<Person>(createPerson);
+            _personRepository.Add(person);
             return _mapper.Map<PersonDto>(person);
         }
 
         public PersonDto Update(Guid id, PersonDto updatePerson)
         {
-            PersonTable existingPerson = _personRepository.SelectById(id) ?? throw new NotFoundException();
+            Person existingPerson = _personRepository.Get(id) ?? throw new KeyNotFoundException();
 
             existingPerson.Name = updatePerson.Name;
             existingPerson.Gender = updatePerson.Gender;
             existingPerson.Birthday = updatePerson.Birthday;
             existingPerson.Picture = updatePerson.Picture;
 
-            PersonTable person = _personRepository.Update(existingPerson);
+            Person person = _personRepository.Update(existingPerson);
 
             return _mapper.Map<PersonDto>(person);
         }
 
         public void Delete(Guid id)
         {
-            PersonTable existingPerson = _personRepository.SelectById(id) ?? throw new NotFoundException();
-            _personRepository.Remove(existingPerson);
+            Person existingPerson = _personRepository.Get(id) ?? throw new KeyNotFoundException();
+            _personRepository.Delete(existingPerson.Id);
         }
 
     }

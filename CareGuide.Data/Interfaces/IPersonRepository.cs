@@ -1,14 +1,11 @@
-﻿using CareGuide.Models.Tables;
+﻿using CareGuide.Data.Interfaces.Shared;
+using CareGuide.Models.Tables;
 
 
 namespace CareGuide.Data.Interfaces
 {
-    public interface IPersonRepository
+    public interface IPersonRepository : IRepository<Person>
     {
-        List<PersonTable> ListAll();
-        PersonTable? SelectById(Guid id);
-        PersonTable Insert(PersonTable person);
-        PersonTable Update(PersonTable person);
-        void Remove(PersonTable person);
+
     }
 }

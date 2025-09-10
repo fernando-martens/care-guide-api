@@ -17,44 +17,12 @@ namespace CareGuide.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CareGuide.Models.Tables.PersonAnnotationTable", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("details");
-
-                    b.Property<string>("FileUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("file_url");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("person_id");
-
-                    b.Property<DateTime>("Register")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("register");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("person_annotation", (string)null);
-                });
-
-            modelBuilder.Entity("CareGuide.Models.Tables.PersonTable", b =>
+            modelBuilder.Entity("CareGuide.Models.Tables.Person", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,10 +33,20 @@ namespace CareGuide.Data.Migrations
                         .HasColumnType("date")
                         .HasColumnName("birthday");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("char(1)")
                         .HasColumnName("gender");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -81,6 +59,10 @@ namespace CareGuide.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("picture");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id");
 
                     b.ToTable("person", null, t =>
@@ -89,18 +71,70 @@ namespace CareGuide.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CareGuide.Models.Tables.UserTable", b =>
+            modelBuilder.Entity("CareGuide.Models.Tables.PersonAnnotation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("details");
+
+                    b.Property<string>("FileUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("file_url");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("person_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("person_annotation", (string)null);
+                });
+
+            modelBuilder.Entity("CareGuide.Models.Tables.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("email");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -112,9 +146,9 @@ namespace CareGuide.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("person_id");
 
-                    b.Property<DateTime>("Register")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("register");
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -126,9 +160,9 @@ namespace CareGuide.Data.Migrations
                     b.ToTable("user", (string)null);
                 });
 
-            modelBuilder.Entity("CareGuide.Models.Tables.PersonAnnotationTable", b =>
+            modelBuilder.Entity("CareGuide.Models.Tables.PersonAnnotation", b =>
                 {
-                    b.HasOne("CareGuide.Models.Tables.PersonTable", "Person")
+                    b.HasOne("CareGuide.Models.Tables.Person", "Person")
                         .WithMany("PersonAnnotations")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -138,9 +172,9 @@ namespace CareGuide.Data.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("CareGuide.Models.Tables.UserTable", b =>
+            modelBuilder.Entity("CareGuide.Models.Tables.User", b =>
                 {
-                    b.HasOne("CareGuide.Models.Tables.PersonTable", "Person")
+                    b.HasOne("CareGuide.Models.Tables.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -149,7 +183,7 @@ namespace CareGuide.Data.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("CareGuide.Models.Tables.PersonTable", b =>
+            modelBuilder.Entity("CareGuide.Models.Tables.Person", b =>
                 {
                     b.Navigation("PersonAnnotations");
                 });
