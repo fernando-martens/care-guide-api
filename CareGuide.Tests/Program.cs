@@ -7,21 +7,20 @@ using CareGuide.Core.Interfaces;
 
 namespace CareGuide.Tests
 {
-    public class Program: IDisposable
+    public class Program : IDisposable
     {
         public ServiceProvider serviceProvider;
 
         public Program()
         {
             IConfiguration configuration = new ConfigurationBuilder()
-                       .AddJsonFile("appsettings.json")
-                       .AddEnvironmentVariables()
-                       .Build();
-
-            Startup startup = new Startup(configuration);
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
 
             IServiceCollection services = new ServiceCollection();
-            startup.ConfigureServices(services);
+            CareGuide.Infra.CommomStartupMethods.ConfigureServices(configuration, services);
+            services.AddScoped<CareGuide.Security.Interfaces.IUserSessionContext, CareGuide.Tests.Context.UserSessionContextTests>();
             serviceProvider = services.BuildServiceProvider();
 
             using (var scope = serviceProvider.CreateScope())
@@ -38,7 +37,6 @@ namespace CareGuide.Tests
             }
 
             CreateSeeds();
-
         }
 
         private void CreateSeeds()
