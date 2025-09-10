@@ -4,7 +4,6 @@
     {
         public Guid Id { get; set; }
         public Guid PersonId { get; set; }
-        public string Email { get; set; }
-        public DateTime Register { get; set; }
+        public required string Email { get; set; }
     }
 }

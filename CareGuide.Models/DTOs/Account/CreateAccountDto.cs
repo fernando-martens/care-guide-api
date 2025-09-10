@@ -4,9 +4,9 @@ namespace CareGuide.Models.DTOs.Auth
 {
     public class CreateAccountDto
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Name { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+        public required string Name { get; set; }
         public Gender Gender { get; set; }
         public DateOnly Birthday { get; set; }
     }

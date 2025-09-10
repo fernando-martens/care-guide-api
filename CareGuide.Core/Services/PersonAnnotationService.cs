@@ -26,7 +26,7 @@ namespace CareGuide.Core.Services
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 
-        public async Task<PersonAnnotationDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<PersonAnnotationDto> GetAsync(Guid id, CancellationToken cancellationToken)
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("The id cannot be empty.", nameof(id));
@@ -39,29 +39,47 @@ namespace CareGuide.Core.Services
             return _mapper.Map<PersonAnnotationDto>(personAnnotationTable);
         }
 
-        public async Task<PersonAnnotationDto> GetAsync(Guid id, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<PersonAnnotationDto> CreateAsync(CreatePersonAnnotationDto personAnnotation, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (personAnnotation == null)
+                throw new ArgumentNullException(nameof(personAnnotation));
+
+            var entity = _mapper.Map<PersonAnnotation>(personAnnotation);
+            await _personAnnotationRepository.AddAsync(entity, cancellationToken);
+            return _mapper.Map<PersonAnnotationDto>(entity);
         }
 
         public async Task<PersonAnnotationDto> UpdateAsync(Guid id, UpdatePersonAnnotationDto personAnnotation, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty)
+                throw new ArgumentException("The id cannot be empty.", nameof(id));
+
+            if (personAnnotation == null)
+                throw new ArgumentNullException(nameof(personAnnotation));
+
+            var existing = await _personAnnotationRepository.GetAsync(id, cancellationToken);
+
+            if (existing == null)
+                throw new KeyNotFoundException($"No person annotation found with the ID {id}.");
+
+            existing.Details = personAnnotation.Details;
+            existing.FileUrl = personAnnotation.FileUrl;
+
+            var updated = await _personAnnotationRepository.UpdateAsync(existing, cancellationToken);
+            return _mapper.Map<PersonAnnotationDto>(updated);
         }
 
         public async Task DeleteAllByPersonAsync(Guid personId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (personId == Guid.Empty)
+                throw new ArgumentException("The personId cannot be empty.", nameof(personId));
+
+            await _personAnnotationRepository.DeleteAllByPersonAsync(personId, cancellationToken);
         }
 
         public async Task DeleteByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _personAnnotationRepository.DeleteManyAsync(ids, cancellationToken);
         }
     }
 }

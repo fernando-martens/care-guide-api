@@ -20,7 +20,7 @@ namespace CareGuide.Data.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task RemoveAllByPersonAsync(Guid personId, CancellationToken cancellationToken = default)
+        public async Task DeleteAllByPersonAsync(Guid personId, CancellationToken cancellationToken = default)
         {
             var annotations = await _context.Set<PersonAnnotation>()
                 .Where(p => p.PersonId == personId)
