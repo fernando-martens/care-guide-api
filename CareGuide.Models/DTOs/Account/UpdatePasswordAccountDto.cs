@@ -2,6 +2,6 @@
 {
     public class UpdatePasswordAccountDto
     {
-        public string Password { get; set; }
+        public required string Password { get; set; }
     }
 }
