@@ -12,8 +12,9 @@ namespace CareGuide.Core.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
+
+        private readonly IUserService _userService;
         private readonly IPersonService _personService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtService _jwtService;
@@ -51,7 +52,7 @@ namespace CareGuide.Core.Services
 
         public AccountDto LoginAccount(LoginAccountDto loginAccount)
         {
-            UserTable? user = _userRepository.SelectByEmail(loginAccount.Email);
+            User? user = _userRepository.GetByEmail(loginAccount.Email);
 
             if (user == null || !PasswordManager.ValidatePassword(loginAccount.Password, user.Password))
                 throw new InvalidOperationException("wrong password or email");
@@ -73,6 +74,6 @@ namespace CareGuide.Core.Services
         {
             throw new NotImplementedException();
         }
-  
+
     }
 }

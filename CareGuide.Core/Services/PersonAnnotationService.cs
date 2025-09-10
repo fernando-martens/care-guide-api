@@ -8,7 +8,6 @@ namespace CareGuide.Core.Services
 {
     public class PersonAnnotationService : IPersonAnnotationService
     {
-
         private readonly IPersonAnnotationRepository _personAnnotationRepository;
         private readonly IMapper _mapper;
 
@@ -23,7 +22,7 @@ namespace CareGuide.Core.Services
             if (personId == Guid.Empty)
                 throw new ArgumentException("The personId cannot be empty.", nameof(personId));
 
-            List<PersonAnnotationTable> list = _personAnnotationRepository.ListAllByPerson(personId);
+            List<PersonAnnotation> list = _personAnnotationRepository.ListAllByPerson(personId);
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 
@@ -32,7 +31,7 @@ namespace CareGuide.Core.Services
             if (id == Guid.Empty)
                 throw new ArgumentException("The id cannot be empty.", nameof(id));
 
-            var personAnnotationTable = _personAnnotationRepository.SelectById(id)
+            var personAnnotationTable = _personAnnotationRepository.Get(id)
                 ?? throw new KeyNotFoundException($"No person annotation found with the ID {id}.");
 
             return _mapper.Map<PersonAnnotationDto>(personAnnotationTable);

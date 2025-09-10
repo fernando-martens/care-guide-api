@@ -33,4 +33,8 @@
     <ProjectReference Include="..\CareGuide.Security\CareGuide.Security.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -1,15 +1,11 @@
-﻿using CareGuide.Models.Tables;
+﻿using CareGuide.Data.Interfaces.Shared;
+using CareGuide.Models.Tables;
 
 
 namespace CareGuide.Data.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
-        List<UserTable> ListAll();
-        UserTable? SelectById(Guid id);
-        UserTable? SelectByEmail(string email);
-        UserTable Insert(UserTable user);
-        UserTable Update(UserTable user);
-        void Remove(UserTable id);
+        User? GetByEmail(string email);
     }
 }

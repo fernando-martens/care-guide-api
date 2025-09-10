@@ -6,6 +6,6 @@ public class PersonProfile : Profile
 {
     public PersonProfile()
     {
-        CreateMap<PersonTable, PersonDto>();
+        CreateMap<Person, PersonDto>();
     }
 }

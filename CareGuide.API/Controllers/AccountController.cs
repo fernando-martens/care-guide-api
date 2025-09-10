@@ -1,48 +1,47 @@
 using CareGuide.API.Attributes;
 using CareGuide.Core.Interfaces;
 using CareGuide.Models.DTOs.Auth;
-using CareGuide.Models.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Controllers
 {
-
-    public class AccountController : BaseApiController
+    [ApiController]
+    [Route("[controller]")]
+    public class AccountController : ControllerBase
     {
-
         private readonly IAccountService _accountService;
 
-        public AccountController(ILogger<BaseApiController> logger, IAccountService accountService) : base(logger)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
 
         [HttpPost]
         [IgnoreSessionMiddleware]
-        public ActionResult<UserDto> Create([FromBody] CreateAccountDto createAccount)
+        public IResult Create([FromBody] CreateAccountDto createAccount)
         {
-            return Ok(_accountService.CreateAccount(createAccount));
+            return Results.Ok(_accountService.CreateAccount(createAccount));
         }
 
         [HttpPost("Login")]
         [IgnoreSessionMiddleware]
-        public ActionResult<UserDto> Login([FromBody] LoginAccountDto loginAccount)
+        public IResult Login([FromBody] LoginAccountDto loginAccount)
         {
-            return Ok(_accountService.LoginAccount(loginAccount));
+            return Results.Ok(_accountService.LoginAccount(loginAccount));
         }
 
         [HttpPut("UpdatePassword/{id}")]
-        public ActionResult<string> UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
+        public IResult UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
         {
             _accountService.UpdatePasswordAccount(id, user);
-            return Ok("Password changed successfully.");
+            return Results.NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<string> DeleteAccount(Guid id)
+        public IResult DeleteAccount(Guid id)
         {
             _accountService.DeleteAccount(id);
-            return Ok("Account successfully deleted.");
+            return Results.NoContent();
         }
 
     }

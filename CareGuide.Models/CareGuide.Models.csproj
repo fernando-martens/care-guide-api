@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Tables\WeatherForecastTable.cs" />
+    <Compile Remove="Entities\WeatherForecastTable.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,59 +1,56 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
+using CareGuide.Models.Constants;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
-using CareGuide.Models.Exceptions;
 using CareGuide.Models.Tables;
 using CareGuide.Security;
-using CareGuide.Security.Interfaces;
 
 namespace CareGuide.Core.Services
 {
     public class UserService : IUserService
     {
-
-        private readonly IJwtService _jwtService;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserService(IJwtService jwtService, IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
-            _jwtService = jwtService;
             _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public List<UserDto> ListAll()
+        public List<UserDto> GetAll(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
         {
-            List<UserTable> list = _userRepository.ListAll();
+            List<User> list = _userRepository.GetAll(page, pageSize);
             return _mapper.Map<List<UserDto>>(list);
         }
 
         public UserDto SelectByIdAsDto(Guid id)
         {
-            UserTable userTable = SelectById(id);
+            User userTable = SelectById(id);
             return _mapper.Map<UserDto>(userTable);
         }
 
-        public UserTable SelectById(Guid id)
+        public User SelectById(Guid id)
         {
-            return _userRepository.SelectById(id) ?? throw new NotFoundException();
+            return _userRepository.Get(id) ?? throw new KeyNotFoundException();
         }
 
         public UserDto Create(PersonDto person, CreateUserDto createUser)
         {
-            if (_userRepository.SelectByEmail(createUser.Email) != null)
+            if (_userRepository.GetByEmail(createUser.Email) != null)
                 throw new InvalidOperationException("Email already registered");
 
-            UserTable user = _userRepository.Insert(new UserTable(person, createUser));
+            User user = _mapper.Map<User>(createUser);
+            _userRepository.Add(user);
             return _mapper.Map<UserDto>(user);
         }
 
         public void UpdatePassword(Guid id, UpdatePasswordAccountDto user)
         {
-            UserTable existingUser = _userRepository.SelectById(id) ?? throw new NotFoundException();
+            User existingUser = _userRepository.Get(id) ?? throw new KeyNotFoundException();
 
             if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {
@@ -61,17 +58,14 @@ namespace CareGuide.Core.Services
             }
 
             existingUser.Password = PasswordManager.HashPassword(user.Password);
-            existingUser.Register = DateTime.UtcNow;
 
             _userRepository.Update(existingUser);
         }
 
         public void Delete(Guid id)
         {
-            UserTable existingUser = _userRepository.SelectById(id) ?? throw new NotFoundException();
-            _userRepository.Remove(existingUser);
+            User existingUser = _userRepository.Get(id) ?? throw new KeyNotFoundException();
+            _userRepository.Delete(existingUser.Id);
         }
-
     }
-
 }

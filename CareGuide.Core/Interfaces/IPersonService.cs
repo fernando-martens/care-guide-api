@@ -1,10 +1,11 @@
-﻿using CareGuide.Models.DTOs.Person;
+﻿using CareGuide.Models.Constants;
+using CareGuide.Models.DTOs.Person;
 
 namespace CareGuide.Core.Interfaces
 {
     public interface IPersonService
     {
-        List<PersonDto> ListAll();
+        List<PersonDto> GetAll(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize);
         PersonDto Select(Guid id);
         PersonDto Create(CreatePersonDto person);
         PersonDto Update(Guid id, PersonDto person);
