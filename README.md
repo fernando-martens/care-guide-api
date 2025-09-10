@@ -36,8 +36,8 @@ Para saber como criar e executar migrations no projeto, consulte a seguinte [doc
 
 ## Endpoints
 
-Esta API fornece documentação no padrão OpenAPI através do Swagger.
-Os endpoints disponíveis, suas descrições e dados necessários para requisição podem ser consultados e testados em `/swagger`.
+Esta API fornece documentação no padrão OpenAPI através do Scalar.
+Os endpoints disponíveis, suas descrições e dados necessários para requisição podem ser consultados e testados em `/scalar`.
 
 ## Participantes do Projeto
 
