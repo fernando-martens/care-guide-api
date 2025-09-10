@@ -12,21 +12,21 @@ namespace CareGuide.Data.TransactionManagement
             _dbContext = dbContext;
         }
 
-        public async Task BeginTransactionAsync()
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            _transaction = await _dbContext.Database.BeginTransactionAsync();
+            _transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         }
 
-        public async Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await _dbContext.SaveChangesAsync();
-                await (_transaction?.CommitAsync() ?? Task.CompletedTask);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                await (_transaction?.CommitAsync(cancellationToken) ?? Task.CompletedTask);
             }
             catch
             {
-                await RollbackTransactionAsync();
+                await RollbackTransactionAsync(cancellationToken);
                 throw;
             }
             finally
@@ -36,19 +36,19 @@ namespace CareGuide.Data.TransactionManagement
             }
         }
 
-        public async Task RollbackTransactionAsync()
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
             {
-                await _transaction.RollbackAsync();
+                await _transaction.RollbackAsync(cancellationToken);
                 await _transaction.DisposeAsync();
                 _transaction = null;
             }
         }
 
-        public async Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public void Dispose()

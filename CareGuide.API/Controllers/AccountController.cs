@@ -18,29 +18,29 @@ namespace CareGuide.API.Controllers
 
         [HttpPost]
         [IgnoreSessionMiddleware]
-        public async Task<IResult> Create([FromBody] CreateAccountDto createAccount)
+        public async Task<IResult> Create([FromBody] CreateAccountDto createAccount, CancellationToken cancellationToken)
         {
-            return Results.Ok(await _accountService.CreateAccountAsync(createAccount));
+            return Results.Ok(await _accountService.CreateAccountAsync(createAccount, cancellationToken));
         }
 
         [HttpPost("login")]
         [IgnoreSessionMiddleware]
-        public async Task<IResult> Login([FromBody] LoginAccountDto loginAccount)
+        public async Task<IResult> Login([FromBody] LoginAccountDto loginAccount, CancellationToken cancellationToken)
         {
-            return Results.Ok(await _accountService.LoginAccountAsync(loginAccount));
+            return Results.Ok(await _accountService.LoginAccountAsync(loginAccount, cancellationToken));
         }
 
         [HttpPut("{id}/password")]
-        public async Task<IResult> UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
+        public async Task<IResult> UpdatePassword([FromRoute] Guid id, [FromBody] UpdatePasswordAccountDto user, CancellationToken cancellationToken)
         {
-            await _accountService.UpdatePasswordAccountAsync(id, user);
+            await _accountService.UpdatePasswordAccountAsync(id, user, cancellationToken);
             return Results.NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IResult> DeleteAccount(Guid id)
+        public async Task<IResult> DeleteAccount([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            await _accountService.DeleteAccountAsync(id);
+            await _accountService.DeleteAccountAsync(id, cancellationToken);
             return Results.NoContent();
         }
 

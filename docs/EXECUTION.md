@@ -16,8 +16,6 @@
 2. **Verifique os arquivos de configuração:**  
    Certifique-se de que os arquivos `Dockerfile` e `docker-compose.yml` estão presentes na raiz do projeto.
 
----
-
 ### Executando via Docker Compose
 
 3. **Inicie a aplicação com Docker Compose:**
@@ -28,27 +26,11 @@
 
    Todos os serviços necessários serão configurados e iniciados automaticamente.
 
----
-
-### Executando Localmente pelo IIS Express
-
-1. Abra a solução `CareGuide.sln` no Visual Studio.
-2. Selecione o projeto de inicialização `CareGuide.API`.
-3. No menu superior, selecione o perfil **IIS Express**.
-4. Pressione `F5` ou clique em **Iniciar Depuração** para executar a API localmente.
-5. A API estará disponível em `http://localhost:5000` (ou na porta configurada em `launchSettings.json`).
-
-   > Certifique-se de que o banco de dados esteja acessível e configurado corretamente em `appsettings.Development.json`.
-
----
-
 ### Informações Importantes
 
 - A API estará disponível em: [http://localhost:8080](http://localhost:8080)
 - O banco de dados PostgreSQL utilizará a porta `5434`.
 - Certifique-se de que as portas `8080` e `5434` estejam livres antes de iniciar o projeto.
-
----
 
 ### Comandos Úteis
 
@@ -70,3 +52,13 @@
   ```
 
 ---
+
+### Executando Localmente pelo IIS Express
+
+1. Abra a solução `CareGuide.sln` no Visual Studio.
+2. Selecione o projeto de inicialização `CareGuide.API`.
+3. No menu superior, selecione o perfil **IIS Express**.
+4. Pressione `F5` ou clique em **Iniciar Depuração** para executar a API localmente.
+5. A API estará disponível em `http://localhost:5000` (ou na porta configurada em `launchSettings.json`).
+
+   > Certifique-se de que o banco de dados esteja acessível e configurado corretamente em `appsettings.Development.json`.

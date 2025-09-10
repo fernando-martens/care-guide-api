@@ -14,9 +14,9 @@ namespace CareGuide.Data.Repositories
             _context = context;
         }
 
-        public async Task<User?> GetByEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
-            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
     }
 }

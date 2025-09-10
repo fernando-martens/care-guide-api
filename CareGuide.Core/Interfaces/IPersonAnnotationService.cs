@@ -4,11 +4,11 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IPersonAnnotationService
     {
-        Task<List<PersonAnnotationDto>> GetAllByPersonAsync(Guid personId);
-        Task<PersonAnnotationDto> GetAsync(Guid id);
-        Task<PersonAnnotationDto> CreateAsync(CreatePersonAnnotationDto personAnnotation);
-        Task<PersonAnnotationDto> UpdateAsync(Guid id, UpdatePersonAnnotationDto personAnnotation);
-        Task DeleteAllByPersonAsync(Guid personId);
-        Task DeleteByIdsAsync(List<Guid> ids);
+        Task<List<PersonAnnotationDto>> GetAllByPersonAsync(Guid personId, CancellationToken cancellationToken);
+        Task<PersonAnnotationDto> GetAsync(Guid id, CancellationToken cancellationToken);
+        Task<PersonAnnotationDto> CreateAsync(CreatePersonAnnotationDto personAnnotation, CancellationToken cancellationToken);
+        Task<PersonAnnotationDto> UpdateAsync(Guid id, UpdatePersonAnnotationDto personAnnotation, CancellationToken cancellationToken);
+        Task DeleteAllByPersonAsync(Guid personId, CancellationToken cancellationToken);
+        Task DeleteByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
     }
 }
