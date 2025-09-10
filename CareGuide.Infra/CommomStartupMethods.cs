@@ -1,11 +1,11 @@
 ﻿using CareGuide.Data;
 using CareGuide.Data.TransactionManagement;
 using CareGuide.Infra.CrossCutting;
+using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.Validators;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,8 +59,8 @@ namespace CareGuide.Infra
 
         private static void ConfigureValidators(IServiceCollection services)
         {
-            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-            services.AddValidatorsFromAssemblyContaining<CreateAccountDtoValidator>();
+            services.AddTransient<IValidator<CreateAccountDto>, CreateAccountDtoValidator>();
+            services.AddTransient<IValidator<UpdatePasswordAccountDto>, UpdatePasswordAccountDtoValidator>();
         }
     }
 }
