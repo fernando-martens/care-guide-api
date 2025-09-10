@@ -3,8 +3,13 @@ using CareGuide.Models.Tables;
 
 namespace CareGuide.Data.Repositories
 {
-    public class PersonRepository(DatabaseContext context) : BaseRepository<Person>(context), IPersonRepository
+    public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
+        private readonly DatabaseContext _context;
 
+        public PersonRepository(DatabaseContext context) : base(context)
+        {
+            _context = context;
+        }
     }
 }

@@ -4,91 +4,95 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CareGuide.Data.Repositories
 {
-    public class BaseRepository<TEntity>(DbContext context) : IRepository<TEntity> where TEntity : Entity
+    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
-        public TEntity Add(TEntity entity)
+        protected readonly DbContext context;
+
+        public BaseRepository(DbContext context)
         {
-            context.Set<TEntity>().Add(entity);
-            context.SaveChanges();
+            this.context = context;
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            await context.Set<TEntity>().AddAsync(entity);
+            await context.SaveChangesAsync();
             return entity;
         }
 
-        public TEntity Delete(Guid id)
+        public async Task<TEntity?> DeleteAsync(Guid id)
         {
-            var entity = context.Set<TEntity>().Find(id);
+            var entity = await context.Set<TEntity>().FindAsync(id);
 
             if (entity == null)
-                return null!;
+                return null;
 
             context.Remove(entity);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return entity;
         }
 
-        public List<TEntity> DeleteMany(IEnumerable<Guid> ids)
+        public async Task<List<TEntity>> DeleteManyAsync(IEnumerable<Guid> ids)
         {
             var set = context.Set<TEntity>();
-
-            var entities = set
-                .Where(e => ids.Contains(e.Id))
-                .ToList();
+            var entities = await set.Where(e => ids.Contains(e.Id)).ToListAsync();
 
             if (entities.Count == 0)
                 return new List<TEntity>();
 
             set.RemoveRange(entities);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return entities;
         }
 
-        public bool Exists(Guid id)
+        public async Task<bool> ExistsAsync(Guid id)
         {
-            return context.Set<TEntity>().Any(e => e.Id == id);
+            return await context.Set<TEntity>().AnyAsync(e => e.Id == id);
         }
 
-        public int CountExisting(IEnumerable<Guid> ids)
+        public async Task<int> CountExistingAsync(IEnumerable<Guid> ids)
         {
             var idList = ids?.Distinct().ToList() ?? [];
             if (idList.Count == 0) return 0;
 
-            return context.Set<TEntity>()
+            return await context.Set<TEntity>()
                 .AsNoTracking()
-                .Count(e => idList.Contains(e.Id));
+                .CountAsync(e => idList.Contains(e.Id));
         }
 
-        public virtual List<TEntity> GetAll(int page, int pageSize)
+        public virtual async Task<List<TEntity>> GetAllAsync(int page, int pageSize)
         {
             if (page < 1) page = 1;
             if (pageSize < 1) pageSize = 10;
 
-            return context.Set<TEntity>()
+            return await context.Set<TEntity>()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync();
         }
 
-        public virtual TEntity Get(Guid id)
+        public virtual async Task<TEntity?> GetAsync(Guid id)
         {
-            return context.Set<TEntity>().Find(id) ?? null!;
+            return await context.Set<TEntity>().FindAsync(id) ?? null;
         }
 
-        public virtual List<TEntity> GetMany(IEnumerable<Guid> ids, int page, int pageSize)
+        public virtual async Task<List<TEntity>> GetManyAsync(IEnumerable<Guid> ids, int page, int pageSize)
         {
             if (page < 1) page = 1;
             if (pageSize < 1) pageSize = 10;
 
-            return context.Set<TEntity>()
+            return await context.Set<TEntity>()
                 .Where(e => ids.Contains(e.Id))
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync();
         }
 
-        public TEntity Update(TEntity entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             context.Entry(entity).State = EntityState.Modified;
             context.Set<TEntity>().Update(entity);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return entity;
         }
     }

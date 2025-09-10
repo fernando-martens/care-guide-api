@@ -7,11 +7,11 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IUserService
     {
-        List<UserDto> GetAll(int page, int pageSize);
-        UserDto GetByIdDto(Guid id);
-        User GetById(Guid id);
-        UserDto Create(PersonDto person, CreateUserDto user);
-        void UpdatePassword(Guid id, UpdatePasswordAccountDto user);
-        void Delete(Guid id);
+        Task<List<UserDto>> GetAllAsync(int page, int pageSize);
+        Task<UserDto> GetByIdDtoAsync(Guid id);
+        Task<User> GetByIdAsync(Guid id);
+        Task<UserDto> CreateAsync(PersonDto person, CreateUserDto createUser);
+        Task UpdatePasswordAsync(Guid id, UpdatePasswordAccountDto user);
+        Task DeleteAsync(Guid id);
     }
 }

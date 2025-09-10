@@ -17,47 +17,49 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public List<PersonAnnotationDto> GetAllByPerson(Guid personId)
+        public async Task<List<PersonAnnotationDto>> GetAllByPersonAsync(Guid personId)
         {
             if (personId == Guid.Empty)
                 throw new ArgumentException("The personId cannot be empty.", nameof(personId));
 
-            List<PersonAnnotation> list = _personAnnotationRepository.GetAllByPerson(personId);
+            var list = await _personAnnotationRepository.GetAllByPersonAsync(personId);
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 
-        public PersonAnnotationDto GetById(Guid id)
+        public async Task<PersonAnnotationDto> GetByIdAsync(Guid id)
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("The id cannot be empty.", nameof(id));
 
-            var personAnnotationTable = _personAnnotationRepository.Get(id)
-                ?? throw new KeyNotFoundException($"No person annotation found with the ID {id}.");
+            var personAnnotationTable = await _personAnnotationRepository.GetAsync(id);
+
+            if (personAnnotationTable == null)
+                throw new KeyNotFoundException($"No person annotation found with the ID {id}.");
 
             return _mapper.Map<PersonAnnotationDto>(personAnnotationTable);
         }
 
-        public PersonAnnotationDto Select(Guid id)
+        public async Task<PersonAnnotationDto> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public PersonAnnotationDto Create(CreatePersonAnnotationDto personAnnotation)
+        public async Task<PersonAnnotationDto> CreateAsync(CreatePersonAnnotationDto personAnnotation)
         {
             throw new NotImplementedException();
         }
 
-        public PersonAnnotationDto Update(Guid id, UpdatePersonAnnotationDto personAnnotation)
+        public async Task<PersonAnnotationDto> UpdateAsync(Guid id, UpdatePersonAnnotationDto personAnnotation)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteAllByPerson(Guid personId)
+        public async Task DeleteAllByPersonAsync(Guid personId)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteByIds(List<Guid> ids)
+        public async Task DeleteByIdsAsync(List<Guid> ids)
         {
             throw new NotImplementedException();
         }

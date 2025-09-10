@@ -18,29 +18,29 @@ namespace CareGuide.API.Controllers
 
         [HttpPost]
         [IgnoreSessionMiddleware]
-        public IResult Create([FromBody] CreateAccountDto createAccount)
+        public async Task<IResult> Create([FromBody] CreateAccountDto createAccount)
         {
-            return Results.Ok(_accountService.CreateAccount(createAccount));
+            return Results.Ok(await _accountService.CreateAccountAsync(createAccount));
         }
 
         [HttpPost("login")]
         [IgnoreSessionMiddleware]
-        public IResult Login([FromBody] LoginAccountDto loginAccount)
+        public async Task<IResult> Login([FromBody] LoginAccountDto loginAccount)
         {
-            return Results.Ok(_accountService.LoginAccount(loginAccount));
+            return Results.Ok(await _accountService.LoginAccountAsync(loginAccount));
         }
 
         [HttpPut("{id}/password")]
-        public IResult UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
+        public async Task<IResult> UpdatePassword(Guid id, [FromBody] UpdatePasswordAccountDto user)
         {
-            _accountService.UpdatePasswordAccount(id, user);
+            await _accountService.UpdatePasswordAccountAsync(id, user);
             return Results.NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IResult DeleteAccount(Guid id)
+        public async Task<IResult> DeleteAccount(Guid id)
         {
-            _accountService.DeleteAccount(id);
+            await _accountService.DeleteAccountAsync(id);
             return Results.NoContent();
         }
 

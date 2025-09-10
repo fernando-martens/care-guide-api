@@ -7,7 +7,7 @@ namespace CareGuide.API.Middlewares
 {
     public class ErrorHandlerMiddleware : IMiddleware
     {
-        private static string PT(string slug) => "about:blank";
+        private static string PT(string slug) => $"https://problems-registry.smartbear.com/{slug}";
         private readonly ILogger<ErrorHandlerMiddleware> _logger;
         private readonly IWebHostEnvironment _env;
 
@@ -120,7 +120,7 @@ namespace CareGuide.API.Middlewares
                 context.Response.StatusCode,
                 title: "Concurrency conflict.",
                 detail: "The resource was modified by another operation. Refresh and try again.",
-                type: PT("concurrency-conflict"),
+                type: PT("business-rule-violation"),
                 extensions: extensions
             );
 
@@ -141,7 +141,7 @@ namespace CareGuide.API.Middlewares
                 context.Response.StatusCode,
                 title: "Failed to persist changes.",
                 detail: ex.Message,
-                type: PT("persistence-failure"),
+                type: PT("server-error"),
                 extensions: extensions
             );
 
@@ -162,7 +162,7 @@ namespace CareGuide.API.Middlewares
                 504,
                 title: "Execution timeout exceeded.",
                 detail: "The operation took longer than expected. Please try again.",
-                type: PT("operation-timeout"),
+                type: PT("service-unavailable"),
                 extensions: extensions
             );
 
@@ -213,12 +213,23 @@ namespace CareGuide.API.Middlewares
                 ? new Dictionary<string, object> { ["stackTrace"] = exception.StackTrace ?? string.Empty }
                 : null;
 
+            string type = statusCode switch
+            {
+                400 => PT("bad-request"),
+                401 => PT("unauthorized"),
+                403 => PT("forbidden"),
+                404 => PT("not-found"),
+                503 => PT("service-unavailable"),
+                500 => PT("server-error"),
+                _ => "about:blank"
+            };
+
             var problem = CreateProblemDetails(
                 context,
                 statusCode,
                 title: "An unexpected error occurred.",
                 detail: exception.Message,
-                type: null,
+                type: type,
                 extensions: extensions
             );
 

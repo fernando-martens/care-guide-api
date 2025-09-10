@@ -6,16 +6,15 @@ namespace CareGuide.Tests.Context
 {
     public class UserSessionContextTests : IUserSessionContext
     {
-
         public Guid UserId { get; set; }
 
         public UserSessionContextTests(IAccountService _accountService)
         {
-            AccountDto account = _accountService.LoginAccount(new LoginAccountDto()
+            AccountDto account = _accountService.LoginAccountAsync(new LoginAccountDto()
             {
                 Email = "test123@domaintest.com.br",
                 Password = "Test123"
-            });
+            }).Result;
 
             UserId = account.Id;
         }

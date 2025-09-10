@@ -1,20 +1,33 @@
 ﻿using CareGuide.Data.Interfaces;
 using CareGuide.Models.Tables;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareGuide.Data.Repositories
 {
-    public class PersonAnnotationRepository(DatabaseContext context) : BaseRepository<PersonAnnotation>(context), IPersonAnnotationRepository
+    public class PersonAnnotationRepository : BaseRepository<PersonAnnotation>, IPersonAnnotationRepository
     {
-        public List<PersonAnnotation> GetAllByPerson(Guid personId)
+        private readonly DatabaseContext _context;
+
+        public PersonAnnotationRepository(DatabaseContext context) : base(context)
         {
-            return context.Set<PersonAnnotation>()
-                .Where(p => p.PersonId == personId)
-                .ToList();
+            _context = context;
         }
 
-        public void RemoveAllByPerson(Guid personId)
+        public async Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId)
         {
-            throw new NotImplementedException();
+            return await _context.Set<PersonAnnotation>()
+                .Where(p => p.PersonId == personId)
+                .ToListAsync();
+        }
+
+        public async Task RemoveAllByPersonAsync(Guid personId)
+        {
+            var annotations = await _context.Set<PersonAnnotation>()
+                .Where(p => p.PersonId == personId)
+                .ToListAsync();
+
+            _context.Set<PersonAnnotation>().RemoveRange(annotations);
+            await _context.SaveChangesAsync();
         }
     }
 }

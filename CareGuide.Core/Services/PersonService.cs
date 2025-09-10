@@ -18,43 +18,53 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public List<PersonDto> GetAll(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
+        public async Task<List<PersonDto>> GetAllAsync(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
         {
-            List<Person> list = _personRepository.GetAll(page, pageSize);
+            var list = await _personRepository.GetAllAsync(page, pageSize);
             return _mapper.Map<List<PersonDto>>(list);
         }
 
-        public PersonDto Get(Guid id)
+        public async Task<PersonDto> GetAsync(Guid id)
         {
-            Person person = _personRepository.Get(id) ?? throw new KeyNotFoundException();
+            var person = await _personRepository.GetAsync(id);
+
+            if (person == null)
+                throw new KeyNotFoundException();
+
             return _mapper.Map<PersonDto>(person);
         }
 
-        public PersonDto Create(CreatePersonDto createPerson)
+        public async Task<PersonDto> CreateAsync(CreatePersonDto createPerson)
         {
-            Person person = _mapper.Map<Person>(createPerson);
-            _personRepository.Add(person);
+            var person = _mapper.Map<Person>(createPerson);
+            await _personRepository.AddAsync(person);
             return _mapper.Map<PersonDto>(person);
         }
 
-        public PersonDto Update(Guid id, PersonDto updatePerson)
+        public async Task<PersonDto> UpdateAsync(Guid id, PersonDto updatePerson)
         {
-            Person existingPerson = _personRepository.Get(id) ?? throw new KeyNotFoundException();
+            var existingPerson = await _personRepository.GetAsync(id);
+
+            if (existingPerson == null)
+                throw new KeyNotFoundException();
 
             existingPerson.Name = updatePerson.Name;
             existingPerson.Gender = updatePerson.Gender;
             existingPerson.Birthday = updatePerson.Birthday;
             existingPerson.Picture = updatePerson.Picture;
 
-            Person person = _personRepository.Update(existingPerson);
-
+            var person = await _personRepository.UpdateAsync(existingPerson);
             return _mapper.Map<PersonDto>(person);
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            Person existingPerson = _personRepository.Get(id) ?? throw new KeyNotFoundException();
-            _personRepository.Delete(existingPerson.Id);
+            var existingPerson = await _personRepository.GetAsync(id);
+
+            if (existingPerson == null)
+                throw new KeyNotFoundException();
+
+            await _personRepository.DeleteAsync(existingPerson.Id);
         }
 
     }

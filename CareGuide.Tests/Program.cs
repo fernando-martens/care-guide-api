@@ -56,7 +56,7 @@ namespace CareGuide.Tests
                         Birthday = DateOnly.FromDateTime(DateTime.Now)
                     };
 
-                    accountService.CreateAccount(createAccount);
+                    var _ = accountService.CreateAccountAsync(createAccount);
                 }
                 catch (Exception ex)
                 {

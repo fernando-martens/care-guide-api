@@ -15,12 +15,6 @@ namespace CareGuide.API.Controllers
             _userSessionContext = userSessionContext;
         }
 
-        [HttpGet("private")]
-        public IResult HealthPrivateStatus()
-        {
-            return Results.Ok(_userSessionContext.UserId);
-        }
-
         [HttpGet]
         [IgnoreSessionMiddleware]
         public IResult HealthStatus()
@@ -28,5 +22,10 @@ namespace CareGuide.API.Controllers
             return Results.NoContent();
         }
 
+        [HttpGet("private")]
+        public IResult HealthPrivateStatus()
+        {
+            return Results.Ok(_userSessionContext.UserId);
+        }
     }
 }
