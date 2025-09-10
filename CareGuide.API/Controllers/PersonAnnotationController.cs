@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CareGuide.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route(CareGuide.Models.Constants.ApiConstants.VersionPrefix + "/[controller]")]
     public class PersonAnnotationController : ControllerBase
     {
         private readonly IPersonAnnotationService _personAnnotationService;
