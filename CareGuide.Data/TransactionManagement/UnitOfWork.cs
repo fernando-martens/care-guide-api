@@ -12,43 +12,43 @@ namespace CareGuide.Data.TransactionManagement
             _dbContext = dbContext;
         }
 
-        public void BeginTransaction()
+        public async Task BeginTransactionAsync()
         {
-            _transaction = _dbContext.Database.BeginTransaction();
+            _transaction = await _dbContext.Database.BeginTransactionAsync();
         }
 
-        public void CommitTransaction()
+        public async Task CommitTransactionAsync()
         {
             try
             {
-                _dbContext.SaveChanges();
-                _transaction?.Commit();
+                await _dbContext.SaveChangesAsync();
+                await (_transaction?.CommitAsync() ?? Task.CompletedTask);
             }
             catch
             {
-                RollbackTransaction();
+                await RollbackTransactionAsync();
                 throw;
             }
             finally
             {
-                _transaction?.Dispose();
+                await (_transaction?.DisposeAsync() ?? ValueTask.CompletedTask);
                 _transaction = null;
             }
         }
 
-        public void RollbackTransaction()
+        public async Task RollbackTransactionAsync()
         {
             if (_transaction != null)
             {
-                _transaction.Rollback();
-                _transaction.Dispose();
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
                 _transaction = null;
             }
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
-            return _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync();
         }
 
         public void Dispose()

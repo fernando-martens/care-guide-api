@@ -21,36 +21,44 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public List<UserDto> GetAll(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
+        public async Task<List<UserDto>> GetAllAsync(int page = PaginationConstants.DefaultPage, int pageSize = PaginationConstants.DefaultPageSize)
         {
-            List<User> list = _userRepository.GetAll(page, pageSize);
+            var list = await _userRepository.GetAllAsync(page, pageSize);
             return _mapper.Map<List<UserDto>>(list);
         }
 
-        public UserDto GetByIdDto(Guid id)
+        public async Task<UserDto> GetByIdDtoAsync(Guid id)
         {
-            User userTable = GetById(id);
+            var userTable = await GetByIdAsync(id);
             return _mapper.Map<UserDto>(userTable);
         }
 
-        public User GetById(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            return _userRepository.Get(id) ?? throw new KeyNotFoundException();
+            var user = await _userRepository.GetAsync(id);
+
+            if (user == null)
+                throw new KeyNotFoundException();
+
+            return user;
         }
 
-        public UserDto Create(PersonDto person, CreateUserDto createUser)
+        public async Task<UserDto> CreateAsync(PersonDto person, CreateUserDto createUser)
         {
-            if (_userRepository.GetByEmail(createUser.Email) != null)
+            if (await _userRepository.GetByEmailAsync(createUser.Email) != null)
                 throw new InvalidOperationException("Email already registered");
 
-            User user = _mapper.Map<User>(createUser);
-            _userRepository.Add(user);
+            var user = _mapper.Map<User>(createUser);
+            await _userRepository.AddAsync(user);
             return _mapper.Map<UserDto>(user);
         }
 
-        public void UpdatePassword(Guid id, UpdatePasswordAccountDto user)
+        public async Task UpdatePasswordAsync(Guid id, UpdatePasswordAccountDto user)
         {
-            User existingUser = _userRepository.Get(id) ?? throw new KeyNotFoundException();
+            var existingUser = await _userRepository.GetAsync(id);
+
+            if (existingUser == null)
+                throw new KeyNotFoundException();
 
             if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {
@@ -59,13 +67,17 @@ namespace CareGuide.Core.Services
 
             existingUser.Password = PasswordManager.HashPassword(user.Password);
 
-            _userRepository.Update(existingUser);
+            await _userRepository.UpdateAsync(existingUser);
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            User existingUser = _userRepository.Get(id) ?? throw new KeyNotFoundException();
-            _userRepository.Delete(existingUser.Id);
+            var existingUser = await _userRepository.GetAsync(id);
+
+            if (existingUser == null)
+                throw new KeyNotFoundException();
+
+            await _userRepository.DeleteAsync(existingUser.Id);
         }
     }
 }

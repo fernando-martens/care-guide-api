@@ -3,11 +3,20 @@ using CareGuide.Models.Tables;
 
 namespace CareGuide.Data.Repositories
 {
-    public class UserRepository(DatabaseContext context) : BaseRepository<User>(context), IUserRepository
+    using Microsoft.EntityFrameworkCore;
+
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public User? GetByEmail(string email)
+        private readonly DatabaseContext _context;
+
+        public UserRepository(DatabaseContext context) : base(context)
         {
-            return context.Set<User>().FirstOrDefault(u => u.Email == email);
+            _context = context;
+        }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
         }
     }
 }

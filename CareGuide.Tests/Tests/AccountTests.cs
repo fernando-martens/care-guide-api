@@ -2,15 +2,15 @@
 
 namespace CareGuide.Tests.Tests
 {
-    public class AccountTests: Base
+    public class AccountTests : Base
     {
-        public AccountTests(Program program): base(program) 
+        public AccountTests(Program program) : base(program)
         {
-           
+
         }
 
         [Fact(DisplayName = "Should be able to create an account")]
-        internal void Test1()
+        public async Task Test1()
         {
             Func<string> generateFakeEmail = () => $"{Guid.NewGuid()}@emailtest.com";
 
@@ -23,21 +23,21 @@ namespace CareGuide.Tests.Tests
                 Birthday = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            AccountDto account = _accountService.CreateAccount(createAccount);
+            AccountDto account = await _accountService.CreateAccountAsync(createAccount);
 
             Assert.Equal(createAccount.Name, account.Name);
             Assert.Equal(createAccount.Email, account.Email);
             Assert.Equal(createAccount.Gender, account.Gender);
             Assert.Equal(createAccount.Birthday, account.Birthday);
 
-            Assert.Equal("Email already registered", Assert.Throws<Exception>(() =>
+            var ex = await Assert.ThrowsAsync<Exception>(async () =>
             {
-                _accountService.CreateAccount(createAccount);
-            }).Message);
+                await _accountService.CreateAccountAsync(createAccount);
+            });
+            Assert.Equal("Email already registered", ex.Message);
 
             createAccount.Email = generateFakeEmail();
-            _accountService.CreateAccount(createAccount);
-
+            await _accountService.CreateAccountAsync(createAccount);
         }
     }
 }

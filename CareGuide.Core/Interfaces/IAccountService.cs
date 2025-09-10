@@ -4,9 +4,9 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IAccountService
     {
-        AccountDto CreateAccount(CreateAccountDto createAccount);
-        AccountDto LoginAccount(LoginAccountDto loginAccount);
-        void UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount);
-        void DeleteAccount(Guid id);
+        Task<AccountDto> CreateAccountAsync(CreateAccountDto createAccount);
+        Task<AccountDto> LoginAccountAsync(LoginAccountDto loginAccount);
+        Task UpdatePasswordAccountAsync(Guid id, UpdatePasswordAccountDto updatePasswordAccount);
+        Task DeleteAccountAsync(Guid id);
     }
 }

@@ -13,7 +13,6 @@ namespace CareGuide.Core.Services
     public class AccountService : IAccountService
     {
         private readonly IUserRepository _userRepository;
-
         private readonly IUserService _userService;
         private readonly IPersonService _personService;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,52 +27,51 @@ namespace CareGuide.Core.Services
             _jwtService = jwtService;
         }
 
-        public AccountDto CreateAccount(CreateAccountDto createAccount)
+        public async Task<AccountDto> CreateAccountAsync(CreateAccountDto createAccount)
         {
-            _unitOfWork.BeginTransaction();
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
-                PersonDto person = _personService.Create(new CreatePersonDto(createAccount));
-                UserDto user = _userService.Create(person, new CreateUserDto(createAccount));
+                PersonDto person = await _personService.CreateAsync(new CreatePersonDto(createAccount));
+                UserDto user = await _userService.CreateAsync(person, new CreateUserDto(createAccount));
 
                 string token = _jwtService.GenerateToken(user.Id, user.Email);
 
-                _unitOfWork.CommitTransaction();
+                await _unitOfWork.CommitTransactionAsync();
 
                 return new AccountDto(user, person, token);
             }
             catch (Exception ex)
             {
-                _unitOfWork.RollbackTransaction();
+                await _unitOfWork.RollbackTransactionAsync();
                 throw new Exception(ex.Message);
             }
         }
 
-        public AccountDto LoginAccount(LoginAccountDto loginAccount)
+        public async Task<AccountDto> LoginAccountAsync(LoginAccountDto loginAccount)
         {
-            User? user = _userRepository.GetByEmail(loginAccount.Email);
+            User? user = await _userRepository.GetByEmailAsync(loginAccount.Email);
 
             if (user == null || !PasswordManager.ValidatePassword(loginAccount.Password, user.Password))
                 throw new InvalidOperationException("wrong password or email");
 
             string token = _jwtService.GenerateToken(user.Id, loginAccount.Email);
 
-            UserDto userDto = _userService.GetByIdDto(user.Id);
-            PersonDto personDto = _personService.Get(userDto.PersonId);
+            UserDto userDto = await _userService.GetByIdDtoAsync(user.Id);
+            PersonDto personDto = await _personService.GetAsync(userDto.PersonId);
 
             return new AccountDto(userDto, personDto, token);
         }
 
-        public void UpdatePasswordAccount(Guid id, UpdatePasswordAccountDto updatePasswordAccount)
+        public async Task UpdatePasswordAccountAsync(Guid id, UpdatePasswordAccountDto updatePasswordAccount)
         {
-            _userService.UpdatePassword(id, updatePasswordAccount);
+            await _userService.UpdatePasswordAsync(id, updatePasswordAccount);
         }
 
-        public void DeleteAccount(Guid id)
+        public async Task DeleteAccountAsync(Guid id)
         {
             throw new NotImplementedException();
         }
-
     }
 }

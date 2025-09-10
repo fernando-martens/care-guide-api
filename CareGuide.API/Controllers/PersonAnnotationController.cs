@@ -16,41 +16,41 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpGet("person/{personId}")]
-        public IResult GetAllByPerson([FromRoute] Guid personId)
+        public async Task<IResult> GetAllByPerson([FromRoute] Guid personId)
         {
-            return Results.Ok(_personAnnotationService.GetAllByPerson(personId));
+            return Results.Ok(await _personAnnotationService.GetAllByPersonAsync(personId));
         }
 
         [HttpGet("{id}")]
-        public IResult GetById([FromRoute] Guid id)
+        public async Task<IResult> GetById([FromRoute] Guid id)
         {
-            return Results.Ok(_personAnnotationService.GetById(id));
+            return Results.Ok(await _personAnnotationService.GetAsync(id));
         }
 
         [HttpPost]
-        public IResult Create([FromBody] CreatePersonAnnotationDto createPersonAnnotation)
+        public async Task<IResult> Create([FromBody] CreatePersonAnnotationDto createPersonAnnotation)
         {
-            var created = _personAnnotationService.Create(createPersonAnnotation);
+            var created = await _personAnnotationService.CreateAsync(createPersonAnnotation);
             return Results.Created($"/personAnnotation/{created.Id}", created);
         }
 
         [HttpPut("{id}")]
-        public IResult Update([FromRoute] Guid id, [FromBody] UpdatePersonAnnotationDto updatePersonAnnotation)
+        public async Task<IResult> Update([FromRoute] Guid id, [FromBody] UpdatePersonAnnotationDto updatePersonAnnotation)
         {
-            return Results.Ok(_personAnnotationService.Update(id, updatePersonAnnotation));
+            return Results.Ok(await _personAnnotationService.UpdateAsync(id, updatePersonAnnotation));
         }
 
         [HttpDelete("person/{personId}")]
-        public IResult DeleteAllByPerson([FromRoute] Guid personId)
+        public async Task<IResult> DeleteAllByPerson([FromRoute] Guid personId)
         {
-            _personAnnotationService.DeleteAllByPerson(personId);
+            await _personAnnotationService.DeleteAllByPersonAsync(personId);
             return Results.NoContent();
         }
 
         [HttpDelete]
-        public IResult DeleteByIds([FromBody] List<Guid> ids)
+        public async Task<IResult> DeleteByIds([FromBody] List<Guid> ids)
         {
-            _personAnnotationService.DeleteByIds(ids);
+            await _personAnnotationService.DeleteByIdsAsync(ids);
             return Results.NoContent();
         }
 

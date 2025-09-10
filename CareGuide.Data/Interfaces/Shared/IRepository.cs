@@ -4,14 +4,14 @@ namespace CareGuide.Data.Interfaces.Shared
 {
     public interface IRepository<T> where T : Entity
     {
-        List<T> GetAll(int page, int pageSize);
-        T Get(Guid id);
-        T Add(T entity);
-        T Update(T entity);
-        T Delete(Guid id);
-        List<T> DeleteMany(IEnumerable<Guid> ids);
-        List<T> GetMany(IEnumerable<Guid> ids, int page, int pageSize);
-        bool Exists(Guid id);
-        int CountExisting(IEnumerable<Guid> ids);
+        Task<T> AddAsync(T entity);
+        Task<T?> DeleteAsync(Guid id);
+        Task<List<T>> DeleteManyAsync(IEnumerable<Guid> ids);
+        Task<bool> ExistsAsync(Guid id);
+        Task<int> CountExistingAsync(IEnumerable<Guid> ids);
+        Task<List<T>> GetAllAsync(int page, int pageSize);
+        Task<T?> GetAsync(Guid id);
+        Task<List<T>> GetManyAsync(IEnumerable<Guid> ids, int page, int pageSize);
+        Task<T> UpdateAsync(T entity);
     }
 }

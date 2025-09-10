@@ -5,7 +5,7 @@ namespace CareGuide.Data.Interfaces
 {
     public interface IWeatherForecastRepository
     {
-        void Insert(WeatherForecastTable table);
-        List<WeatherForecastTable> ListAll();
+        Task Insert(WeatherForecastTable table);
+        Task<List<WeatherForecastTable>> ListAll();
     }
 }
