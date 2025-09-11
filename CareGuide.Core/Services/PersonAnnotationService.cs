@@ -17,12 +17,12 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<List<PersonAnnotationDto>> GetAllByPersonAsync(Guid personId, CancellationToken cancellationToken)
+        public async Task<List<PersonAnnotationDto>> GetAllByPersonAsync(Guid personId, int page, int pageSize, CancellationToken cancellationToken)
         {
             if (personId == Guid.Empty)
                 throw new ArgumentException("The personId cannot be empty.", nameof(personId));
 
-            var list = await _personAnnotationRepository.GetAllByPersonAsync(personId, cancellationToken);
+            var list = await _personAnnotationRepository.GetAllByPersonAsync(personId, page, pageSize, cancellationToken);
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 

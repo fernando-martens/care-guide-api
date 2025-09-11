@@ -2,6 +2,7 @@
 using CareGuide.Data.TransactionManagement;
 using CareGuide.Infra.CrossCutting;
 using CareGuide.Models.DTOs.Auth;
+using CareGuide.Models.Mappers;
 using CareGuide.Models.Validators;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
@@ -39,8 +40,11 @@ namespace CareGuide.Infra
         {
             services.AddAutoMapper(cfg =>
             {
-                cfg.AddProfile<UserProfile>();
-                cfg.AddProfile<PersonProfile>();
+                cfg.AddProfile<AccountToPersonProfileMapper>();
+                cfg.AddProfile<AccountToUserProfileMapper>();
+                cfg.AddProfile<PersonAnnotationProfileMapper>();
+                cfg.AddProfile<PersonProfileMapper>();
+                cfg.AddProfile<UserProfileMapper>();
             });
         }
 

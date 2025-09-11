@@ -1,4 +1,5 @@
 ﻿using CareGuide.Core.Interfaces;
+using CareGuide.Models.Constants;
 using CareGuide.Models.DTOs.PersonAnnotation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,10 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpGet("person/{personId}")]
-        public async Task<IResult> GetAllByPerson([FromRoute] Guid personId, CancellationToken cancellationToken)
+        public async Task<IResult> GetAllByPerson([FromRoute] Guid personId, [FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
         {
-            return Results.Ok(await _personAnnotationService.GetAllByPersonAsync(personId, cancellationToken));
+            var result = await _personAnnotationService.GetAllByPersonAsync(personId, page, pageSize, cancellationToken);
+            return Results.Ok(result);
         }
 
         [HttpGet("{id}")]

@@ -13,7 +13,7 @@ namespace CareGuide.Data.Mappings
 
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(p => p.PersonId).IsRequired().HasColumnName("person_id");
-            builder.Property(p => p.Details).IsRequired().HasColumnType("text").HasColumnName("details");
+            builder.Property(p => p.Details).HasColumnType("text").HasColumnName("details");
             builder.Property(p => p.FileUrl).HasMaxLength(255).HasColumnName("file_url");
             builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("created_at");
             builder.Property(x => x.UpdatedAt).IsRequired().HasColumnName("updated_at");
