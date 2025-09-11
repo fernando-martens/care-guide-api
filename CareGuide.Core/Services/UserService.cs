@@ -48,8 +48,17 @@ namespace CareGuide.Core.Services
             if (await _userRepository.GetByEmailAsync(createUser.Email, cancellationToken) != null)
                 throw new InvalidOperationException("Email already registered");
 
+            var (isSecure, feedback) = PasswordManager.CheckPassword(createUser.Password);
+
+            if (!isSecure)
+                throw new InvalidOperationException(feedback);
+
             var user = _mapper.Map<User>(createUser);
+
+            user.Password = PasswordManager.HashPassword(user.Password);
+
             await _userRepository.AddAsync(user, cancellationToken);
+
             return _mapper.Map<UserDto>(user);
         }
 
@@ -59,6 +68,11 @@ namespace CareGuide.Core.Services
 
             if (existingUser == null)
                 throw new KeyNotFoundException();
+
+            var (isSecure, feedback) = PasswordManager.CheckPassword(user.Password);
+
+            if (!isSecure)
+                throw new InvalidOperationException(feedback);
 
             if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
             {

@@ -5,7 +5,7 @@ namespace CareGuide.Data.Interfaces
 {
     public interface IPersonAnnotationRepository : IRepository<PersonAnnotation>
     {
-        Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId, CancellationToken cancellationToken);
+        Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId, int page, int pageSize, CancellationToken cancellationToken);
         Task DeleteAllByPersonAsync(Guid personId, CancellationToken cancellationToken);
     }
 }

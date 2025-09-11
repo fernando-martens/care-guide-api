@@ -40,8 +40,11 @@ namespace CareGuide.Data
 
         private void UpdateEntityTimestamps()
         {
-            var currentTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
-            var entries = ChangeTracker.Entries().Where(e => e.Entity is IEntity && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            var currentTime = DateTime.UtcNow;
+
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is IEntity &&
+                           (e.State == EntityState.Added || e.State == EntityState.Modified));
 
             foreach (var entityEntry in entries)
             {

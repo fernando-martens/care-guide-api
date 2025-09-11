@@ -2,11 +2,11 @@
 using CareGuide.Models.DTOs.PersonAnnotation;
 using CareGuide.Models.Tables;
 
-namespace CareGuide.Core.Mappings
+namespace CareGuide.Models.Mappers
 {
-    public class PersonAnnotationProfile : Profile
+    public class PersonAnnotationProfileMapper : Profile
     {
-        public PersonAnnotationProfile()
+        public PersonAnnotationProfileMapper()
         {
             CreateMap<PersonAnnotation, PersonAnnotationDto>();
         }
