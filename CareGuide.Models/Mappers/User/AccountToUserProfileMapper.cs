@@ -9,9 +9,12 @@ namespace CareGuide.Models.Mappers
         public AccountToUserProfileMapper()
         {
             CreateMap<CreateAccountDto, CreateUserDto>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ConstructUsing(src => new CreateUserDto(
+                    Guid.Empty,
+                    Guid.Empty,
+                    src.Email,
+                    src.Password
+                ));
         }
     }
 }
