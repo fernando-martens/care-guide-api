@@ -2,8 +2,10 @@
 using CareGuide.Data.TransactionManagement;
 using CareGuide.Infra.CrossCutting;
 using CareGuide.Models.DTOs.Auth;
+using CareGuide.Models.DTOs.PersonAnnotation;
 using CareGuide.Models.Mappers;
-using CareGuide.Models.Validators;
+using CareGuide.Models.Validators.Account;
+using CareGuide.Models.Validators.PersonAnnotation;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
@@ -65,6 +67,8 @@ namespace CareGuide.Infra
         {
             services.AddTransient<IValidator<CreateAccountDto>, CreateAccountDtoValidator>();
             services.AddTransient<IValidator<UpdatePasswordAccountDto>, UpdatePasswordAccountDtoValidator>();
+            services.AddTransient<IValidator<CreatePersonAnnotationDto>, CreatePersonAnnotationDtoValidator>();
+            services.AddTransient<IValidator<UpdatePersonAnnotationDto>, UpdatePersonAnnotationDtoValidator>();
         }
     }
 }

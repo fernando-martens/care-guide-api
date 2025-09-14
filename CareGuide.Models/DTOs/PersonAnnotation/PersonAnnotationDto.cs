@@ -1,10 +1,9 @@
 ﻿namespace CareGuide.Models.DTOs.PersonAnnotation
 {
-    public class PersonAnnotationDto
-    {
-        public Guid Id { get; set; }
-        public Guid PersonId { get; set; }
-        public string? Details { get; set; }
-        public string? FileUrl { get; set; }
-    }
+    public record PersonAnnotationDto(
+        Guid Id,
+        Guid PersonId,
+        string Details,
+        string? FileUrl
+    );
 }

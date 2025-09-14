@@ -39,24 +39,23 @@ namespace CareGuide.Core.Services
                 var createUserDto = _mapper.Map<CreateUserDto>(createAccount);
 
                 PersonDto person = await _personService.CreateAsync(createPersonDto, cancellationToken);
-                createUserDto.PersonId = person.Id;
+                var createUserDtoWithPerson = createUserDto with { PersonId = person.Id };
 
-                UserDto user = await _userService.CreateAsync(person, createUserDto, cancellationToken);
+                UserDto user = await _userService.CreateAsync(person, createUserDtoWithPerson, cancellationToken);
 
                 string token = _jwtService.GenerateToken(user.Id, user.Email);
 
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                return new AccountDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    SessionToken = token,
-                    Name = person.Name,
-                    Gender = person.Gender,
-                    Birthday = person.Birthday,
-                    Picture = person.Picture
-                };
+                return new AccountDto(
+                    user.Id,
+                    user.Email,
+                    token,
+                    person.Name,
+                    person.Gender,
+                    person.Birthday,
+                    person.Picture
+                );
             }
             catch (Exception)
             {
@@ -77,16 +76,15 @@ namespace CareGuide.Core.Services
             UserDto userDto = await _userService.GetByIdDtoAsync(user.Id, cancellationToken);
             PersonDto personDto = await _personService.GetAsync(userDto.PersonId, cancellationToken);
 
-            return new AccountDto
-            {
-                Id = userDto.Id,
-                Email = userDto.Email,
-                SessionToken = token,
-                Name = personDto.Name,
-                Gender = personDto.Gender,
-                Birthday = personDto.Birthday,
-                Picture = personDto.Picture
-            };
+            return new AccountDto(
+                userDto.Id,
+                userDto.Email,
+                token,
+                personDto.Name,
+                personDto.Gender,
+                personDto.Birthday,
+                personDto.Picture
+            );
         }
 
         public async Task UpdatePasswordAccountAsync(Guid id, UpdatePasswordAccountDto updatePasswordAccount, CancellationToken cancellationToken)

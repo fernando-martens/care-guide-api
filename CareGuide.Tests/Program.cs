@@ -47,14 +47,13 @@ namespace CareGuide.Tests
                 {
                     IAccountService accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
 
-                    CreateAccountDto createAccount = new CreateAccountDto()
-                    {
-                        Email = "test123@domaintest.com.br",
-                        Password = "Test123",
-                        Name = "Test name",
-                        Gender = Models.Enums.Gender.F,
-                        Birthday = DateOnly.FromDateTime(DateTime.Now)
-                    };
+                    CreateAccountDto createAccount = new CreateAccountDto(
+                        "test123@domaintest.com.br",
+                        "Test123",
+                        "Test name",
+                        Models.Enums.Gender.F,
+                        DateOnly.FromDateTime(DateTime.Now)
+                    );
 
                     var _ = accountService.CreateAccountAsync(createAccount, CancellationToken.None);
                 }

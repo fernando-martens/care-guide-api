@@ -2,12 +2,11 @@
 
 namespace CareGuide.Models.DTOs.Auth
 {
-    public class CreateAccountDto
-    {
-        public required string Email { get; set; }
-        public required string Password { get; set; }
-        public required string Name { get; set; }
-        public Gender Gender { get; set; }
-        public DateOnly Birthday { get; set; }
-    }
+    public record CreateAccountDto(
+        string Email,
+        string Password,
+        string Name,
+        Gender Gender,
+        DateOnly Birthday
+    );
 }
