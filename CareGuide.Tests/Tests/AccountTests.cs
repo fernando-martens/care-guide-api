@@ -14,14 +14,13 @@ namespace CareGuide.Tests.Tests
         {
             Func<string> generateFakeEmail = () => $"{Guid.NewGuid()}@emailtest.com";
 
-            CreateAccountDto createAccount = new CreateAccountDto()
-            {
-                Email = generateFakeEmail(),
-                Password = "Test123",
-                Name = "Test name",
-                Gender = Models.Enums.Gender.F,
-                Birthday = DateOnly.FromDateTime(DateTime.Now)
-            };
+            CreateAccountDto createAccount = new CreateAccountDto(
+                generateFakeEmail(),
+                "Test123",
+                "Test name",
+                Models.Enums.Gender.F,
+                DateOnly.FromDateTime(DateTime.Now)
+            );
 
             AccountDto account = await _accountService.CreateAccountAsync(createAccount, CancellationToken.None);
 
@@ -36,8 +35,8 @@ namespace CareGuide.Tests.Tests
             });
             Assert.Equal("Email already registered", ex.Message);
 
-            createAccount.Email = generateFakeEmail();
-            await _accountService.CreateAccountAsync(createAccount, CancellationToken.None);
+            var createAccount2 = createAccount with { Email = generateFakeEmail() };
+            await _accountService.CreateAccountAsync(createAccount2, CancellationToken.None);
         }
     }
 }

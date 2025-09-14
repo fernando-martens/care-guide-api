@@ -2,12 +2,11 @@
 
 namespace CareGuide.Models.DTOs.Person
 {
-    public class PersonDto
-    {
-        public Guid Id { get; set; }
-        public required string Name { get; set; }
-        public string? Picture { get; set; }
-        public Gender Gender { get; set; }
-        public DateOnly Birthday { get; set; }
-    }
+    public record PersonDto(
+        Guid Id,
+        string Name,
+        string? Picture,
+        Gender Gender,
+        DateOnly Birthday
+    );
 }

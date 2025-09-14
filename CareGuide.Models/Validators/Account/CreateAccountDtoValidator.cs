@@ -1,7 +1,7 @@
 ﻿using CareGuide.Models.DTOs.Auth;
 using FluentValidation;
 
-namespace CareGuide.Models.Validators
+namespace CareGuide.Models.Validators.Account
 {
     public class CreateAccountDtoValidator : AbstractValidator<CreateAccountDto>
     {

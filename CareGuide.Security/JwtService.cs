@@ -53,7 +53,6 @@ namespace CareGuide.Security
                     ValidateIssuer = true,
                     ValidIssuer = _issuer,
                     ValidateAudience = false,
-                    //ClockSkew = TimeSpan.FromMinutes(5),
                     ValidateLifetime = false,
                 }, out SecurityToken validatedToken);
 
