@@ -1,16 +1,22 @@
-﻿using Zxcvbn;
+﻿using Microsoft.AspNetCore.Identity;
+using Zxcvbn;
+
 namespace CareGuide.Security
 {
     public static class PasswordManager
     {
+        private static readonly PasswordHasher<object> hasher = new();
+        private static readonly object HashScope = new();
+
         public static string HashPassword(string password)
         {
-            return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
+            return hasher.HashPassword(HashScope, password);
         }
 
         public static bool ValidatePassword(string password, string hash)
         {
-            return BCrypt.Net.BCrypt.Verify(password, hash);
+            var result = hasher.VerifyHashedPassword(HashScope, hash, password);
+            return result == PasswordVerificationResult.Success;
         }
 
         public static (bool IsSecure, string Feedback) CheckPassword(string password)
