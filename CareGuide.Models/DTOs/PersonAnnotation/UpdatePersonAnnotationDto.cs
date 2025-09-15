@@ -2,7 +2,6 @@
 {
     public record UpdatePersonAnnotationDto(
         Guid Id,
-        Guid PersonId,
         string Details,
         string? FileUrl
     );

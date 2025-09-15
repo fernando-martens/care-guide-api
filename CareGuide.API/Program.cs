@@ -1,4 +1,3 @@
-
 using CareGuide.API.Middlewares;
 using CareGuide.Data;
 using CareGuide.Infra;
@@ -67,6 +66,9 @@ builder.Services.AddTransient<SessionMiddleware>();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -88,7 +90,7 @@ app.MapControllers();
 
 app.Run();
 
-void ConfigurePipeline(WebApplication app)
+static void ConfigurePipeline(WebApplication app)
 {
     app.MapSwagger("/openapi/{documentName}.json");
     app.MapScalarApiReference();

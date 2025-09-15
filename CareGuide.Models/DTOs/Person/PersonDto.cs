@@ -7,6 +7,8 @@ namespace CareGuide.Models.DTOs.Person
         string Name,
         string? Picture,
         Gender Gender,
-        DateOnly Birthday
+        DateOnly Birthday,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
     );
 }

@@ -4,6 +4,8 @@
         Guid Id,
         Guid PersonId,
         string Details,
-        string? FileUrl
+        string? FileUrl,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
     );
 }

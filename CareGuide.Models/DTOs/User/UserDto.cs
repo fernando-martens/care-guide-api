@@ -3,6 +3,8 @@
     public record UserDto(
         Guid Id,
         Guid PersonId,
-        string Email
+        string Email,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
     );
 }
