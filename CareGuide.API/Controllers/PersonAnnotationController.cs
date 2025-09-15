@@ -16,10 +16,10 @@ namespace CareGuide.API.Controllers
             _personAnnotationService = personAnnotationService;
         }
 
-        [HttpGet("person/{personId}")]
-        public async Task<IResult> GetAllByPerson([FromRoute] Guid personId, [FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
+        [HttpGet]
+        public async Task<IResult> GetAllByPerson([FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
         {
-            var result = await _personAnnotationService.GetAllByPersonAsync(personId, page, pageSize, cancellationToken);
+            var result = await _personAnnotationService.GetAllByPersonAsync(page, pageSize, cancellationToken);
             return Results.Ok(result);
         }
 
@@ -42,10 +42,10 @@ namespace CareGuide.API.Controllers
             return Results.Ok(await _personAnnotationService.UpdateAsync(id, updatePersonAnnotation, cancellationToken));
         }
 
-        [HttpDelete("person/{personId}")]
-        public async Task<IResult> DeleteAllByPerson([FromRoute] Guid personId, CancellationToken cancellationToken)
+        [HttpDelete("person")]
+        public async Task<IResult> DeleteAllByPerson(CancellationToken cancellationToken)
         {
-            await _personAnnotationService.DeleteAllByPersonAsync(personId, cancellationToken);
+            await _personAnnotationService.DeleteAllByPersonAsync(cancellationToken);
             return Results.NoContent();
         }
 

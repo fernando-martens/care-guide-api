@@ -43,7 +43,7 @@ namespace CareGuide.Core.Services
 
                 UserDto user = await _userService.CreateAsync(person, createUserDtoWithPerson, cancellationToken);
 
-                string token = _jwtService.GenerateToken(user.Id, user.Email);
+                string token = _jwtService.GenerateToken(user.Id, person.Id, user.Email);
 
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
@@ -53,8 +53,7 @@ namespace CareGuide.Core.Services
                     token,
                     person.Name,
                     person.Gender,
-                    person.Birthday,
-                    person.Picture
+                    person.Birthday
                 );
             }
             catch (Exception)
@@ -71,7 +70,7 @@ namespace CareGuide.Core.Services
             if (user == null || !PasswordManager.ValidatePassword(loginAccount.Password, user.Password))
                 throw new InvalidOperationException("Wrong password or email");
 
-            string token = _jwtService.GenerateToken(user.Id, loginAccount.Email);
+            string token = _jwtService.GenerateToken(user.Id, user.PersonId, loginAccount.Email);
 
             UserDto userDto = await _userService.GetByIdDtoAsync(user.Id, cancellationToken);
             PersonDto personDto = await _personService.GetAsync(userDto.PersonId, cancellationToken);
@@ -82,8 +81,7 @@ namespace CareGuide.Core.Services
                 token,
                 personDto.Name,
                 personDto.Gender,
-                personDto.Birthday,
-                personDto.Picture
+                personDto.Birthday
             );
         }
 

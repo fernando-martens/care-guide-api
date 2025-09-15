@@ -1,5 +1,4 @@
-﻿using CareGuide.API.Attributes;
-using CareGuide.Security.Interfaces;
+﻿using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Controllers
@@ -16,13 +15,6 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpGet]
-        [IgnoreSessionMiddleware]
-        public IResult HealthStatus()
-        {
-            return Results.NoContent();
-        }
-
-        [HttpGet("private")]
         public IResult HealthPrivateStatus()
         {
             return Results.Ok(_userSessionContext.UserId);

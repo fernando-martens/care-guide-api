@@ -3,5 +3,7 @@
     public interface IUserSessionContext
     {
         Guid UserId { get; }
+        Guid PersonId { get; }
+        string Email { get; }
     }
 }

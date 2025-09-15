@@ -9,6 +9,8 @@ namespace CareGuide.Models.Mappers
         public PersonAnnotationProfileMapper()
         {
             CreateMap<PersonAnnotation, PersonAnnotationDto>();
+            CreateMap<CreatePersonAnnotationDto, PersonAnnotation>();
+            CreateMap<UpdatePersonAnnotationDto, PersonAnnotation>();
         }
     }
 }

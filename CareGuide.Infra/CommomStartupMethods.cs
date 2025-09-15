@@ -9,9 +9,12 @@ using CareGuide.Models.Validators.PersonAnnotation;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CareGuide.Infra
 {
@@ -19,6 +22,7 @@ namespace CareGuide.Infra
     {
         public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
+            ConfigureAuthentication(configuration, services);
             ConfigureDatabase(configuration, services);
             ConfigureAutoMapper(services);
             ConfigureSecuritySettings(configuration, services);
@@ -38,18 +42,6 @@ namespace CareGuide.Infra
             });
         }
 
-        private static void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(cfg =>
-            {
-                cfg.AddProfile<AccountToPersonProfileMapper>();
-                cfg.AddProfile<AccountToUserProfileMapper>();
-                cfg.AddProfile<PersonAnnotationProfileMapper>();
-                cfg.AddProfile<PersonProfileMapper>();
-                cfg.AddProfile<UserProfileMapper>();
-            });
-        }
-
         private static void ConfigureSecuritySettings(IConfiguration configuration, IServiceCollection services)
         {
             services.AddScoped<IJwtService, JwtService>();
@@ -61,6 +53,39 @@ namespace CareGuide.Infra
                 throw new InvalidOperationException("Security key is not configured properly in appsettings.json.");
 
             services.AddSingleton(securitySettings);
+        }
+
+        private static void ConfigureAuthentication(IConfiguration configuration, IServiceCollection services)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecuritySettings:SecretKey"] ?? "")),
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["SecuritySettings:Issuer"] ?? "",
+                    ValidateAudience = false,
+                    NameClaimType = "sub"
+                };
+            });
+        }
+
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<AccountToPersonProfileMapper>();
+                cfg.AddProfile<AccountToUserProfileMapper>();
+                cfg.AddProfile<PersonAnnotationProfileMapper>();
+                cfg.AddProfile<PersonProfileMapper>();
+                cfg.AddProfile<UserProfileMapper>();
+            });
         }
 
         private static void ConfigureValidators(IServiceCollection services)

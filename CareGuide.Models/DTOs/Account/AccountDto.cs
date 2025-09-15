@@ -8,7 +8,6 @@ namespace CareGuide.Models.DTOs.Auth
         string SessionToken,
         string Name,
         Gender Gender,
-        DateOnly Birthday,
-        string? Picture
+        DateOnly Birthday
     );
 }
