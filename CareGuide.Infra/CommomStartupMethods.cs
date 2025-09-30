@@ -10,11 +10,14 @@ using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.RateLimiting;
 
 namespace CareGuide.Infra
 {
@@ -23,6 +26,7 @@ namespace CareGuide.Infra
         public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             ConfigureAuthentication(configuration, services);
+            ConfigureRateLimiting(services);
             ConfigureDatabase(configuration, services);
             ConfigureAutoMapper(services);
             ConfigureSecuritySettings(configuration, services);
@@ -30,6 +34,24 @@ namespace CareGuide.Infra
             NativeInjector.Register(services);
 
             services.AddHttpContextAccessor();
+        }
+
+        private static void ConfigureRateLimiting(IServiceCollection services)
+        {
+            services.AddRateLimiter(options =>
+            {
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 10,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = 0
+                        }));
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            });
         }
 
         private static void ConfigureDatabase(IConfiguration configuration, IServiceCollection services)

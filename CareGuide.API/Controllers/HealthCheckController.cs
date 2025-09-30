@@ -1,5 +1,6 @@
 ﻿using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CareGuide.API.Controllers
 {
@@ -14,6 +15,8 @@ namespace CareGuide.API.Controllers
             _userSessionContext = userSessionContext;
         }
 
+
+        [SwaggerOperation(Summary = "Health Check", Description = "Returns the health status of the API and the current user's ID.")]
         [HttpGet]
         public IResult HealthPrivateStatus()
         {
