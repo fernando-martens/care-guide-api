@@ -39,6 +39,7 @@ namespace CareGuide.Core.Services
         public async Task<RefreshToken> RotateAsync(Guid userId, string oldToken, CancellationToken cancellationToken)
         {
             var storedToken = await _refreshTokenRepository.GetByTokenAsync(userId, oldToken, cancellationToken);
+
             if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow || storedToken.Revoked)
                 throw new UnauthorizedAccessException("Invalid or expired refresh token.");
 
@@ -66,6 +67,16 @@ namespace CareGuide.Core.Services
                 storedToken.Revoked = true;
                 await _refreshTokenRepository.InvalidateAndReplaceAsync(storedToken, storedToken, cancellationToken);
             }
+        }
+
+        public async Task InvalidateAllAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var userTokens = await _refreshTokenRepository.GetAllByUserAsync(userId, cancellationToken);
+
+            foreach (var token in userTokens)
+                token.Revoked = true;
+
+            await _refreshTokenRepository.SaveChangesAsync(cancellationToken);
         }
     }
 }

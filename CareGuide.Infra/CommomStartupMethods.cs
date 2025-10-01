@@ -56,7 +56,8 @@ namespace CareGuide.Infra
 
         private static void ConfigureDatabase(IConfiguration configuration, IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEfTransactionUnitOfWork, EfTransactionUnitOfWork>();
+
             services.AddDbContext<DatabaseContext>(opt =>
             {
                 var connectionString = configuration.GetConnectionString("DatabaseConnection");

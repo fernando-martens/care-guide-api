@@ -1,6 +1,6 @@
 ﻿namespace CareGuide.Data.TransactionManagement
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IEfTransactionUnitOfWork : IDisposable
     {
         Task BeginTransactionAsync(CancellationToken cancellationToken);
         Task CommitTransactionAsync(CancellationToken cancellationToken);

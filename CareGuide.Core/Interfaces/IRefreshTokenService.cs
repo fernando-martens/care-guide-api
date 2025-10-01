@@ -8,5 +8,6 @@ namespace CareGuide.Core.Interfaces
         Task<RefreshToken?> GetAsync(Guid userId, string token, CancellationToken cancellationToken);
         Task<RefreshToken> RotateAsync(Guid userId, string oldToken, CancellationToken cancellationToken);
         Task InvalidateAsync(Guid userId, string token, CancellationToken cancellationToken);
+        Task InvalidateAllAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

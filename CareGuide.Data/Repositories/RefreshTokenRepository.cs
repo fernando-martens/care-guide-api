@@ -20,6 +20,13 @@ namespace CareGuide.Data.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<IEnumerable<RefreshToken>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await _context.Set<RefreshToken>()
+                .Where(rt => rt.UserId == userId && !rt.Revoked)
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task InvalidateAndReplaceAsync(RefreshToken oldToken, RefreshToken newToken, CancellationToken cancellationToken)
         {
             _context.Update(oldToken);
