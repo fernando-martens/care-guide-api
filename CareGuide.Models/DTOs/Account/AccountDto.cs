@@ -6,6 +6,7 @@ namespace CareGuide.Models.DTOs.Auth
         Guid Id,
         string Email,
         string SessionToken,
+        string RefreshToken,
         string Name,
         Gender Gender,
         DateOnly Birthday

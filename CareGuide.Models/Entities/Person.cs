@@ -9,6 +9,6 @@ namespace CareGuide.Models.Tables
         public required Gender Gender { get; set; }
         public required DateOnly Birthday { get; set; }
         public string? Picture { get; set; }
-        public ICollection<PersonAnnotation> PersonAnnotations { get; set; }
+        public ICollection<PersonAnnotation> PersonAnnotations { get; set; } = new List<PersonAnnotation>();
     }
 }

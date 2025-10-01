@@ -1,4 +1,5 @@
 ﻿using CareGuide.Data.Mappings;
+using CareGuide.Models.Entities;
 using CareGuide.Models.Entities.Shared;
 using CareGuide.Models.Tables;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,14 @@ namespace CareGuide.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<PersonAnnotation> PersonAnnotations { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserMapping());
             modelBuilder.ApplyConfiguration(new PersonMapping());
             modelBuilder.ApplyConfiguration(new PersonAnnotationMapping());
+            modelBuilder.ApplyConfiguration(new RefreshTokenMapping());
 
             base.OnModelCreating(modelBuilder);
         }
