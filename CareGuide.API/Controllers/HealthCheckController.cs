@@ -16,8 +16,8 @@ namespace CareGuide.API.Controllers
         }
 
 
-        [SwaggerOperation(Summary = "Health Check", Description = "Returns the health status of the API and the current user's ID.")]
         [HttpGet]
+        [SwaggerOperation(Summary = "Health Check", Description = "Returns the health status of the API and the current user's ID.")]
         public IResult HealthPrivateStatus()
         {
             return Results.Ok(_userSessionContext.UserId);
