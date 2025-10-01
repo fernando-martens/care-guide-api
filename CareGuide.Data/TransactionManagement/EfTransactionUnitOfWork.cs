@@ -2,12 +2,12 @@
 
 namespace CareGuide.Data.TransactionManagement
 {
-    public class UnitOfWork : IUnitOfWork
+    public class EfTransactionUnitOfWork : IEfTransactionUnitOfWork
     {
         private readonly DatabaseContext _dbContext;
         private IDbContextTransaction? _transaction;
 
-        public UnitOfWork(DatabaseContext dbContext)
+        public EfTransactionUnitOfWork(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

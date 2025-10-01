@@ -13,6 +13,11 @@ namespace CareGuide.Data.Repositories
             this.context = context;
         }
 
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             await context.Set<TEntity>().AddAsync(entity, cancellationToken);

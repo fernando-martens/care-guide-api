@@ -3,6 +3,7 @@ using CareGuide.API.Helpers;
 using CareGuide.Core.Interfaces;
 using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Auth;
+using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -32,7 +33,7 @@ namespace CareGuide.API.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [IgnoreSessionMiddleware]
-        [SwaggerOperation(Summary = "Login", Description = "Authenticates a user and returns a JWT token.")]
+        [SwaggerOperation(Summary = "Login", Description = "Authenticates a user and returns a JWT token and a refresh token.")]
         public async Task<IResult> Login([FromBody] LoginAccountDto loginAccount, CancellationToken cancellationToken)
         {
             var result = await _accountService.LoginAccountAsync(loginAccount, cancellationToken);
@@ -50,6 +51,15 @@ namespace CareGuide.API.Controllers
             AuthCookieHelper.AppendRefreshToken(HttpContext.Response, result.RefreshToken);
 
             return response;
+        }
+
+        [HttpPost("logout")]
+        [SwaggerOperation(Summary = "Logout", Description = "Logs out the current user by revoking refresh tokens and clearing cookies.")]
+        public async Task<IResult> Logout([FromServices] IUserSessionContext session, CancellationToken cancellationToken)
+        {
+            await _accountService.LogoutAccountAsync(session.UserId, cancellationToken);
+            AuthCookieHelper.RemoveRefreshToken(HttpContext.Response);
+            return Results.NoContent();
         }
 
         [HttpPost("refresh")]

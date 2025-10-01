@@ -5,6 +5,7 @@ namespace CareGuide.Data.Interfaces.Shared
     public interface IRepository<T> where T : Entity
     {
         Task<T> AddAsync(T entity, CancellationToken cancellationToken);
+        Task SaveChangesAsync(CancellationToken cancellationToken);
         Task<T?> DeleteAsync(Guid id, CancellationToken cancellationToken);
         Task<List<T>> DeleteManyAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
         Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken);

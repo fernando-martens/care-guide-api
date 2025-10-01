@@ -16,12 +16,12 @@ namespace CareGuide.Core.Services
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly IPersonService _personService;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEfTransactionUnitOfWork _unitOfWork;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly AutoMapper.IMapper _mapper;
 
-        public AccountService(IUserService userService, IUserRepository userRepository, IPersonService personService, IUnitOfWork unitOfWork, IJwtService jwtService, IRefreshTokenService refreshTokenService, AutoMapper.IMapper mapper)
+        public AccountService(IUserService userService, IUserRepository userRepository, IPersonService personService, IEfTransactionUnitOfWork unitOfWork, IJwtService jwtService, IRefreshTokenService refreshTokenService, AutoMapper.IMapper mapper)
         {
             _userService = userService;
             _userRepository = userRepository;
@@ -90,6 +90,11 @@ namespace CareGuide.Core.Services
                 personDto.Gender,
                 personDto.Birthday
             );
+        }
+
+        public async Task LogoutAccountAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            await _refreshTokenService.InvalidateAllAsync(userId, cancellationToken);
         }
 
         public async Task<AccountDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
