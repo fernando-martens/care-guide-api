@@ -1,10 +1,10 @@
 ﻿using CareGuide.Models.Entities.Shared;
 
-namespace CareGuide.Models.Tables
+namespace CareGuide.Models.Entities
 {
-    public class PersonAnnotation : Entity
+    public class PersonAnnotation : Entity, IPersonOwnedEntity
     {
-        public required Guid PersonId { get; set; }
+        public required Guid? PersonId { get; set; }
         public required string Details { get; set; }
         public string? FileUrl { get; set; }
         public Person Person { get; set; }

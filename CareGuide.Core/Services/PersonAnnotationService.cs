@@ -2,27 +2,24 @@
 using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
 using CareGuide.Models.DTOs.PersonAnnotation;
-using CareGuide.Models.Tables;
-using CareGuide.Security.Interfaces;
+using CareGuide.Models.Entities;
 
 namespace CareGuide.Core.Services
 {
     public class PersonAnnotationService : IPersonAnnotationService
     {
         private readonly IPersonAnnotationRepository _personAnnotationRepository;
-        private readonly IUserSessionContext _userSessionContext;
         private readonly IMapper _mapper;
 
-        public PersonAnnotationService(IPersonAnnotationRepository personAnnotationRepository, IUserSessionContext userSessionContext, IMapper mapper)
+        public PersonAnnotationService(IPersonAnnotationRepository personAnnotationRepository, IMapper mapper)
         {
             _personAnnotationRepository = personAnnotationRepository;
-            _userSessionContext = userSessionContext;
             _mapper = mapper;
         }
 
         public async Task<List<PersonAnnotationDto>> GetAllByPersonAsync(int page, int pageSize, CancellationToken cancellationToken)
         {
-            var list = await _personAnnotationRepository.GetAllByPersonAsync(_userSessionContext.PersonId, page, pageSize, cancellationToken);
+            var list = await _personAnnotationRepository.GetAllByPersonAsync(page, pageSize, cancellationToken);
             return _mapper.Map<List<PersonAnnotationDto>>(list);
         }
 
@@ -31,12 +28,12 @@ namespace CareGuide.Core.Services
             if (id == Guid.Empty)
                 throw new ArgumentException("The id cannot be empty.", nameof(id));
 
-            var personAnnotationTable = await _personAnnotationRepository.GetAsync(id, cancellationToken);
+            var entity = await _personAnnotationRepository.GetAsync(id, cancellationToken);
 
-            if (personAnnotationTable == null)
+            if (entity == null)
                 throw new KeyNotFoundException($"No person annotation found with the ID {id}.");
 
-            return _mapper.Map<PersonAnnotationDto>(personAnnotationTable);
+            return _mapper.Map<PersonAnnotationDto>(entity);
         }
 
         public async Task<PersonAnnotationDto> CreateAsync(CreatePersonAnnotationDto personAnnotation, CancellationToken cancellationToken)
@@ -45,7 +42,6 @@ namespace CareGuide.Core.Services
                 throw new ArgumentNullException(nameof(personAnnotation));
 
             var entity = _mapper.Map<PersonAnnotation>(personAnnotation);
-            entity.PersonId = _userSessionContext.PersonId;
 
             await _personAnnotationRepository.AddAsync(entity, cancellationToken);
 
@@ -74,7 +70,7 @@ namespace CareGuide.Core.Services
 
         public async Task DeleteAllByPersonAsync(CancellationToken cancellationToken)
         {
-            await _personAnnotationRepository.DeleteAllByPersonAsync(_userSessionContext.PersonId, cancellationToken);
+            await _personAnnotationRepository.DeleteAllByPersonAsync(cancellationToken);
         }
 
         public async Task DeleteByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)

@@ -20,7 +20,7 @@ namespace CareGuide.Security
             _audience = settings.Audience;
         }
 
-        public string GenerateToken(Guid userId, Guid personId, string email)
+        public string GenerateToken(Guid userId, Guid? personId, string email)
         {
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -30,7 +30,7 @@ namespace CareGuide.Security
                 claims: new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                    new Claim("personId", personId.ToString()),
+                    new Claim("personId", personId?.ToString() ?? string.Empty),
                     new Claim(JwtRegisteredClaimNames.Email, email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 },

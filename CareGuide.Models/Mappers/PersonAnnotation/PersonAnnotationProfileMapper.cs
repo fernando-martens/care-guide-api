@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CareGuide.Models.DTOs.PersonAnnotation;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
 
 namespace CareGuide.Models.Mappers
 {

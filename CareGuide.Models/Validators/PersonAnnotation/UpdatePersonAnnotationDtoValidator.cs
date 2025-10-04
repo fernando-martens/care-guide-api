@@ -1,5 +1,6 @@
 ﻿namespace CareGuide.Models.Validators.PersonAnnotation
 {
+    using CareGuide.Models.Constants;
     using CareGuide.Models.DTOs.PersonAnnotation;
     using FluentValidation;
 
@@ -13,10 +14,10 @@
 
             RuleFor(x => x.Details)
                 .NotEmpty().WithMessage("Details is required.")
-                .MaximumLength(1000).WithMessage("Details must be at most 1000 characters.");
+                .MaximumLength(DatabaseConstants.MaxLengthLargeText).WithMessage($"Details must be at most {DatabaseConstants.MaxLengthLargeText} characters.");
 
             RuleFor(x => x.FileUrl)
-                .MaximumLength(255).WithMessage("FileUrl must be at most 255 characters.");
+                .MaximumLength(DatabaseConstants.MaxLengthStandardText).WithMessage($"FileUrl must be at most {DatabaseConstants.MaxLengthStandardText} characters.");
         }
     }
 }

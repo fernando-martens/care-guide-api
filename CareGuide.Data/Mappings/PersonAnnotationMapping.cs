@@ -1,4 +1,5 @@
-﻿using CareGuide.Models.Tables;
+﻿using CareGuide.Models.Constants;
+using CareGuide.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,14 +13,14 @@ namespace CareGuide.Data.Mappings
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("id");
-            builder.Property(p => p.PersonId).IsRequired().HasColumnName("person_id");
-            builder.Property(p => p.Details).IsRequired().HasColumnType("text").HasColumnName("details");
-            builder.Property(p => p.FileUrl).HasMaxLength(255).HasColumnName("file_url");
+            builder.Property(x => x.PersonId).IsRequired().HasColumnName("person_id");
+            builder.Property(x => x.Details).IsRequired().HasColumnType("text").HasColumnName("details");
+            builder.Property(x => x.FileUrl).HasMaxLength(DatabaseConstants.MaxLengthStandardText).HasColumnName("file_url");
             builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("created_at");
             builder.Property(x => x.UpdatedAt).IsRequired().HasColumnName("updated_at");
             builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true).HasColumnName("is_active");
 
-            builder.HasOne(p => p.Person).WithMany(p => p.PersonAnnotations).HasForeignKey(p => p.PersonId).HasConstraintName("fk_person_annotation_person").OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Person).WithMany(x => x.PersonAnnotations).HasForeignKey(x => x.PersonId).HasConstraintName("fk_person_annotation_person").OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

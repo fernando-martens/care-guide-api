@@ -1,4 +1,5 @@
-﻿using CareGuide.Models.DTOs.Auth;
+﻿using CareGuide.Models.Constants;
+using CareGuide.Models.DTOs.Auth;
 using FluentValidation;
 
 namespace CareGuide.Models.Validators.Account
@@ -9,7 +10,7 @@ namespace CareGuide.Models.Validators.Account
         {
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required.")
-                .MaximumLength(255).WithMessage("Password must not exceed 255 characters.");
+                .MaximumLength(DatabaseConstants.MaxLengthStandardText).WithMessage($"Password must not exceed {DatabaseConstants.MaxLengthStandardText} characters.");
         }
     }
 }

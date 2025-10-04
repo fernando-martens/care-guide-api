@@ -1,4 +1,5 @@
-﻿using CareGuide.Models.DTOs.Auth;
+﻿using CareGuide.Models.Constants;
+using CareGuide.Models.DTOs.Auth;
 using FluentValidation;
 
 namespace CareGuide.Models.Validators.Account
@@ -9,16 +10,16 @@ namespace CareGuide.Models.Validators.Account
         {
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
-                .MaximumLength(255).WithMessage("Email must not exceed 255 characters.")
+                .MaximumLength(DatabaseConstants.MaxLengthStandardText).WithMessage($"Email must not exceed {DatabaseConstants.MaxLengthStandardText} characters.")
                 .EmailAddress().WithMessage("Email must be a valid email address.");
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required.")
-                .MaximumLength(255).WithMessage("Password must not exceed 255 characters.");
+                .MaximumLength(DatabaseConstants.MaxLengthStandardText).WithMessage($"Password must not exceed {DatabaseConstants.MaxLengthStandardText} characters.");
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(255).WithMessage("Name must not exceed 255 characters.");
+                .MaximumLength(DatabaseConstants.MaxLengthStandardText).WithMessage($"Name must not exceed {DatabaseConstants.MaxLengthStandardText} characters.");
 
             RuleFor(x => x.Gender)
                 .IsInEnum().WithMessage("Gender must be 'M', 'F', or 'O'.");

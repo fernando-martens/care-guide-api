@@ -1,11 +1,12 @@
-﻿using CareGuide.Core.Interfaces;
+﻿using AutoMapper;
+using CareGuide.Core.Interfaces;
 using CareGuide.Data.Interfaces;
 using CareGuide.Data.TransactionManagement;
 using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 
@@ -19,9 +20,9 @@ namespace CareGuide.Core.Services
         private readonly IEfTransactionUnitOfWork _unitOfWork;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly AutoMapper.IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public AccountService(IUserService userService, IUserRepository userRepository, IPersonService personService, IEfTransactionUnitOfWork unitOfWork, IJwtService jwtService, IRefreshTokenService refreshTokenService, AutoMapper.IMapper mapper)
+        public AccountService(IUserService userService, IUserRepository userRepository, IPersonService personService, IEfTransactionUnitOfWork unitOfWork, IJwtService jwtService, IRefreshTokenService refreshTokenService, IMapper mapper)
         {
             _userService = userService;
             _userRepository = userRepository;
@@ -79,7 +80,10 @@ namespace CareGuide.Core.Services
             var refreshToken = await _refreshTokenService.CreateAsync(user.Id, cancellationToken);
 
             var userDto = await _userService.GetByIdDtoAsync(user.Id, cancellationToken);
-            var personDto = await _personService.GetAsync(userDto.PersonId, cancellationToken);
+
+            var personDto = user.PersonId.HasValue
+                ? await _personService.GetAsync(user.PersonId.Value, cancellationToken)
+                : throw new InvalidOperationException("PersonId não está definido para o usuário.");
 
             return new AccountDto(
                 userDto.Id,
@@ -108,7 +112,7 @@ namespace CareGuide.Core.Services
             string newAccessToken = _jwtService.GenerateToken(user.Id, user.PersonId, user.Email);
 
             var userDto = await _userService.GetByIdDtoAsync(user.Id, cancellationToken);
-            var personDto = await _personService.GetAsync(user.PersonId, cancellationToken);
+            var personDto = await _personService.GetAsync(user.PersonId!.Value, cancellationToken);
 
             return new AccountDto(
                 userDto.Id,
@@ -138,7 +142,11 @@ namespace CareGuide.Core.Services
                     throw new KeyNotFoundException($"User with id {id} not found");
 
                 await _userService.DeleteAsync(id, cancellationToken);
-                await _personService.DeleteAsync(user.PersonId, cancellationToken);
+
+                if (user.PersonId.HasValue)
+                {
+                    await _personService.DeleteAsync(user.PersonId.Value, cancellationToken);
+                }
 
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
