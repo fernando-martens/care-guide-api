@@ -1,5 +1,6 @@
 ﻿using CareGuide.Data.Interfaces;
 using CareGuide.Models.Entities;
+using CareGuide.Security.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareGuide.Data.Repositories
@@ -8,7 +9,7 @@ namespace CareGuide.Data.Repositories
     {
         private readonly DatabaseContext _context;
 
-        public RefreshTokenRepository(DatabaseContext context) : base(context)
+        public RefreshTokenRepository(DatabaseContext context, IUserSessionContext userSessionContext) : base(context)
         {
             _context = context;
         }

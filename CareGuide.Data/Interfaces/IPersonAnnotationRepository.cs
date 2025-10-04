@@ -1,11 +1,9 @@
 ﻿using CareGuide.Data.Interfaces.Shared;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
 
 namespace CareGuide.Data.Interfaces
 {
-    public interface IPersonAnnotationRepository : IRepository<PersonAnnotation>
+    public interface IPersonAnnotationRepository : IBasePersonOwnedRepository<PersonAnnotation>
     {
-        Task<List<PersonAnnotation>> GetAllByPersonAsync(Guid personId, int page, int pageSize, CancellationToken cancellationToken);
-        Task DeleteAllByPersonAsync(Guid personId, CancellationToken cancellationToken);
     }
 }

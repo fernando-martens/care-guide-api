@@ -1,5 +1,6 @@
 ﻿using CareGuide.Data.Interfaces;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
+using CareGuide.Security.Interfaces;
 
 namespace CareGuide.Data.Repositories
 {
@@ -7,7 +8,7 @@ namespace CareGuide.Data.Repositories
     {
         private readonly DatabaseContext _context;
 
-        public PersonRepository(DatabaseContext context) : base(context)
+        public PersonRepository(DatabaseContext context, IUserSessionContext userSessionContext) : base(context)
         {
             _context = context;
         }

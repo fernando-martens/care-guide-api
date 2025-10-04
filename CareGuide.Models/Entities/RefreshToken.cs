@@ -1,5 +1,4 @@
 ﻿using CareGuide.Models.Entities.Shared;
-using CareGuide.Models.Tables;
 
 namespace CareGuide.Models.Entities
 {

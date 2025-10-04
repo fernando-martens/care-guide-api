@@ -5,11 +5,11 @@ using CareGuide.Security.Interfaces;
 
 namespace CareGuide.Data.Repositories
 {
-    public class PersonAnnotationRepository : BasePersonOwnedRepository<PersonAnnotation>, IPersonAnnotationRepository
+    public class PersonHealthRepository : BasePersonOwnedRepository<PersonHealth>, IPersonHealthRepository
     {
         private readonly DatabaseContext _context;
 
-        public PersonAnnotationRepository(DatabaseContext context, IUserSessionContext userSessionContext) : base(context, userSessionContext)
+        public PersonHealthRepository(DatabaseContext context, IUserSessionContext userSessionContext) : base(context, userSessionContext)
         {
             _context = context;
         }

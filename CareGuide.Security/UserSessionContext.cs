@@ -6,41 +6,35 @@ namespace CareGuide.Security
 {
     public class UserSessionContext : IUserSessionContext
     {
-        public Guid UserId { get; }
-        public Guid PersonId { get; }
-        public string Email { get; }
+        public Guid UserId { get; private set; }
+        public Guid PersonId { get; private set; }
+        public string Email { get; private set; } = string.Empty;
 
         public UserSessionContext(IHttpContextAccessor httpContextAccessor, IJwtService jwtService)
         {
             var httpContext = httpContextAccessor.HttpContext;
 
             if (httpContext == null)
-                throw new UnauthorizedAccessException("No HttpContext available.");
+                return;
 
             if (!httpContext.Request.Headers.TryGetValue("Authorization", out var headerAuth))
-                throw new UnauthorizedAccessException("Authorization header not found.");
+                return;
 
-            var token = jwtService.ValidateToken(headerAuth.ToString().Replace("Bearer ", ""));
+            var tokenString = headerAuth.ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var token = jwtService.ValidateToken(tokenString);
 
             if (token == null)
-                throw new UnauthorizedAccessException("Invalid or expired token.");
+                return;
 
-            UserId = GetGuidClaim(token.Claims, "sub", "UserId");
-            PersonId = GetGuidClaim(token.Claims, "personId", "PersonId");
+            UserId = GetGuidClaim(token.Claims, "sub");
+            PersonId = GetGuidClaim(token.Claims, "personId");
             Email = GetStringClaim(token.Claims, "email");
         }
 
-        private static Guid GetGuidClaim(IEnumerable<Claim> claims, string type, string name)
+        private static Guid GetGuidClaim(IEnumerable<Claim> claims, string type)
         {
             var value = claims.FirstOrDefault(c => c.Type == type)?.Value;
-
-            if (value == null)
-                throw new UnauthorizedAccessException($"{name} claim ('{type}') not found in token.");
-
-            if (!Guid.TryParse(value, out var guid))
-                throw new UnauthorizedAccessException($"{name} claim ('{type}') is not a valid GUID: {value}");
-
-            return guid;
+            return Guid.TryParse(value, out var guid) ? guid : Guid.Empty;
         }
 
         private static string GetStringClaim(IEnumerable<Claim> claims, string type)

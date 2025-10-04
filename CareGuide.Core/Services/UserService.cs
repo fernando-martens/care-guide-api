@@ -5,7 +5,7 @@ using CareGuide.Models.Constants;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
 using CareGuide.Security;
 
 namespace CareGuide.Core.Services

@@ -1,11 +1,10 @@
-﻿using CareGuide.Models.Entities;
-using CareGuide.Models.Entities.Shared;
+﻿using CareGuide.Models.Entities.Shared;
 
-namespace CareGuide.Models.Tables
+namespace CareGuide.Models.Entities
 {
-    public class User : Entity
+    public class User : Entity, IPersonOwnedEntity
     {
-        public required Guid PersonId { get; set; }
+        public required Guid? PersonId { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }
         public Person Person { get; set; }

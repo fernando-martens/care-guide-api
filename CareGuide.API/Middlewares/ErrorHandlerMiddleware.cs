@@ -24,6 +24,12 @@ namespace CareGuide.API.Middlewares
                 HttpRequest request = context.Request;
                 request.EnableBuffering();
                 await next(context);
+
+                if (context.Response.StatusCode == StatusCodes.Status429TooManyRequests)
+                {
+                    await HandleRateLimitExceededAsync(context);
+                    return;
+                }
             }
             catch (ValidationException vex)
             {
@@ -186,6 +192,33 @@ namespace CareGuide.API.Middlewares
                 type: PT("not-found"),
                 extensions: extensions
             );
+
+            return context.Response.WriteAsJsonAsync(problem);
+        }
+
+        private Task HandleRateLimitExceededAsync(HttpContext context)
+        {
+            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+
+            var retryAfter = context.Response.Headers["Retry-After"].FirstOrDefault();
+
+            var extensions = new Dictionary<string, object>();
+            if (!string.IsNullOrEmpty(retryAfter))
+            {
+                extensions["retryAfter"] = retryAfter;
+            }
+
+            var problem = CreateProblemDetails(
+                context,
+                context.Response.StatusCode,
+                title: "Too many requests.",
+                detail: "You have exceeded the allowed number of requests. Please wait before trying again.",
+                type: PT("too-many-requests"),
+                extensions: extensions
+            );
+
+            _logger.LogWarning("Rate limit exceeded for IP {Ip}", context.Connection.RemoteIpAddress?.ToString());
 
             return context.Response.WriteAsJsonAsync(problem);
         }

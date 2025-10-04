@@ -1,5 +1,5 @@
 ﻿using CareGuide.Data.Interfaces.Shared;
-using CareGuide.Models.Tables;
+using CareGuide.Models.Entities;
 
 
 namespace CareGuide.Data.Interfaces

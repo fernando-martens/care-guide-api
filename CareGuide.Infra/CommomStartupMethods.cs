@@ -3,9 +3,12 @@ using CareGuide.Data.TransactionManagement;
 using CareGuide.Infra.CrossCutting;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.PersonAnnotation;
+using CareGuide.Models.DTOs.PersonHealth;
 using CareGuide.Models.Mappers;
+using CareGuide.Models.Mappers.PersonHealth;
 using CareGuide.Models.Validators.Account;
 using CareGuide.Models.Validators.PersonAnnotation;
+using CareGuide.Models.Validators.PersonHealth;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
@@ -106,6 +109,7 @@ namespace CareGuide.Infra
                 cfg.AddProfile<AccountToPersonProfileMapper>();
                 cfg.AddProfile<AccountToUserProfileMapper>();
                 cfg.AddProfile<PersonAnnotationProfileMapper>();
+                cfg.AddProfile<PersonHealthProfileMapper>();
                 cfg.AddProfile<PersonProfileMapper>();
                 cfg.AddProfile<UserProfileMapper>();
             });
@@ -117,6 +121,8 @@ namespace CareGuide.Infra
             services.AddTransient<IValidator<UpdatePasswordAccountDto>, UpdatePasswordAccountDtoValidator>();
             services.AddTransient<IValidator<CreatePersonAnnotationDto>, CreatePersonAnnotationDtoValidator>();
             services.AddTransient<IValidator<UpdatePersonAnnotationDto>, UpdatePersonAnnotationDtoValidator>();
+            services.AddTransient<IValidator<CreatePersonHealthDto>, CreatePersonHealthDtoValidator>();
+            services.AddTransient<IValidator<UpdatePersonHealthDto>, UpdatePersonHealthDtoValidator>();
         }
     }
 }
