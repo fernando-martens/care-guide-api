@@ -8,7 +8,7 @@ namespace CareGuide.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.ToTable("refresh_token");
+            builder.ToTable("refresh_tokens");
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("id");

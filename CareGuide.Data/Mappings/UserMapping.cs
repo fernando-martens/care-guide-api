@@ -9,12 +9,12 @@ namespace CareGuide.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("user");
+            builder.ToTable("users");
 
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("id");
-            builder.Property(x => x.PersonId).HasColumnName("person_id");
+            builder.Property(x => x.PersonId).IsRequired().HasColumnName("person_id");
             builder.Property(x => x.Email).IsRequired().HasMaxLength(DatabaseConstants.MaxLengthStandardText).HasColumnName("email");
             builder.Property(x => x.Password).IsRequired().HasMaxLength(DatabaseConstants.MaxLengthStandardText).HasColumnName("password");
             builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("created_at");

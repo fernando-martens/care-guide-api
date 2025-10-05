@@ -12,7 +12,7 @@ namespace CareGuide.Data.Mappings
         {
             var bloodTypeConverter = new ValueConverter<BloodType, string>(x => ConvertBloodTypeToString(x), x => ConvertStringToBloodType(x));
 
-            builder.ToTable("person_health", x =>
+            builder.ToTable("person_healths", x =>
             {
                 x.HasCheckConstraint("CK_PersonHealth_BloodType", "blood_type IN ('A+','A-','B+','B-','AB+','AB-','O+','O-')");
             });

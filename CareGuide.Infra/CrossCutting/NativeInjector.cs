@@ -18,6 +18,7 @@ namespace CareGuide.Infra.CrossCutting
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPersonAnnotationService, PersonAnnotationService>();
             services.AddScoped<IPersonHealthService, PersonHealthService>();
+            services.AddScoped<IPhoneService, PhoneService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             #endregion
@@ -28,6 +29,7 @@ namespace CareGuide.Infra.CrossCutting
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IPersonAnnotationRepository, PersonAnnotationRepository>();
             services.AddScoped<IPersonHealthRepository, PersonHealthRepository>();
+            services.AddScoped<IPhoneRepository, PhoneRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             #endregion
