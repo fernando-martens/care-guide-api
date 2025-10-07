@@ -19,7 +19,7 @@ namespace CareGuide.API.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get Person Health", Description = "Retrieves the health record associated with the logged-in person.")]
-        public async Task<IResult> GetAllByPerson([FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
+        public async Task<IResult> GetAll([FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
         {
             var result = await _personHealthService.GetAllByPersonAsync(page, pageSize, cancellationToken);
             return Results.Ok(result);
@@ -30,7 +30,7 @@ namespace CareGuide.API.Controllers
         public async Task<IResult> Create([FromBody] CreatePersonHealthDto createPersonHealth, CancellationToken cancellationToken)
         {
             var created = await _personHealthService.CreateAsync(createPersonHealth, cancellationToken);
-            return Results.Created($"/personHealth/{created.Id}", created);
+            return Results.Created($"/PersonHealth/{created.Id}", created);
         }
 
         [HttpPut("{id}")]
@@ -42,7 +42,7 @@ namespace CareGuide.API.Controllers
 
         [HttpDelete("person")]
         [SwaggerOperation(Summary = "Delete Person Health", Description = "Deletes all person healths for the logged-in person.")]
-        public async Task<IResult> DeleteAllByPerson(CancellationToken cancellationToken)
+        public async Task<IResult> DeleteAll(CancellationToken cancellationToken)
         {
             await _personHealthService.DeleteAllByPersonAsync(cancellationToken);
             return Results.NoContent();

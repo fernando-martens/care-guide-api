@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareGuide.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20251003133544_AddPersonHealthTable")]
-    partial class AddPersonHealthTable
+    [Migration("20251005155812_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,7 @@ namespace CareGuide.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("person", null, t =>
+                    b.ToTable("persons", null, t =>
                         {
                             t.HasCheckConstraint("CK_Person_Gender", "gender IN ('M', 'F', 'O')");
                         });
@@ -112,7 +112,7 @@ namespace CareGuide.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("person_annotation", (string)null);
+                    b.ToTable("person_annotations", (string)null);
                 });
 
             modelBuilder.Entity("CareGuide.Models.Entities.PersonHealth", b =>
@@ -163,9 +163,55 @@ namespace CareGuide.Data.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("person_health", null, t =>
+                    b.ToTable("person_healths", null, t =>
                         {
                             t.HasCheckConstraint("CK_PersonHealth_BloodType", "blood_type IN ('A+','A-','B+','B-','AB+','AB-','O+','O-')");
+                        });
+                });
+
+            modelBuilder.Entity("CareGuide.Models.Entities.Phone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AreaCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
+                        .HasColumnName("area_code");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("number");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(3)")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("phones", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Phone_Type", "type IN ('R', 'COM', 'CEL', 'O')");
                         });
                 });
 
@@ -214,7 +260,7 @@ namespace CareGuide.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("refresh_token", (string)null);
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("CareGuide.Models.Entities.User", b =>
@@ -261,7 +307,7 @@ namespace CareGuide.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("user", (string)null);
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("CareGuide.Models.Entities.PersonAnnotation", b =>

@@ -27,7 +27,21 @@ namespace CareGuide.API.Controllers
         [SwaggerOperation(Summary = "Create Account", Description = "Creates a new user account.")]
         public async Task<IResult> Create([FromBody] CreateAccountDto createAccount, CancellationToken cancellationToken)
         {
-            return Results.Ok(await _accountService.CreateAccountAsync(createAccount, cancellationToken));
+            var result = await _accountService.CreateAccountAsync(createAccount, cancellationToken);
+
+            var response = Results.Ok(new
+            {
+                result.Id,
+                result.Email,
+                result.Name,
+                result.Gender,
+                result.Birthday
+            });
+
+            AuthCookieHelper.AppendRefreshToken(HttpContext.Response, result.RefreshToken);
+            AuthCookieHelper.AppendSessionToken(HttpContext.Response, result.SessionToken);
+
+            return response;
         }
 
         [HttpPost("login")]
@@ -42,13 +56,13 @@ namespace CareGuide.API.Controllers
             {
                 result.Id,
                 result.Email,
-                result.SessionToken,
                 result.Name,
                 result.Gender,
                 result.Birthday
             });
 
             AuthCookieHelper.AppendRefreshToken(HttpContext.Response, result.RefreshToken);
+            AuthCookieHelper.AppendSessionToken(HttpContext.Response, result.SessionToken);
 
             return response;
         }
@@ -59,6 +73,8 @@ namespace CareGuide.API.Controllers
         {
             await _accountService.LogoutAccountAsync(session.UserId, cancellationToken);
             AuthCookieHelper.RemoveRefreshToken(HttpContext.Response);
+            AuthCookieHelper.RemoveSessionToken(HttpContext.Response);
+
             return Results.NoContent();
         }
 
@@ -74,13 +90,13 @@ namespace CareGuide.API.Controllers
             {
                 result.Id,
                 result.Email,
-                result.SessionToken,
                 result.Name,
                 result.Gender,
                 result.Birthday
             });
 
             AuthCookieHelper.AppendRefreshToken(HttpContext.Response, result.RefreshToken);
+            AuthCookieHelper.AppendSessionToken(HttpContext.Response, result.SessionToken);
 
             return response;
         }

@@ -14,7 +14,7 @@ namespace CareGuide.Data.Mappings
             var genderConverter = new ValueConverter<Gender, string>(x => x.ToString(), x => (Gender)Enum.Parse(typeof(Gender), x));
             var dateOnlyConverter = new ValueConverter<DateOnly, DateTime>(x => x.ToDateTime(TimeOnly.MinValue), x => DateOnly.FromDateTime(x));
 
-            builder.ToTable("person", x =>
+            builder.ToTable("persons", x =>
             {
                 x.HasCheckConstraint("CK_Person_Gender", "gender IN ('M', 'F', 'O')");
             });

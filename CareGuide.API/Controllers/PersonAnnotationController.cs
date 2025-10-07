@@ -17,15 +17,13 @@ namespace CareGuide.API.Controllers
             _personAnnotationService = personAnnotationService;
         }
 
-
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Annotations", Description = "Retrieves all annotations for the logged-in person, with pagination.")]
-        public async Task<IResult> GetAllByPerson([FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
+        public async Task<IResult> GetAll([FromQuery] int page = PaginationConstants.DefaultPage, [FromQuery] int pageSize = PaginationConstants.DefaultPageSize, CancellationToken cancellationToken = default)
         {
             var result = await _personAnnotationService.GetAllByPersonAsync(page, pageSize, cancellationToken);
             return Results.Ok(result);
         }
-
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Annotation By Id", Description = "Retrieves a specific annotation by its ID.")]
@@ -34,15 +32,13 @@ namespace CareGuide.API.Controllers
             return Results.Ok(await _personAnnotationService.GetAsync(id, cancellationToken));
         }
 
-
         [HttpPost]
         [SwaggerOperation(Summary = "Create Annotation", Description = "Creates a new annotation for the logged-in person.")]
         public async Task<IResult> Create([FromBody] CreatePersonAnnotationDto createPersonAnnotation, CancellationToken cancellationToken)
         {
             var created = await _personAnnotationService.CreateAsync(createPersonAnnotation, cancellationToken);
-            return Results.Created($"/personAnnotation/{created.Id}", created);
+            return Results.Created($"/PersonAnnotation/{created.Id}", created);
         }
-
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Annotation", Description = "Updates an existing annotation by its ID.")]
@@ -51,15 +47,13 @@ namespace CareGuide.API.Controllers
             return Results.Ok(await _personAnnotationService.UpdateAsync(id, updatePersonAnnotation, cancellationToken));
         }
 
-
         [HttpDelete("person")]
         [SwaggerOperation(Summary = "Delete All Annotations", Description = "Deletes all annotations for the logged-in person.")]
-        public async Task<IResult> DeleteAllByPerson(CancellationToken cancellationToken)
+        public async Task<IResult> DeleteAll(CancellationToken cancellationToken)
         {
             await _personAnnotationService.DeleteAllByPersonAsync(cancellationToken);
             return Results.NoContent();
         }
-
 
         [HttpDelete]
         [SwaggerOperation(Summary = "Delete Multiple Annotations", Description = "Deletes multiple annotations by their IDs.")]
@@ -68,6 +62,5 @@ namespace CareGuide.API.Controllers
             await _personAnnotationService.DeleteByIdsAsync(ids, cancellationToken);
             return Results.NoContent();
         }
-
     }
 }

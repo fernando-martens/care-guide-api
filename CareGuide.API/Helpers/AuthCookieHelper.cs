@@ -2,8 +2,6 @@
 {
     public class AuthCookieHelper
     {
-        private const string CookieName = "refreshToken";
-
         public static void AppendRefreshToken(HttpResponse response, string refreshToken, int days = 1)
         {
             var cookieOptions = new CookieOptions
@@ -14,12 +12,30 @@
                 Expires = DateTime.UtcNow.AddDays(days)
             };
 
-            response.Cookies.Append(CookieName, refreshToken, cookieOptions);
+            response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        }
+
+        public static void AppendSessionToken(HttpResponse response, string accessToken, int minutes = 15)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddMinutes(minutes)
+            };
+
+            response.Cookies.Append("sessionToken", accessToken, cookieOptions);
         }
 
         public static void RemoveRefreshToken(HttpResponse response)
         {
-            response.Cookies.Delete(CookieName);
+            response.Cookies.Delete("refreshToken");
+        }
+
+        public static void RemoveSessionToken(HttpResponse response)
+        {
+            response.Cookies.Delete("sessionToken");
         }
     }
 }

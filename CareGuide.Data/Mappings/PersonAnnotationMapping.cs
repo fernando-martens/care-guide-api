@@ -9,7 +9,7 @@ namespace CareGuide.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<PersonAnnotation> builder)
         {
-            builder.ToTable("person_annotation");
+            builder.ToTable("person_annotations");
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("id");

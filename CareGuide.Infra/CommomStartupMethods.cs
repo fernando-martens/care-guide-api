@@ -4,11 +4,15 @@ using CareGuide.Infra.CrossCutting;
 using CareGuide.Models.DTOs.Auth;
 using CareGuide.Models.DTOs.PersonAnnotation;
 using CareGuide.Models.DTOs.PersonHealth;
+using CareGuide.Models.DTOs.Phone;
 using CareGuide.Models.Mappers;
 using CareGuide.Models.Mappers.PersonHealth;
+using CareGuide.Models.Mappers.PersonPhone;
+using CareGuide.Models.Mappers.Phone;
 using CareGuide.Models.Validators.Account;
 using CareGuide.Models.Validators.PersonAnnotation;
 using CareGuide.Models.Validators.PersonHealth;
+using CareGuide.Models.Validators.Phone;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
 using FluentValidation;
@@ -112,6 +116,8 @@ namespace CareGuide.Infra
                 cfg.AddProfile<PersonHealthProfileMapper>();
                 cfg.AddProfile<PersonProfileMapper>();
                 cfg.AddProfile<UserProfileMapper>();
+                cfg.AddProfile<PhoneProfileMapper>();
+                cfg.AddProfile<PersonPhoneProfileMapper>();
             });
         }
 
@@ -123,6 +129,8 @@ namespace CareGuide.Infra
             services.AddTransient<IValidator<UpdatePersonAnnotationDto>, UpdatePersonAnnotationDtoValidator>();
             services.AddTransient<IValidator<CreatePersonHealthDto>, CreatePersonHealthDtoValidator>();
             services.AddTransient<IValidator<UpdatePersonHealthDto>, UpdatePersonHealthDtoValidator>();
+            services.AddTransient<IValidator<CreatePhoneDto>, CreatePhoneDtoValidator>();
+            services.AddTransient<IValidator<UpdatePhoneDto>, UpdatePhoneDtoValidator>();
         }
     }
 }

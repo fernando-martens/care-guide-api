@@ -11,8 +11,7 @@ namespace CareGuide.Data
     {
         private readonly IUserSessionContext? _userSessionContext;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, IUserSessionContext? userSessionContext = null)
-            : base(options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IUserSessionContext? userSessionContext = null) : base(options)
         {
             _userSessionContext = userSessionContext;
         }
@@ -21,6 +20,8 @@ namespace CareGuide.Data
         public DbSet<Person> Persons { get; set; } = null!;
         public DbSet<PersonAnnotation> PersonAnnotations { get; set; } = null!;
         public DbSet<PersonHealth> PersonHealths { get; set; } = null!;
+        public DbSet<Phone> Phones { get; set; } = null!;
+        public DbSet<PersonPhone> PersonPhones { get; set; } = null!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +30,8 @@ namespace CareGuide.Data
             modelBuilder.ApplyConfiguration(new PersonMapping());
             modelBuilder.ApplyConfiguration(new PersonAnnotationMapping());
             modelBuilder.ApplyConfiguration(new PersonHealthMapping());
+            modelBuilder.ApplyConfiguration(new PhoneMapping());
+            modelBuilder.ApplyConfiguration(new PersonPhoneMapping());
             modelBuilder.ApplyConfiguration(new RefreshTokenMapping());
 
             if (_userSessionContext != null && _userSessionContext.PersonId != Guid.Empty)
