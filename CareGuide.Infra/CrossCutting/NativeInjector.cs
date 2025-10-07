@@ -11,7 +11,7 @@ namespace CareGuide.Infra.CrossCutting
 
         public static void Register(IServiceCollection services)
         {
-            #region Core
+            #region Service
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPersonService, PersonService>();
@@ -19,6 +19,7 @@ namespace CareGuide.Infra.CrossCutting
             services.AddScoped<IPersonAnnotationService, PersonAnnotationService>();
             services.AddScoped<IPersonHealthService, PersonHealthService>();
             services.AddScoped<IPhoneService, PhoneService>();
+            services.AddScoped<IPersonPhoneService, PersonPhoneService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             #endregion
@@ -30,6 +31,7 @@ namespace CareGuide.Infra.CrossCutting
             services.AddScoped<IPersonAnnotationRepository, PersonAnnotationRepository>();
             services.AddScoped<IPersonHealthRepository, PersonHealthRepository>();
             services.AddScoped<IPhoneRepository, PhoneRepository>();
+            services.AddScoped<IPersonPhoneRepository, PersonPhoneRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             #endregion

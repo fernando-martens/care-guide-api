@@ -26,16 +26,16 @@
       "applicationUrl": "http://localhost:5000",
       "launchUrl": "scalar"
     },
-    "Container (Dockerfile)": {
+    "Container": {
       "commandName": "Docker",
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "launchBrowser": true,
+      "launchUrl": "scalar",
       "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "publishAllPorts": true,
-      "useSSL": true
-    }
+      "useSSL": false
+    },
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {

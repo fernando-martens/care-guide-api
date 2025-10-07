@@ -7,6 +7,7 @@ namespace CareGuide.Models.Entities
         public required Guid? PersonId { get; set; }
         public required string Details { get; set; }
         public string? FileUrl { get; set; }
-        public Person Person { get; set; }
+        
+        public Person Person { get; set; } = null!;
     }
 }

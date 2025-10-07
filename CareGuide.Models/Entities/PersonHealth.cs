@@ -10,6 +10,7 @@ namespace CareGuide.Models.Entities
         public required decimal Height { get; set; }
         public required decimal Weight { get; set; }
         public string? Description { get; set; }
-        public Person Person { get; set; }
+
+        public Person Person { get; set; } = null!;
     }
 }

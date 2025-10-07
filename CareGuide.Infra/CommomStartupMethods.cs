@@ -7,6 +7,7 @@ using CareGuide.Models.DTOs.PersonHealth;
 using CareGuide.Models.DTOs.Phone;
 using CareGuide.Models.Mappers;
 using CareGuide.Models.Mappers.PersonHealth;
+using CareGuide.Models.Mappers.PersonPhone;
 using CareGuide.Models.Mappers.Phone;
 using CareGuide.Models.Validators.Account;
 using CareGuide.Models.Validators.PersonAnnotation;
@@ -116,6 +117,7 @@ namespace CareGuide.Infra
                 cfg.AddProfile<PersonProfileMapper>();
                 cfg.AddProfile<UserProfileMapper>();
                 cfg.AddProfile<PhoneProfileMapper>();
+                cfg.AddProfile<PersonPhoneProfileMapper>();
             });
         }
 

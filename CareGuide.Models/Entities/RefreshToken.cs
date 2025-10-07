@@ -8,6 +8,7 @@ namespace CareGuide.Models.Entities
         public string Token { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
         public bool Revoked { get; set; }
-        public User User { get; set; }
+
+        public User User { get; set; } = null!;
     }
 }
