@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using CareGuide.Models.DTOs.PersonAnnotation;
-using CareGuide.Models.Entities;
 
-namespace CareGuide.Models.Mappers
+namespace CareGuide.Models.Mappers.PersonAnnotation
 {
     public class PersonAnnotationProfileMapper : Profile
     {
         public PersonAnnotationProfileMapper()
         {
-            CreateMap<PersonAnnotation, PersonAnnotationDto>();
-            CreateMap<CreatePersonAnnotationDto, PersonAnnotation>();
-            CreateMap<UpdatePersonAnnotationDto, PersonAnnotation>();
+            CreateMap<Entities.PersonAnnotation, PersonAnnotationDto>();
+            CreateMap<CreatePersonAnnotationDto, Entities.PersonAnnotation>();
+            CreateMap<UpdatePersonAnnotationDto, Entities.PersonAnnotation>();
         }
     }
 }

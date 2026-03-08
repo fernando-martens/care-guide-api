@@ -1,4 +1,5 @@
 ﻿using CareGuide.Data.Interfaces;
+using CareGuide.Data.Repositories.Shared;
 using CareGuide.Models.Entities;
 
 namespace CareGuide.Data.Repositories

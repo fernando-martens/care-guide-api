@@ -1,4 +1,4 @@
-﻿namespace CareGuide.Models.DTOs.Auth
+﻿namespace CareGuide.Models.DTOs.Account
 {
     public record LoginAccountDto(
         string Email,

@@ -1,10 +1,9 @@
 using CareGuide.API.Middlewares;
-using CareGuide.Data;
 using CareGuide.Infra;
 using CareGuide.Security;
 using CareGuide.Security.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 
@@ -15,43 +14,53 @@ builder.Services.AddScoped<IUserSessionContext, UserSessionContext>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAnyOrigin", builder =>
+    options.AddPolicy("AllowAnyOrigin", policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddOpenApi("v1", options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CareGuideAPI", Version = "v1" });
-    c.EnableAnnotations();
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.AddDocumentTransformer(async (document, context, cancellationToken) =>
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
+        document.Info = new OpenApiInfo
         {
-            new OpenApiSecurityScheme
+            Title = "CareGuideAPI",
+            Version = "v1"
+        };
+
+        var authenticationSchemeProvider = context.ApplicationServices.GetRequiredService<IAuthenticationSchemeProvider>();
+        var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+
+        if (authenticationSchemes.Any(scheme => scheme.Name == "Bearer"))
+        {
+            document.Components ??= new OpenApiComponents();
+            document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>
             {
-                Reference = new OpenApiReference
+                ["Bearer"] = new OpenApiSecurityScheme
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                },
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header,
-            },
-            new List<string>()
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+                }
+            };
+
+            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
+            {
+                operation.Value.Security ??= [];
+
+                operation.Value.Security.Add(new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+                });
+            }
         }
     });
 });
@@ -71,21 +80,6 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<DatabaseContext>();
-        context.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetService<ILogger<Program>>();
-        logger?.LogError(ex, "Error migrating the database");
-    }
-}
-
 ConfigurePipeline(app);
 
 app.MapControllers();
@@ -94,7 +88,7 @@ app.Run();
 
 static void ConfigurePipeline(WebApplication app)
 {
-    app.MapSwagger("/openapi/{documentName}.json");
+    app.MapOpenApi("/openapi/{documentName}.json");
     app.MapScalarApiReference();
 
     if (app.Environment.IsDevelopment())

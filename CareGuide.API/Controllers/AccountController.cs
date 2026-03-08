@@ -1,12 +1,10 @@
-using CareGuide.API.Attributes;
 using CareGuide.API.Helpers;
+using CareGuide.API.Middlewares;
 using CareGuide.Core.Interfaces;
 using CareGuide.Models.DTOs.Account;
-using CareGuide.Models.DTOs.Auth;
 using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace CareGuide.API.Controllers
 {
@@ -24,7 +22,8 @@ namespace CareGuide.API.Controllers
         [HttpPost]
         [AllowAnonymous]
         [IgnoreSessionMiddleware]
-        [SwaggerOperation(Summary = "Create Account", Description = "Creates a new user account.")]
+        [EndpointSummary("Create Account")]
+        [EndpointDescription("Creates a new user account.")]
         public async Task<IResult> Create([FromBody] CreateAccountDto createAccount, CancellationToken cancellationToken)
         {
             var result = await _accountService.CreateAccountAsync(createAccount, cancellationToken);
@@ -47,7 +46,8 @@ namespace CareGuide.API.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [IgnoreSessionMiddleware]
-        [SwaggerOperation(Summary = "Login", Description = "Authenticates a user and returns a JWT token and a refresh token.")]
+        [EndpointSummary("Login")]
+        [EndpointDescription("Authenticates a user and returns a JWT token and a refresh token.")]
         public async Task<IResult> Login([FromBody] LoginAccountDto loginAccount, CancellationToken cancellationToken)
         {
             var result = await _accountService.LoginAccountAsync(loginAccount, cancellationToken);
@@ -68,7 +68,8 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpPost("logout")]
-        [SwaggerOperation(Summary = "Logout", Description = "Logs out the current user by revoking refresh tokens and clearing cookies.")]
+        [EndpointSummary("Logout")]
+        [EndpointDescription("Logs out the current user by revoking refresh tokens and clearing cookies.")]
         public async Task<IResult> Logout([FromServices] IUserSessionContext session, CancellationToken cancellationToken)
         {
             await _accountService.LogoutAccountAsync(session.UserId, cancellationToken);
@@ -81,7 +82,8 @@ namespace CareGuide.API.Controllers
         [HttpPost("refresh")]
         [AllowAnonymous]
         [IgnoreSessionMiddleware]
-        [SwaggerOperation(Summary = "Refresh Token", Description = "Refreshes JWT access token using a valid refresh token.")]
+        [EndpointSummary("Refresh Token")]
+        [EndpointDescription("Refreshes JWT access token using a valid refresh token.")]
         public async Task<IResult> Refresh([FromBody] RefreshTokenDto refreshRequest, CancellationToken cancellationToken)
         {
             var result = await _accountService.RefreshTokenAsync(refreshRequest, cancellationToken);
@@ -102,7 +104,8 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpPut("{id}/password")]
-        [SwaggerOperation(Summary = "Update Password", Description = "Updates the password for a specific user account.")]
+        [EndpointSummary("Update Password")]
+        [EndpointDescription("Updates the password for a specific user account.")]
         public async Task<IResult> UpdatePassword([FromRoute] Guid id, [FromBody] UpdatePasswordAccountDto user, CancellationToken cancellationToken)
         {
             await _accountService.UpdatePasswordAccountAsync(id, user, cancellationToken);
@@ -110,12 +113,12 @@ namespace CareGuide.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Delete Account", Description = "Deletes a user account by its ID.")]
+        [EndpointSummary("Delete Account")]
+        [EndpointDescription("Deletes a user account by its ID.")]
         public async Task<IResult> DeleteAccount([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             await _accountService.DeleteAccountAsync(id, cancellationToken);
             return Results.NoContent();
         }
-
     }
 }

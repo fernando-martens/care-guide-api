@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using CareGuide.Models.DTOs.User;
-using CareGuide.Models.Entities;
 
-namespace CareGuide.Models.Mappers
+namespace CareGuide.Models.Mappers.User
 {
     public class UserProfileMapper : Profile
     {
         public UserProfileMapper()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<CreateUserDto, User>();
+            CreateMap<Entities.User, UserDto>();
+            CreateMap<CreateUserDto, Entities.User>();
         }
     }
 }

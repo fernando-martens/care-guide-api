@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace CareGuide.Data
+namespace CareGuide.Data.Factories
 {
     public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContext>
     {

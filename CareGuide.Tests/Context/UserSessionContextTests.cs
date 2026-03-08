@@ -1,5 +1,5 @@
 ﻿using CareGuide.Core.Interfaces;
-using CareGuide.Models.DTOs.Auth;
+using CareGuide.Models.DTOs.Account;
 using CareGuide.Security.Interfaces;
 
 namespace CareGuide.Tests.Context
