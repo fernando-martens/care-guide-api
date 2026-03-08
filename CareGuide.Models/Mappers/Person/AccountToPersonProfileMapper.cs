@@ -1,8 +1,8 @@
 using AutoMapper;
-using CareGuide.Models.DTOs.Auth;
+using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Person;
 
-namespace CareGuide.Models.Mappers
+namespace CareGuide.Models.Mappers.Person
 {
     public class AccountToPersonProfileMapper : Profile
     {

@@ -1,5 +1,4 @@
-﻿using CareGuide.Models.Constants;
-using CareGuide.Models.DTOs.Person;
+﻿using CareGuide.Models.DTOs.Person;
 
 namespace CareGuide.Core.Interfaces
 {

@@ -1,5 +1,4 @@
 ﻿using CareGuide.Models.DTOs.Account;
-using CareGuide.Models.DTOs.Auth;
 
 namespace CareGuide.Core.Interfaces
 {

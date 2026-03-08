@@ -1,5 +1,4 @@
-﻿using CareGuide.API.Attributes;
-using CareGuide.Security.Interfaces;
+﻿using CareGuide.Security.Interfaces;
 using Microsoft.Extensions.Primitives;
 
 namespace CareGuide.API.Middlewares

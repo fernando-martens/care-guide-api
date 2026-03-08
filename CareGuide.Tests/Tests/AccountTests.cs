@@ -1,4 +1,4 @@
-﻿using CareGuide.Models.DTOs.Auth;
+﻿using CareGuide.Models.DTOs.Account;
 
 namespace CareGuide.Tests.Tests
 {

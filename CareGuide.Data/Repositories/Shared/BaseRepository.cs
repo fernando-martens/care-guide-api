@@ -2,7 +2,7 @@
 using CareGuide.Models.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace CareGuide.Data.Repositories
+namespace CareGuide.Data.Repositories.Shared
 {
     public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {

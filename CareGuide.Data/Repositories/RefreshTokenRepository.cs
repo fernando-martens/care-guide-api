@@ -1,4 +1,5 @@
 ﻿using CareGuide.Data.Interfaces;
+using CareGuide.Data.Repositories.Shared;
 using CareGuide.Models.Entities;
 using CareGuide.Security.Interfaces;
 using Microsoft.EntityFrameworkCore;

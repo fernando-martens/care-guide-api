@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CareGuide.Core.Interfaces;
 using CareGuide.Data;
+using CareGuide.Models.DTOs.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using CareGuide.Models.DTOs.Auth;
-using CareGuide.Core.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CareGuide.Tests
 {

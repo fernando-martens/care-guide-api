@@ -1,6 +1,6 @@
 ﻿using CareGuide.Models.Enums;
 
-namespace CareGuide.Models.DTOs.Auth
+namespace CareGuide.Models.DTOs.Account
 {
     public record AccountDto(
         Guid Id,

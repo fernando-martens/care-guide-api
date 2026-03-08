@@ -1,4 +1,4 @@
-﻿using CareGuide.Models.DTOs.Auth;
+﻿using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
 using CareGuide.Models.Entities;

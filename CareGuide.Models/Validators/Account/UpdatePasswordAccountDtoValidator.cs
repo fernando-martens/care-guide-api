@@ -1,5 +1,5 @@
 ﻿using CareGuide.Models.Constants;
-using CareGuide.Models.DTOs.Auth;
+using CareGuide.Models.DTOs.Account;
 using FluentValidation;
 
 namespace CareGuide.Models.Validators.Account
