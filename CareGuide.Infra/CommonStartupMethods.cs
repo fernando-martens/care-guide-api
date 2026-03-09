@@ -30,19 +30,25 @@ using System.Threading.RateLimiting;
 
 namespace CareGuide.Infra
 {
-    public static class CommomStartupMethods
+    public static class CommonStartupMethods
     {
         public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
+            ConfigureSecuritySettings(configuration, services);
             ConfigureAuthentication(configuration, services);
+            ConfigureAuthorization(services);
             ConfigureRateLimiting(services);
             ConfigureDatabase(configuration, services);
             ConfigureAutoMapper(services);
-            ConfigureSecuritySettings(configuration, services);
             ConfigureValidators(services);
             NativeInjector.Register(services);
 
             services.AddHttpContextAccessor();
+        }
+
+        private static void ConfigureAuthorization(IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder();
         }
 
         private static void ConfigureRateLimiting(IServiceCollection services)
@@ -59,6 +65,7 @@ namespace CareGuide.Infra
                             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                             QueueLimit = 0
                         }));
+
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             });
         }
@@ -70,7 +77,14 @@ namespace CareGuide.Infra
             services.AddDbContext<DatabaseContext>(opt =>
             {
                 var connectionString = configuration.GetConnectionString("DatabaseConnection");
-                opt.UseNpgsql(connectionString).EnableSensitiveDataLogging();
+                var environment = configuration["ASPNETCORE_ENVIRONMENT"];
+
+                opt.UseNpgsql(connectionString);
+
+                if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase))
+                {
+                    opt.EnableSensitiveDataLogging();
+                }
             });
         }
 
@@ -78,17 +92,25 @@ namespace CareGuide.Infra
         {
             services.AddScoped<IJwtService, JwtService>();
 
-            SecuritySettings securitySettings = new SecuritySettings();
-            configuration.Bind("SecuritySettings", securitySettings);
-
-            if (string.IsNullOrEmpty(securitySettings.SecretKey))
-                throw new InvalidOperationException("Security key is not configured properly in appsettings.json.");
-
-            services.AddSingleton(securitySettings);
+            services.AddOptions<SecuritySettings>()
+                .Bind(configuration.GetSection("SecuritySettings"))
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.SecretKey), "SecuritySettings:SecretKey is required.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.Issuer), "SecuritySettings:Issuer is required.")
+                .ValidateOnStart();
         }
 
         private static void ConfigureAuthentication(IConfiguration configuration, IServiceCollection services)
         {
+            var secretKey = configuration["SecuritySettings:SecretKey"];
+            var issuer = configuration["SecuritySettings:Issuer"];
+            var audience = configuration["SecuritySettings:Audience"];
+
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("SecuritySettings:SecretKey is not configured.");
+
+            if (string.IsNullOrWhiteSpace(issuer))
+                throw new InvalidOperationException("SecuritySettings:Issuer is not configured.");
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,10 +121,11 @@ namespace CareGuide.Infra
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecuritySettings:SecretKey"] ?? "")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                     ValidateIssuer = true,
-                    ValidIssuer = configuration["SecuritySettings:Issuer"] ?? "",
-                    ValidateAudience = false,
+                    ValidIssuer = issuer,
+                    ValidateAudience = !string.IsNullOrWhiteSpace(audience),
+                    ValidAudience = audience,
                     NameClaimType = "sub"
                 };
             });

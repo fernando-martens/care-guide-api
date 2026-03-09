@@ -9,18 +9,33 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-CommomStartupMethods.ConfigureServices(builder.Configuration, builder.Services);
+CommonStartupMethods.ConfigureServices(builder.Configuration, builder.Services);
 builder.Services.AddScoped<IUserSessionContext, UserSessionContext>();
 
-builder.Services.AddCors(options =>
+if (builder.Environment.IsProduction())
 {
-    options.AddPolicy("AllowAnyOrigin", policy =>
+    builder.Services.AddCors(options =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        options.AddPolicy("CorsPolicy", policy =>
+        {
+            policy.WithOrigins("https://careguide.dev")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
     });
-});
+}
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy", policy =>
+        {
+            policy.WithOrigins("http://localhost:8080")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+    });
+}
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -52,7 +67,7 @@ builder.Services.AddOpenApi("v1", options =>
                 }
             };
 
-            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
+            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations ?? Enumerable.Empty<KeyValuePair<HttpMethod, OpenApiOperation>>()))
             {
                 operation.Value.Security ??= [];
 
@@ -65,20 +80,11 @@ builder.Services.AddOpenApi("v1", options =>
     });
 });
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
-
+builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 builder.Services.AddTransient<ErrorHandlerMiddleware>();
 builder.Services.AddTransient<SessionMiddleware>();
 
 var app = builder.Build();
-
-app.UseRateLimiter();
-app.UseAuthentication();
-app.UseAuthorization();
 
 ConfigurePipeline(app);
 
@@ -97,23 +103,17 @@ static void ConfigurePipeline(WebApplication app)
     }
     else
     {
-        app.Use(async (context, next) =>
-        {
-            context.Response.Headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-            await next();
-        });
+        app.UseHsts();
     }
 
-    app.Use(async (context, next) =>
-    {
-        context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-        context.Response.Headers.Append("Referrer-Policy", "no-referrer");
-        context.Response.Headers.Append("X-Frame-Options", "DENY");
-        context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-        await next();
-    });
+    app.UseHttpsRedirection();
 
+    app.UseMiddleware<SecurityHeadersMiddleware>();
     app.UseMiddleware<ErrorHandlerMiddleware>();
     app.UseMiddleware<SessionMiddleware>();
-    app.UseCors("AllowAnyOrigin");
+
+    app.UseCors("CorsPolicy");
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseRateLimiter();
 }
