@@ -1,13 +1,5 @@
 ﻿{
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "launchUrl": "http://localhost:5000/scalar"
-    },
     "https": {
       "commandName": "Project",
       "launchBrowser": true,
@@ -26,6 +18,14 @@
       "applicationUrl": "http://localhost:5000",
       "launchUrl": "scalar"
     },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "launchUrl": "http://localhost:5000/scalar"
+    },
     "Container": {
       "commandName": "Docker",
       "launchBrowser": true,
@@ -35,7 +35,7 @@
       },
       "publishAllPorts": true,
       "useSSL": false
-    },
+    }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {

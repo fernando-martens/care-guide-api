@@ -1,4 +1,5 @@
 ﻿using CareGuide.Security.Interfaces;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,11 +14,13 @@ namespace CareGuide.Security
         private readonly string _issuer;
         private readonly string _audience;
 
-        public JwtService(SecuritySettings settings)
+        public JwtService(IOptions<SecuritySettings> settings)
         {
-            _secretKey = settings.SecretKey;
-            _issuer = settings.Issuer;
-            _audience = settings.Audience;
+            var securitySettings = settings.Value;
+
+            _secretKey = securitySettings.SecretKey;
+            _issuer = securitySettings.Issuer;
+            _audience = securitySettings.Audience;
         }
 
         public string GenerateToken(Guid userId, Guid? personId, string email)
@@ -27,6 +30,7 @@ namespace CareGuide.Security
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _issuer,
+                audience: string.IsNullOrWhiteSpace(_audience) ? null : _audience,
                 claims: new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
@@ -54,12 +58,12 @@ namespace CareGuide.Security
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidIssuer = _issuer,
-                    ValidateAudience = false,
+                    ValidateAudience = !string.IsNullOrWhiteSpace(_audience),
+                    ValidAudience = _audience,
                     ValidateLifetime = false,
                 }, out SecurityToken validatedToken);
 
                 return new JwtSecurityTokenHandler().ReadJwtToken(token);
-
             }
             catch
             {
