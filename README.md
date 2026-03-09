@@ -13,7 +13,7 @@ Esta solução tem como objetivo centralizar todas as informações relevantes a
 
 ## Tecnologias Utilizadas
 
-- .NET 9.0;
+- .NET 10;
 - Entity Framework;
 - PostgreSQL;
 - Docker;
