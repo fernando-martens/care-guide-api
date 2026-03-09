@@ -19,7 +19,7 @@ namespace CareGuide.Tests
                 .Build();
 
             IServiceCollection services = new ServiceCollection();
-            CareGuide.Infra.CommomStartupMethods.ConfigureServices(configuration, services);
+            CareGuide.Infra.CommonStartupMethods.ConfigureServices(configuration, services);
             services.AddScoped<CareGuide.Security.Interfaces.IUserSessionContext, CareGuide.Tests.Context.UserSessionContextTests>();
             serviceProvider = services.BuildServiceProvider();
 
