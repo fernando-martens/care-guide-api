@@ -95,18 +95,16 @@ app.Run();
 static void ConfigurePipeline(WebApplication app)
 {
     app.MapOpenApi("/openapi/{documentName}.json");
-    app.MapScalarApiReference();
 
     if (app.Environment.IsDevelopment())
     {
-        app.UseDeveloperExceptionPage();
+        app.MapScalarApiReference();
     }
     else
     {
         app.UseHsts();
+        app.UseHttpsRedirection();
     }
-
-    app.UseHttpsRedirection();
 
     app.UseMiddleware<SecurityHeadersMiddleware>();
     app.UseMiddleware<ErrorHandlerMiddleware>();

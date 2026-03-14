@@ -12,15 +12,15 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["CareGuide.API/CareGuide.API.csproj", "CareGuide.API/"]
-COPY ["CareGuide.Core/CareGuide.Core.csproj", "CareGuide.Core/"]
-COPY ["CareGuide.Data/CareGuide.Data.csproj", "CareGuide.Data/"]
-COPY ["CareGuide.Models/CareGuide.Models.csproj", "CareGuide.Models/"]
-COPY ["CareGuide.Security/CareGuide.Security.csproj", "CareGuide.Security/"]
-COPY ["CareGuide.Infra/CareGuide.Infra.csproj", "CareGuide.Infra/"]
-RUN dotnet restore "./CareGuide.API/CareGuide.API.csproj"
+COPY ["src/CareGuide.API/CareGuide.API.csproj", "src/CareGuide.API/"]
+COPY ["src/CareGuide.Core/CareGuide.Core.csproj", "src/CareGuide.Core/"]
+COPY ["src/CareGuide.Data/CareGuide.Data.csproj", "src/CareGuide.Data/"]
+COPY ["src/CareGuide.Models/CareGuide.Models.csproj", "src/CareGuide.Models/"]
+COPY ["src/CareGuide.Security/CareGuide.Security.csproj", "src/CareGuide.Security/"]
+COPY ["src/CareGuide.Infra/CareGuide.Infra.csproj", "src/CareGuide.Infra/"]
+RUN dotnet restore "./src/CareGuide.API/CareGuide.API.csproj"
 COPY . .
-WORKDIR "/src/CareGuide.API"
+WORKDIR "/src/src/CareGuide.API"
 RUN dotnet build "./CareGuide.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
