@@ -1,5 +1,4 @@
 ﻿using CareGuide.API.Endpoints.Shared;
-using CareGuide.API.Extensions;
 using CareGuide.API.Helpers;
 using CareGuide.API.Middlewares;
 using CareGuide.Core.Interfaces;
@@ -15,7 +14,8 @@ public class AccountEndpoints() : IEndpoint
         var group = endpoints
             .MapGroup("/accounts")
             .WithTags("Accounts")
-            .WithDefaultProblemResponses();
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status500InternalServerError);
 
         group.MapPost("/", Create)
              .AllowAnonymous()
@@ -39,7 +39,8 @@ public class AccountEndpoints() : IEndpoint
         group.MapPost("/logout", Logout)
              .WithSummary("Logout")
              .WithDescription("Logs out the current user by revoking refresh tokens and clearing cookies.")
-             .Produces(StatusCodes.Status204NoContent);
+             .Produces(StatusCodes.Status204NoContent)
+             .ProducesProblem(StatusCodes.Status401Unauthorized);
 
         group.MapPost("/refresh", Refresh)
              .AllowAnonymous()
@@ -56,13 +57,15 @@ public class AccountEndpoints() : IEndpoint
              .Accepts<UpdatePasswordAccountDto>("application/json")
              .Produces(StatusCodes.Status204NoContent)
              .ProducesProblem(StatusCodes.Status400BadRequest)
-             .ProducesProblem(StatusCodes.Status404NotFound);
+             .ProducesProblem(StatusCodes.Status404NotFound)
+             .ProducesProblem(StatusCodes.Status401Unauthorized);
 
         group.MapDelete("/{id:guid}", DeleteAccount)
             .WithSummary("Delete Account")
             .WithDescription("Deletes a user account by its ID.")
             .Produces(StatusCodes.Status204NoContent)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
     }
 
     private static async Task<IResult> Create(CreateAccountDto createAccount, IAccountService accountService, HttpContext httpContext, CancellationToken cancellationToken)
