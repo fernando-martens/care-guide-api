@@ -1,0 +1,46 @@
+﻿using CareGuide.Infra.Contexts;
+using CareGuide.Infra.Interfaces;
+using CareGuide.Infra.Repositories;
+using CareGuide.Infra.TransactionManagement;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CareGuide.Infra
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IEfTransactionUnitOfWork, EfTransactionUnitOfWork>();
+
+            services.AddDbContext<DatabaseContext>(opt =>
+            {
+                var connectionString = configuration.GetConnectionString("DatabaseConnection");
+                var environment = configuration["ASPNETCORE_ENVIRONMENT"];
+
+                opt.UseNpgsql(connectionString);
+
+                if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase))
+                {
+                    opt.EnableSensitiveDataLogging();
+                }
+            });
+
+            RegisterRepositories(services);
+
+            return services;
+        }
+
+        private static void RegisterRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IPersonAnnotationRepository, PersonAnnotationRepository>();
+            services.AddScoped<IPersonHealthRepository, PersonHealthRepository>();
+            services.AddScoped<IPhoneRepository, PhoneRepository>();
+            services.AddScoped<IPersonPhoneRepository, PersonPhoneRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        }
+    }
+}

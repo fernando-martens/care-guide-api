@@ -21,7 +21,7 @@ public class AccountEndpoints() : IEndpoint
              .AllowAnonymous()
              .WithMetadata(new IgnoreSessionMiddleware())
              .WithSummary("Create Account")
-             .WithDescription("Creates a new user account.")
+             .WithDescription("Creates a new account by creating a Person for personal information and a User for account credentials.")
              .Accepts<CreateAccountDto>("application/json")
              .Produces<AccountResponseDto>(StatusCodes.Status201Created)
              .ProducesProblem(StatusCodes.Status400BadRequest)

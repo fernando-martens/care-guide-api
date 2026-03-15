@@ -1,7 +1,6 @@
 <Solution>
   <Project Path="src/CareGuide.API/CareGuide.API.csproj" />
   <Project Path="src/CareGuide.Core/CareGuide.Core.csproj" />
-  <Project Path="src/CareGuide.Data/CareGuide.Data.csproj" />
   <Project Path="src/CareGuide.Infra/CareGuide.Infra.csproj" />
   <Project Path="src/CareGuide.Models/CareGuide.Models.csproj" />
   <Project Path="src/CareGuide.Security/CareGuide.Security.csproj" />

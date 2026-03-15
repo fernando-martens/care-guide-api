@@ -2,23 +2,27 @@
 
 Abaixo está a descrição dos principais projetos e pastas que compõem a solução do Care Guide.
 
-## Projetos
+```text
+src/
+    CareGuide.API/
+    CareGuide.Core/
+    CareGuide.Infra/
+    CareGuide.Models/
+    CareGuide.Security/
+    CareGuide.Tests/
+```
 
 ### CareGuide.API
 
-Responsável pelos controllers que recebem e respondem às requisições HTTP, além de gerenciar o fluxo da API.
+Responsável pelos endpoints (Minimal API) que recebem e respondem às requisições HTTP, além de gerenciar o fluxo da API.
 
 ### CareGuide.Core
 
 Contém a lógica de negócios da aplicação, incluindo regras, validações e serviços centrais.
 
-### CareGuide.Data
-
-Gerencia o acesso ao banco de dados, persistência dos dados e implementação dos repositórios.
-
 ### CareGuide.Infra
 
-Centraliza a configuração de infraestrutura, como injeção de dependências, middlewares e integrações externas.
+Gerencia o acesso ao banco de dados, persistência dos dados e implementação dos repositórios.
 
 ### CareGuide.Models
 

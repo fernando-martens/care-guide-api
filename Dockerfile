@@ -14,7 +14,6 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/CareGuide.API/CareGuide.API.csproj", "src/CareGuide.API/"]
 COPY ["src/CareGuide.Core/CareGuide.Core.csproj", "src/CareGuide.Core/"]
-COPY ["src/CareGuide.Data/CareGuide.Data.csproj", "src/CareGuide.Data/"]
 COPY ["src/CareGuide.Models/CareGuide.Models.csproj", "src/CareGuide.Models/"]
 COPY ["src/CareGuide.Security/CareGuide.Security.csproj", "src/CareGuide.Security/"]
 COPY ["src/CareGuide.Infra/CareGuide.Infra.csproj", "src/CareGuide.Infra/"]

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
-using CareGuide.Data.Interfaces;
+using CareGuide.Infra.Interfaces;
 using CareGuide.Models.Constants;
 using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
 using CareGuide.Models.Entities;
-using CareGuide.Security;
+using CareGuide.Security.Helpers;
 
 namespace CareGuide.Core.Services
 {
@@ -48,14 +48,14 @@ namespace CareGuide.Core.Services
             if (await _userRepository.GetByEmailAsync(createUser.Email, cancellationToken) != null)
                 throw new InvalidOperationException("Email already registered");
 
-            var (isSecure, feedback) = PasswordManager.CheckPassword(createUser.Password);
+            var (isSecure, feedback) = PasswordManagerHelper.CheckPassword(createUser.Password);
 
             if (!isSecure)
                 throw new InvalidOperationException(feedback);
 
             var user = _mapper.Map<User>(createUser);
 
-            user.Password = PasswordManager.HashPassword(user.Password);
+            user.Password = PasswordManagerHelper.HashPassword(user.Password);
 
             await _userRepository.AddAsync(user, cancellationToken);
 
@@ -69,17 +69,17 @@ namespace CareGuide.Core.Services
             if (existingUser == null)
                 throw new KeyNotFoundException();
 
-            var (isSecure, feedback) = PasswordManager.CheckPassword(user.Password);
+            var (isSecure, feedback) = PasswordManagerHelper.CheckPassword(user.Password);
 
             if (!isSecure)
                 throw new InvalidOperationException(feedback);
 
-            if (PasswordManager.ValidatePassword(user.Password, existingUser.Password))
+            if (PasswordManagerHelper.ValidatePassword(user.Password, existingUser.Password))
             {
                 throw new InvalidOperationException("The new password cannot be the same as the current password.");
             }
 
-            existingUser.Password = PasswordManager.HashPassword(user.Password);
+            existingUser.Password = PasswordManagerHelper.HashPassword(user.Password);
 
             await _userRepository.UpdateAsync(existingUser, cancellationToken);
         }

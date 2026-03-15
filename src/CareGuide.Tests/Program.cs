@@ -1,6 +1,10 @@
-﻿using CareGuide.Core.Interfaces;
-using CareGuide.Data;
+﻿using CareGuide.Core;
+using CareGuide.Core.Interfaces;
+using CareGuide.Infra;
+using CareGuide.Infra.Contexts;
+using CareGuide.Models;
 using CareGuide.Models.DTOs.Account;
+using CareGuide.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +23,16 @@ namespace CareGuide.Tests
                 .Build();
 
             IServiceCollection services = new ServiceCollection();
-            CareGuide.Infra.CommonStartupMethods.ConfigureServices(configuration, services);
-            services.AddScoped<CareGuide.Security.Interfaces.IUserSessionContext, CareGuide.Tests.Context.UserSessionContextTests>();
+
+            services
+                .AddInfrastructure(configuration)
+                .AddCoreServices()
+                .AddSecurity(configuration)
+                .AddModelMappings()
+                .AddModelValidation();
+
+            services.AddScoped<Security.Interfaces.IUserSessionContext, Context.UserSessionContextTests>();
+
             serviceProvider = services.BuildServiceProvider();
 
             using (var scope = serviceProvider.CreateScope())
@@ -55,7 +67,7 @@ namespace CareGuide.Tests
                         DateOnly.FromDateTime(DateTime.Now)
                     );
 
-                    var _ = accountService.CreateAccountAsync(createAccount, CancellationToken.None);
+                    accountService.CreateAccountAsync(createAccount, CancellationToken.None).GetAwaiter().GetResult();
                 }
                 catch (Exception ex)
                 {
@@ -84,18 +96,5 @@ namespace CareGuide.Tests
     [CollectionDefinition("Startup")]
     public class StartupCollection : ICollectionFixture<Program>
     {
-        private readonly Program Program;
-
-        public StartupCollection(Program program)
-        {
-            Program = program;
-        }
-
-        public Program GetProgramInstance()
-        {
-            return Program;
-        }
     }
-
-
 }
