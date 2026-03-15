@@ -1,3 +1,4 @@
+using CareGuide.API.Extensions;
 using CareGuide.API.Middlewares;
 using CareGuide.Infra;
 using CareGuide.Security;
@@ -5,7 +6,6 @@ using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +80,6 @@ builder.Services.AddOpenApi("v1", options =>
     });
 });
 
-builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 builder.Services.AddTransient<ErrorHandlerMiddleware>();
 builder.Services.AddTransient<SessionMiddleware>();
 
@@ -88,13 +87,16 @@ var app = builder.Build();
 
 ConfigurePipeline(app);
 
-app.MapControllers();
+app.MapGroup("/api")
+   .RequireAuthorization()
+   .MapGroup("/v1")
+   .MapAllEndpoints();
 
 app.Run();
 
 static void ConfigurePipeline(WebApplication app)
 {
-    app.MapOpenApi("/openapi/{documentName}.json");
+    app.MapOpenApi();
 
     if (app.Environment.IsDevelopment())
     {
@@ -111,6 +113,8 @@ static void ConfigurePipeline(WebApplication app)
     app.UseMiddleware<SessionMiddleware>();
 
     app.UseCors("CorsPolicy");
+
+    app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseRateLimiter();
