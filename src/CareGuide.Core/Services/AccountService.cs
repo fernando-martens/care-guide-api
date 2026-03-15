@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
-using CareGuide.Data.Interfaces;
-using CareGuide.Data.TransactionManagement;
+using CareGuide.Infra.Interfaces;
+using CareGuide.Infra.TransactionManagement;
 using CareGuide.Models.DTOs.Account;
 using CareGuide.Models.DTOs.Person;
 using CareGuide.Models.DTOs.User;
 using CareGuide.Models.Entities;
-using CareGuide.Security;
+using CareGuide.Security.Helpers;
 using CareGuide.Security.Interfaces;
 
 namespace CareGuide.Core.Services
@@ -72,7 +72,7 @@ namespace CareGuide.Core.Services
         {
             User? user = await _userRepository.GetByEmailAsync(loginAccount.Email, cancellationToken);
 
-            if (user == null || !PasswordManager.ValidatePassword(loginAccount.Password, user.Password))
+            if (user == null || !PasswordManagerHelper.ValidatePassword(loginAccount.Password, user.Password))
                 throw new InvalidOperationException("Wrong password or email");
 
             var accessToken = _jwtService.GenerateToken(user.Id, user.PersonId, loginAccount.Email);

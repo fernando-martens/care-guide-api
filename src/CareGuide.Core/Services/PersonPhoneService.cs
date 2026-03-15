@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
-using CareGuide.Data.Interfaces;
-using CareGuide.Data.TransactionManagement;
+using CareGuide.Infra.Interfaces;
+using CareGuide.Infra.TransactionManagement;
 using CareGuide.Models.DTOs.PersonPhone;
 using CareGuide.Models.DTOs.Phone;
 using CareGuide.Models.Entities;

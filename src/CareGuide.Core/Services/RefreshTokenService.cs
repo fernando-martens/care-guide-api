@@ -1,5 +1,5 @@
 ﻿using CareGuide.Core.Interfaces;
-using CareGuide.Data.Interfaces;
+using CareGuide.Infra.Interfaces;
 using CareGuide.Models.Entities;
 using CareGuide.Security.Interfaces;
 

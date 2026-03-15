@@ -15,7 +15,7 @@ Antes de executar os comandos de migrations, certifique-se de que a ferramenta `
 ### 1. Criar uma nova migration
 
 ```sh
- dotnet ef migrations add MigrationName --project CareGuide.Data --startup-project CareGuide.API
+ dotnet ef migrations add MigrationName --project CareGuide.Infra --startup-project CareGuide.API
 ```
 
 - `MigrationName`: Nome descritivo para a migration (ex: `AddPatientTable`).
@@ -25,7 +25,7 @@ Antes de executar os comandos de migrations, certifique-se de que a ferramenta `
 ### 2. Aplicar uma migration ao banco de dados
 
 ```sh
- dotnet ef database update --project CareGuide.Data --startup-project CareGuide.API
+ dotnet ef database update --project CareGuide.Infra --startup-project CareGuide.API
 ```
 
 - Aplica todas migrações as pendentes.

@@ -1,16 +1,15 @@
 using CareGuide.API.Extensions;
 using CareGuide.API.Middlewares;
+using CareGuide.Core;
 using CareGuide.Infra;
+using CareGuide.Models;
+using CareGuide.Models.Constants;
 using CareGuide.Security;
-using CareGuide.Security.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-CommonStartupMethods.ConfigureServices(builder.Configuration, builder.Services);
-builder.Services.AddScoped<IUserSessionContext, UserSessionContext>();
 
 if (builder.Environment.IsProduction())
 {
@@ -37,16 +36,24 @@ else
     });
 }
 
+builder.Services
+    .AddInfrastructure(builder.Configuration)
+    .AddCoreServices()
+    .AddSecurity(builder.Configuration)
+    .AddModelMappings()
+    .AddModelValidation()
+    .AddApiRateLimiting();
+
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddOpenApi("v1", options =>
+builder.Services.AddOpenApi(ApiConstants.API_VERSION, options =>
 {
     options.AddDocumentTransformer(async (document, context, cancellationToken) =>
     {
         document.Info = new OpenApiInfo
         {
-            Title = "CareGuideAPI",
-            Version = "v1"
+            Title = "CareGuide.API",
+            Version = ApiConstants.API_VERSION
         };
 
         var authenticationSchemeProvider = context.ApplicationServices.GetRequiredService<IAuthenticationSchemeProvider>();
@@ -87,9 +94,9 @@ var app = builder.Build();
 
 ConfigurePipeline(app);
 
-app.MapGroup("/api")
+app.MapGroup(ApiConstants.API_PREFIX)
    .RequireAuthorization()
-   .MapGroup("/v1")
+   .MapGroup(ApiConstants.API_VERSION)
    .MapAllEndpoints();
 
 app.Run();

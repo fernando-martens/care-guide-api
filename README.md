@@ -34,10 +34,15 @@ Para um passo a passo de como executar a aplicação, acesse a seguinte [documen
 
 Para saber como criar e executar migrations no projeto, consulte a seguinte [documentação](docs/MIGRATIONS.md).
 
-## Endpoints
+## Documentação da API (OpenAPI + Scalar)
 
-Esta API fornece documentação no padrão OpenAPI através do Scalar.
-Os endpoints disponíveis, suas descrições e dados necessários para requisição podem ser consultados e testados em `/scalar`.
+A API é documentada utilizando o padrão **OpenAPI** e a interface interativa do **Scalar**.
+
+Ao rodar a aplicação, a documentação estará disponível em:
+
+- `http://localhost:<porta>/scalar`
+
+Essa interface permite visualizar todos os endpoints, schemas de requisição/resposta, exemplos e realizar testes diretamente pelo navegador.
 
 ## Participantes do Projeto
 

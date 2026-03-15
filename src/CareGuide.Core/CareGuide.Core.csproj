@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CareGuide.Data\CareGuide.Data.csproj" />
+    <ProjectReference Include="..\CareGuide.Infra\CareGuide.Infra.csproj" />
     <ProjectReference Include="..\CareGuide.Models\CareGuide.Models.csproj" />
     <ProjectReference Include="..\CareGuide.Security\CareGuide.Security.csproj" />
   </ItemGroup>

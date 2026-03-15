@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CareGuide.Core.Interfaces;
-using CareGuide.Data.Interfaces;
+using CareGuide.Infra.Interfaces;
 using CareGuide.Models.DTOs.Phone;
 using CareGuide.Models.Entities;
 
