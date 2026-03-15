@@ -1,4 +1,5 @@
 using CareGuide.API.Extensions;
+using CareGuide.API.Filters;
 using CareGuide.API.Middlewares;
 using CareGuide.Core;
 using CareGuide.Infra;
@@ -97,6 +98,7 @@ ConfigurePipeline(app);
 app.MapGroup(ApiConstants.API_PREFIX)
    .RequireAuthorization()
    .MapGroup(ApiConstants.API_VERSION)
+   .AddEndpointFilterFactory(ValidationFilterFactory.Create)
    .MapAllEndpoints();
 
 app.Run();
@@ -117,12 +119,14 @@ static void ConfigurePipeline(WebApplication app)
 
     app.UseMiddleware<SecurityHeadersMiddleware>();
     app.UseMiddleware<ErrorHandlerMiddleware>();
-    app.UseMiddleware<SessionMiddleware>();
 
     app.UseCors("CorsPolicy");
 
     app.UseRouting();
     app.UseAuthentication();
+
+    app.UseMiddleware<SessionMiddleware>();
+
     app.UseAuthorization();
     app.UseRateLimiter();
 }
