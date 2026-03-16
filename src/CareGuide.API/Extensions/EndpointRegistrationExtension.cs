@@ -21,10 +21,8 @@ namespace CareGuide.API.Extensions
 
         public static RouteGroupBuilder WithDefaultProblemResponses(this RouteGroupBuilder group)
         {
-            group.ProducesProblem(StatusCodes.Status401Unauthorized);
-            group.ProducesProblem(StatusCodes.Status403Forbidden);
             group.ProducesProblem(StatusCodes.Status500InternalServerError);
-
+            group.ProducesProblem(StatusCodes.Status401Unauthorized);
             return group;
         }
     }

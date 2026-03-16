@@ -40,6 +40,7 @@ namespace CareGuide.Infra
             services.AddScoped<IPersonHealthRepository, PersonHealthRepository>();
             services.AddScoped<IPhoneRepository, PhoneRepository>();
             services.AddScoped<IPersonPhoneRepository, PersonPhoneRepository>();
+            services.AddScoped<IPersonDiseaseRepository, PersonDiseaseRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         }
     }
