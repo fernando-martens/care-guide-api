@@ -13,5 +13,6 @@ namespace CareGuide.Models.Entities
         public PersonHealth PersonHealth { get; set; } = null!;
         public ICollection<PersonAnnotation> PersonAnnotations { get; set; } = new List<PersonAnnotation>();
         public ICollection<PersonPhone> PersonPhones { get; set; } = new List<PersonPhone>();
+        public ICollection<PersonDisease> PersonDiseases { get; set; } = new List<PersonDisease>();
     }
 }

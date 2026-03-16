@@ -14,7 +14,6 @@ public class AccountEndpoints() : IEndpoint
         var group = endpoints
             .MapGroup("/accounts")
             .WithTags("Accounts")
-            .ProducesProblem(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
         group.MapPost("/", Create)
