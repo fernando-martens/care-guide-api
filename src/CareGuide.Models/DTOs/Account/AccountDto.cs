@@ -1,4 +1,5 @@
 ﻿using CareGuide.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace CareGuide.Models.DTOs.Account
 {
@@ -8,7 +9,7 @@ namespace CareGuide.Models.DTOs.Account
         string SessionToken,
         string RefreshToken,
         string Name,
-        Gender Gender,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
         DateOnly Birthday
     );
 }

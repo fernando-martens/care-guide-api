@@ -1,4 +1,5 @@
 ﻿using CareGuide.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace CareGuide.Models.DTOs.Person
 {
@@ -6,7 +7,7 @@ namespace CareGuide.Models.DTOs.Person
         Guid Id,
         string Name,
         string? Picture,
-        Gender Gender,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] Gender Gender,
         DateOnly Birthday,
         DateTime CreatedAt,
         DateTime UpdatedAt

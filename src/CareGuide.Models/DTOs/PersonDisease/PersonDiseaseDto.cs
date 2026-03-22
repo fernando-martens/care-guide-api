@@ -1,4 +1,5 @@
 ﻿using CareGuide.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace CareGuide.Models.DTOs.PersonDisease
 {
@@ -7,7 +8,7 @@ namespace CareGuide.Models.DTOs.PersonDisease
         Guid PersonId,
         string Name,
         DateOnly? DiagnosisDate,
-        DiseaseType DiseaseType,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] DiseaseType DiseaseType,
         DateTime CreatedAt,
         DateTime UpdatedAt
     );
