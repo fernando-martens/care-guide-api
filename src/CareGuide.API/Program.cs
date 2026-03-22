@@ -109,7 +109,10 @@ static void ConfigurePipeline(WebApplication app)
 
     if (app.Environment.IsDevelopment())
     {
-        app.MapScalarApiReference();
+        app.MapScalarApiReference(options =>
+    {
+        options.AddPreferredSecuritySchemes("Bearer");
+    });
     }
     else
     {
