@@ -1,10 +1,11 @@
 ﻿using CareGuide.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace CareGuide.Models.DTOs.PersonDisease
 {
     public record CreatePersonDiseaseDto(
         string Name,
         DateOnly? DiagnosisDate,
-        DiseaseType DiseaseType
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] DiseaseType DiseaseType
     );
 }

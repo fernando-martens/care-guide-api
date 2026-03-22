@@ -93,7 +93,33 @@ builder.Services.AddTransient<SessionMiddleware>();
 
 var app = builder.Build();
 
-ConfigurePipeline(app);
+app.MapOpenApi();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapScalarApiReference(options =>
+    {
+        options.AddPreferredSecuritySchemes("Bearer");
+    });
+}
+else
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
+
+app.UseMiddleware<SecurityHeadersMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseCors("CorsPolicy");
+
+app.UseRouting();
+app.UseAuthentication();
+
+app.UseMiddleware<SessionMiddleware>();
+
+app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapGroup(ApiConstants.API_PREFIX)
    .RequireAuthorization()
@@ -102,34 +128,3 @@ app.MapGroup(ApiConstants.API_PREFIX)
    .MapAllEndpoints();
 
 app.Run();
-
-static void ConfigurePipeline(WebApplication app)
-{
-    app.MapOpenApi();
-
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapScalarApiReference(options =>
-    {
-        options.AddPreferredSecuritySchemes("Bearer");
-    });
-    }
-    else
-    {
-        app.UseHsts();
-        app.UseHttpsRedirection();
-    }
-
-    app.UseMiddleware<SecurityHeadersMiddleware>();
-    app.UseMiddleware<ErrorHandlerMiddleware>();
-
-    app.UseCors("CorsPolicy");
-
-    app.UseRouting();
-    app.UseAuthentication();
-
-    app.UseMiddleware<SessionMiddleware>();
-
-    app.UseAuthorization();
-    app.UseRateLimiter();
-}
