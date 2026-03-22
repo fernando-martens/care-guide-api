@@ -9,6 +9,8 @@ namespace CareGuide.Models.Mappers.PersonDisease
         {
             CreateMap<Entities.PersonDisease, PersonDiseaseDto>();
             CreateMap<PersonDiseaseDto, Entities.PersonDisease>();
+            CreateMap<CreatePersonDiseaseDto, Entities.PersonDisease>();
+            CreateMap<UpdatePersonDiseaseDto, Entities.PersonDisease>();
         }
     }
 }
