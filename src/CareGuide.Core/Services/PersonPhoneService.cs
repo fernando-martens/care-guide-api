@@ -23,17 +23,14 @@ namespace CareGuide.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<PersonPhoneDto> GetAllByPersonAsync(int page, int pageSize, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<PersonPhoneDto>> GetAllByPersonAsync(int page, int pageSize, CancellationToken cancellationToken)
         {
             var personPhones = await _personPhoneRepository.GetAllByPersonWithPhonesAsync(page, pageSize, cancellationToken);
 
             if (personPhones.Count == 0)
                 throw new KeyNotFoundException("No phone records found for the logged-in person.");
 
-            var personId = personPhones.First().PersonId ?? throw new InvalidOperationException("PersonId not found.");
-            var phones = _mapper.Map<ICollection<PhoneDto>>(personPhones.Select(pp => pp.Phone));
-
-            return new PersonPhoneDto(personId, phones);
+            return _mapper.Map<List<PersonPhoneDto>>(personPhones);
         }
 
         public async Task<PersonPhoneDto> GetAsync(Guid phoneId, CancellationToken cancellationToken)
@@ -43,10 +40,7 @@ namespace CareGuide.Core.Services
             if (personPhone == null)
                 throw new UnauthorizedAccessException("You are not authorized to access this phone record or it does not exist.");
 
-            var personId = personPhone.PersonId ?? throw new InvalidOperationException("PersonId not found.");
-            var phoneDto = _mapper.Map<PhoneDto>(personPhone.Phone);
-
-            return new PersonPhoneDto(personId, new List<PhoneDto> { phoneDto });
+            return _mapper.Map<PersonPhoneDto>(personPhone);
         }
 
         public async Task<PersonPhoneDto> CreateAsync(CreatePhoneDto phoneDto, CancellationToken cancellationToken)
@@ -65,17 +59,18 @@ namespace CareGuide.Core.Services
                 await _personPhoneRepository.AddAsync(personPhone, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                var personId = personPhone.PersonId ?? throw new InvalidOperationException("PersonId not found.");
-                var phoneResult = _mapper.Map<PhoneDto>(createdPhone);
+                var createdPersonPhone = await _personPhoneRepository.GetByPersonWithPhoneAsync(createdPhone.Id, cancellationToken);
 
-                return new PersonPhoneDto(personId, new List<PhoneDto> { phoneResult });
+                if (createdPersonPhone == null)
+                    throw new InvalidOperationException("The created phone record could not be retrieved.");
+
+                return _mapper.Map<PersonPhoneDto>(createdPersonPhone);
             }
             catch
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
-
         }
 
         public async Task<PersonPhoneDto> UpdateAsync(Guid id, UpdatePhoneDto phoneDto, CancellationToken cancellationToken)
@@ -83,17 +78,19 @@ namespace CareGuide.Core.Services
             if (phoneDto == null)
                 throw new ArgumentNullException(nameof(phoneDto));
 
-            var personPhone = await _personPhoneRepository.GetByPersonWithPhoneAsync(phoneDto.Id, cancellationToken);
+            var personPhone = await _personPhoneRepository.GetByPersonWithPhoneAsync(id, cancellationToken);
 
             if (personPhone == null)
                 throw new UnauthorizedAccessException("You are not authorized to update this phone record or it does not exist.");
 
-            var updatedPhone = await _phoneService.UpdateAsync(phoneDto.Id, phoneDto, cancellationToken);
+            await _phoneService.UpdateAsync(id, phoneDto, cancellationToken);
 
-            var personId = personPhone.PersonId ?? throw new InvalidOperationException("PersonId not found.");
-            var phoneResult = _mapper.Map<PhoneDto>(updatedPhone);
+            var updatedPersonPhone = await _personPhoneRepository.GetByPersonWithPhoneAsync(id, cancellationToken);
 
-            return new PersonPhoneDto(personId, new List<PhoneDto> { phoneResult });
+            if (updatedPersonPhone == null)
+                throw new InvalidOperationException("The updated phone record could not be retrieved.");
+
+            return _mapper.Map<PersonPhoneDto>(updatedPersonPhone);
         }
 
         public async Task DeleteAllByPersonAsync(CancellationToken cancellationToken)

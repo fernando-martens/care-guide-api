@@ -21,7 +21,7 @@ public class PersonPhoneEndpoints() : IEndpoint
              .WithName("GetAllPersonPhones")
              .WithSummary("Get all person phones")
              .WithDescription("Retrieves all phone records associated with the authenticated person using pagination parameters.")
-             .Produces<PersonPhoneDto>(StatusCodes.Status200OK)
+             .Produces<IReadOnlyCollection<PersonPhoneDto>>(StatusCodes.Status200OK)
              .ProducesProblem(StatusCodes.Status400BadRequest);
 
         group.MapGet("/{id:guid}", GetById)
