@@ -5,7 +5,7 @@ namespace CareGuide.Core.Interfaces
 {
     public interface IPersonPhoneService
     {
-        Task<PersonPhoneDto> GetAllByPersonAsync(int page, int pageSize, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<PersonPhoneDto>> GetAllByPersonAsync(int page, int pageSize, CancellationToken cancellationToken);
         Task<PersonPhoneDto> GetAsync(Guid phoneId, CancellationToken cancellationToken);
         Task<PersonPhoneDto> CreateAsync(CreatePhoneDto personPhone, CancellationToken cancellationToken);
         Task<PersonPhoneDto> UpdateAsync(Guid id, UpdatePhoneDto personPhone, CancellationToken cancellationToken);
