@@ -1,12 +1,14 @@
-﻿using CareGuide.Infra.Interfaces.Shared;
-using CareGuide.Models.Entities;
+﻿using CareGuide.Models.Entities;
 
 namespace CareGuide.Infra.Interfaces
 {
-    public interface IPersonPhoneRepository : IBasePersonOwnedRepository<PersonPhone>
+    public interface IPersonPhoneRepository
     {
-        Task<List<PersonPhone>> GetAllByPersonWithPhonesAsync(int page, int pageSize, CancellationToken cancellationToken);
-        Task<PersonPhone?> GetByPersonWithPhoneAsync(Guid phoneId, CancellationToken cancellationToken);
-        Task<List<PersonPhone>> GetManyByPersonAndIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        Task AddAsync(PersonPhone entity, CancellationToken cancellationToken = default);
+        Task<List<PersonPhone>> GetAllByPersonWithPhonesAsync(int page, int pageSize, CancellationToken cancellationToken = default);
+        Task<PersonPhone?> GetByPersonWithPhoneAsync(Guid phoneId, CancellationToken cancellationToken = default);
+        Task<List<PersonPhone>> GetManyByPersonAndPhoneIdsAsync(IEnumerable<Guid> phoneIds, CancellationToken cancellationToken = default);
+        Task DeleteAllByPersonAsync(CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(IEnumerable<Guid> phoneIds, CancellationToken cancellationToken = default);
     }
 }

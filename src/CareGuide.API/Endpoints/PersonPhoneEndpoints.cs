@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Endpoints;
 
-public class PersonPhoneEndpoints() : IEndpoint
+public class PersonPhoneEndpoints : IEndpoint
 {
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
     {
@@ -24,10 +24,10 @@ public class PersonPhoneEndpoints() : IEndpoint
              .Produces<IReadOnlyCollection<PersonPhoneDto>>(StatusCodes.Status200OK)
              .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        group.MapGet("/{id:guid}", GetById)
+        group.MapGet("/{phoneId:guid}", GetById)
              .WithName("GetPersonPhoneById")
-             .WithSummary("Get person phone by id")
-             .WithDescription("Retrieves a specific phone record for the authenticated person by its identifier.")
+             .WithSummary("Get person phone by phone id")
+             .WithDescription("Retrieves a specific phone record for the authenticated person by phone identifier.")
              .Produces<PersonPhoneDto>(StatusCodes.Status200OK)
              .ProducesProblem(StatusCodes.Status404NotFound);
 
@@ -39,10 +39,10 @@ public class PersonPhoneEndpoints() : IEndpoint
              .Produces<PersonPhoneDto>(StatusCodes.Status201Created)
              .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        group.MapPut("/{id:guid}", Update)
+        group.MapPut("/{phoneId:guid}", Update)
              .WithName("UpdatePersonPhone")
              .WithSummary("Update person phone")
-             .WithDescription("Updates an existing phone record for the authenticated person by its identifier.")
+             .WithDescription("Updates an existing phone record for the authenticated person by phone identifier.")
              .Accepts<UpdatePhoneDto>("application/json")
              .Produces<PersonPhoneDto>(StatusCodes.Status200OK)
              .ProducesProblem(StatusCodes.Status400BadRequest)
@@ -72,21 +72,21 @@ public class PersonPhoneEndpoints() : IEndpoint
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetById(Guid id, IPersonPhoneService personPhoneService, CancellationToken cancellationToken)
+    private static async Task<IResult> GetById(Guid phoneId, IPersonPhoneService personPhoneService, CancellationToken cancellationToken)
     {
-        var result = await personPhoneService.GetAsync(id, cancellationToken);
+        var result = await personPhoneService.GetAsync(phoneId, cancellationToken);
         return Results.Ok(result);
     }
 
     private static async Task<IResult> Create(CreatePhoneDto createPhoneDto, IPersonPhoneService personPhoneService, CancellationToken cancellationToken)
     {
         var created = await personPhoneService.CreateAsync(createPhoneDto, cancellationToken);
-        return Results.Created($"/person-phones/{created.PersonId}", created);
+        return Results.Created($"/person-phones/{created.PhoneId}", created);
     }
 
-    private static async Task<IResult> Update(Guid id, UpdatePhoneDto updatePhoneDto, IPersonPhoneService personPhoneService, CancellationToken cancellationToken)
+    private static async Task<IResult> Update(Guid phoneId, UpdatePhoneDto updatePhoneDto, IPersonPhoneService personPhoneService, CancellationToken cancellationToken)
     {
-        var result = await personPhoneService.UpdateAsync(id, updatePhoneDto, cancellationToken);
+        var result = await personPhoneService.UpdateAsync(phoneId, updatePhoneDto, cancellationToken);
         return Results.Ok(result);
     }
 

@@ -12,15 +12,11 @@ namespace CareGuide.Infra.Mappings
 
             builder.HasKey(x => new { x.PersonId, x.PhoneId });
 
-            builder.Property(x => x.Id).IsRequired().HasColumnName("id");
-            builder.Property(x => x.PersonId).HasColumnName("person_id");
-            builder.Property(x => x.PhoneId).HasColumnName("phone_id");
-            builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("created_at");
-            builder.Property(x => x.UpdatedAt).IsRequired().HasColumnName("updated_at");
-            builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true).HasColumnName("is_active");
+            builder.Property(x => x.PersonId).IsRequired().HasColumnName("person_id");
+            builder.Property(x => x.PhoneId).IsRequired().HasColumnName("phone_id");
 
-            builder.HasOne(x => x.Person).WithMany(x => x.PersonPhones).HasForeignKey(x => x.PersonId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.Phone).WithMany(x => x.PersonPhones).HasForeignKey(x => x.PhoneId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Person).WithMany(x => x.PersonPhones).HasForeignKey(x => x.PersonId).HasConstraintName("fk_person_phone_person").OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Phone).WithMany(x => x.PersonPhones).HasForeignKey(x => x.PhoneId).HasConstraintName("fk_person_phone_phone").OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

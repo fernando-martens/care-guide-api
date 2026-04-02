@@ -2,7 +2,7 @@
 
 namespace CareGuide.Models.Entities
 {
-    public class PersonPhone : Entity, IPersonOwnedEntity
+    public class PersonPhone : IPersonOwnedEntity
     {
         public Guid? PersonId { get; set; }
         public Guid PhoneId { get; set; }
