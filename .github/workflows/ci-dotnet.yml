@@ -4,13 +4,24 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ vars.DB_HOST }}
+      DB_PORT: ${{ vars.DB_PORT }}
+      DB_EXTERNAL_PORT: ${{ vars.DB_EXTERNAL_PORT }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      DB_USER: ${{ vars.DB_USER }}
+      TEST_DB_HOST: ${{ vars.TEST_DB_HOST }}
+      TEST_DB_PORT: ${{ vars.TEST_DB_PORT }}
+      TEST_DB_EXTERNAL_PORT: ${{ vars.TEST_DB_EXTERNAL_PORT }}
+      TEST_DB_NAME: ${{ vars.TEST_DB_NAME }}
+      TEST_DB_USER: ${{ vars.TEST_DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +29,7 @@ jobs:
       - name: Setup .NET 10
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: "10.0.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -36,4 +47,4 @@ jobs:
         run: |
           docker compose -f docker-compose.yml up -d
           sleep 10
-          docker compose -f docker-compose.yml down
+          docker compose -f docker-compose.yml down -v
