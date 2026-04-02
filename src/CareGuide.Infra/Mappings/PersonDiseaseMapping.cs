@@ -21,7 +21,7 @@ namespace CareGuide.Infra.Mappings
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).IsRequired().HasColumnName("id");
-            builder.Property(x => x.PersonId).HasColumnName("person_id");
+            builder.Property(x => x.PersonId).IsRequired().HasColumnName("person_id");
             builder.Property(x => x.Name).IsRequired().HasMaxLength(DatabaseConstants.MaxLengthStandardText).HasColumnName("name");
             builder.Property(x => x.DiagnosisDate).HasColumnName("diagnosis_date");
             builder.Property(x => x.DiseaseType).IsRequired().HasMaxLength(3).HasColumnName("disease_type").HasConversion(bloodTypeConverter);

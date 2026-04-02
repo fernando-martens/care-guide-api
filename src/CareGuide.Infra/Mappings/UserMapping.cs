@@ -22,8 +22,9 @@ namespace CareGuide.Infra.Mappings
             builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true).HasColumnName("is_active");
 
             builder.HasIndex(x => x.Email).IsUnique();
+            builder.HasIndex(x => x.PersonId).IsUnique();
 
-            builder.HasOne(x => x.Person).WithMany().HasForeignKey(x => x.PersonId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Person).WithOne(x => x.User).HasForeignKey<User>(x => x.PersonId).HasConstraintName("fk_user_person").OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace CareGuide.Core.Services
         {
             var personPhones = await _personPhoneRepository.GetAllByPersonWithPhonesAsync(1, int.MaxValue, cancellationToken);
 
-            if (personPhones == null || personPhones.Count == 0)
+            if (personPhones.Count == 0)
                 return;
 
             var phoneIds = personPhones.Select(pp => pp.PhoneId).ToList();
@@ -122,9 +122,9 @@ namespace CareGuide.Core.Services
             if (ids == null || ids.Count == 0)
                 throw new ArgumentException("The list of IDs cannot be empty.", nameof(ids));
 
-            var personPhones = await _personPhoneRepository.GetManyByPersonAndIdsAsync(ids, cancellationToken);
+            var personPhones = await _personPhoneRepository.GetManyByPersonAndPhoneIdsAsync(ids, cancellationToken);
 
-            if (personPhones == null || personPhones.Count == 0)
+            if (personPhones.Count == 0)
                 throw new UnauthorizedAccessException("No valid phone records found for this person.");
 
             var phoneIds = personPhones.Select(pp => pp.PhoneId).ToList();
@@ -133,7 +133,7 @@ namespace CareGuide.Core.Services
 
             try
             {
-                await _personPhoneRepository.DeleteManyAsync(personPhones.Select(pp => pp.Id), cancellationToken);
+                await _personPhoneRepository.DeleteManyAsync(phoneIds, cancellationToken);
                 await _phoneService.DeleteByIdsAsync(phoneIds, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }

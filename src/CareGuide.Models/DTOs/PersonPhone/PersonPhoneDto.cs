@@ -5,11 +5,9 @@ namespace CareGuide.Models.DTOs.PersonPhone
 {
     public record PersonPhoneDto(
         Guid PersonId,
-        Guid Id,
+        Guid PhoneId,
         string Number,
         string AreaCode,
-        [property: JsonConverter(typeof(JsonStringEnumConverter))] PhoneType Type,
-        DateTime CreatedAt,
-        DateTime UpdatedAt
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] PhoneType Type
     );
 }

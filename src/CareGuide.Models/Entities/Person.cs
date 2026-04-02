@@ -10,6 +10,7 @@ namespace CareGuide.Models.Entities
         public required DateOnly Birthday { get; set; }
         public string? Picture { get; set; }
 
+        public User User { get; set; } = null!;
         public PersonHealth PersonHealth { get; set; } = null!;
         public ICollection<PersonAnnotation> PersonAnnotations { get; set; } = new List<PersonAnnotation>();
         public ICollection<PersonPhone> PersonPhones { get; set; } = new List<PersonPhone>();
