@@ -23,6 +23,7 @@ namespace CareGuide.Infra.Contexts
         public DbSet<Phone> Phones { get; set; } = null!;
         public DbSet<PersonPhone> PersonPhones { get; set; } = null!;
         public DbSet<PersonDisease> PersonDiseases { get; set; } = null!;
+        public DbSet<PersonFamilyHistory> PersonFamilyHistories { get; set; } = null!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,6 +35,7 @@ namespace CareGuide.Infra.Contexts
             modelBuilder.ApplyConfiguration(new PersonDiseaseMapping());
             modelBuilder.ApplyConfiguration(new PhoneMapping());
             modelBuilder.ApplyConfiguration(new PersonPhoneMapping());
+            modelBuilder.ApplyConfiguration(new PersonFamilyHistoryMapping());
             modelBuilder.ApplyConfiguration(new RefreshTokenMapping());
 
             if (_userSessionContext != null && _userSessionContext.PersonId != Guid.Empty)
@@ -46,13 +48,9 @@ namespace CareGuide.Infra.Contexts
                     {
                         var parameter = Expression.Parameter(entityType.ClrType, "e");
                         var property = Expression.Property(parameter, nameof(IPersonOwnedEntity.PersonId));
-
-                        var body = Expression.OrElse(
-                            Expression.Equal(property, Expression.Constant(null, typeof(Guid?))),
-                            Expression.Equal(property, Expression.Constant((Guid?)personId, typeof(Guid?)))
-                        );
-
+                        var body = Expression.OrElse(Expression.Equal(property, Expression.Constant(null, typeof(Guid?))), Expression.Equal(property, Expression.Constant((Guid?)personId, typeof(Guid?))));
                         var lambda = Expression.Lambda(body, parameter);
+
                         modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
                     }
                 }

@@ -16,6 +16,7 @@ namespace CareGuide.Core
             services.AddScoped<IPhoneService, PhoneService>();
             services.AddScoped<IPersonPhoneService, PersonPhoneService>();
             services.AddScoped<IPersonDiseaseService, PersonDiseaseService>();
+            services.AddScoped<IPersonFamilyHistoryService, PersonFamilyHistoryService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             return services;
