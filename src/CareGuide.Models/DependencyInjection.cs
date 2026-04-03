@@ -1,4 +1,5 @@
-﻿using CareGuide.Models.Mappers.Person;
+﻿using CareGuide.Models.Mappers.Doctor;
+using CareGuide.Models.Mappers.Person;
 using CareGuide.Models.Mappers.PersonAnnotation;
 using CareGuide.Models.Mappers.PersonDisease;
 using CareGuide.Models.Mappers.PersonFamilyHistory;
@@ -26,6 +27,7 @@ namespace CareGuide.Models
                 cfg.AddProfile<PhoneProfileMapper>();
                 cfg.AddProfile<PersonPhoneProfileMapper>();
                 cfg.AddProfile<PersonDiseaseProfileMapper>();
+                cfg.AddProfile<DoctorProfileMapper>();
                 cfg.AddProfile<PersonFamilyHistoryProfileMapper>();
             });
 

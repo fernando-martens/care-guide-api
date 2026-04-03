@@ -7,8 +7,9 @@ Esta solução tem como objetivo centralizar todas as informações relevantes a
 ## Principais Funcionalidades
 
 - **Gerenciar Usuários**: Cadastro de informações e login;
-- **Gerenciar Médicos**: Cadastro de médicos (TO DO);
-- **Gerenciar Anotações**: Cadastro de anotações importantes (TO DO);
+- **Gerenciar Pessoas**: Cadastro de todas as informações referentes a pessoa/usuário;
+- **Gerenciar Médicos**: Cadastro de médicos;
+- **Gerenciar Anotações**: Cadastro de anotações importantes;
 - **Agenda/Calendário**: Cadastro de eventos em uma agenda/calendário (TO DO);
 
 ## Tecnologias Utilizadas
