@@ -25,6 +25,7 @@ namespace CareGuide.Infra.Contexts
         public DbSet<PersonDisease> PersonDiseases { get; set; } = null!;
         public DbSet<PersonFamilyHistory> PersonFamilyHistories { get; set; } = null!;
         public DbSet<Doctor> Doctors { get; set; } = null!;
+        public DbSet<DoctorPhone> DoctorPhones { get; set; } = null!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +39,7 @@ namespace CareGuide.Infra.Contexts
             modelBuilder.ApplyConfiguration(new PersonPhoneMapping());
             modelBuilder.ApplyConfiguration(new PersonFamilyHistoryMapping());
             modelBuilder.ApplyConfiguration(new DoctorMapping());
+            modelBuilder.ApplyConfiguration(new DoctorPhoneMapping());
             modelBuilder.ApplyConfiguration(new RefreshTokenMapping());
 
             if (_userSessionContext != null && _userSessionContext.PersonId != Guid.Empty)

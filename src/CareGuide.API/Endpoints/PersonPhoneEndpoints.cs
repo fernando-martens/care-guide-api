@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareGuide.API.Endpoints;
 
-public class PersonPhoneEndpoints : IEndpoint
+public class PersonPhoneEndpoints() : IEndpoint
 {
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
     {
