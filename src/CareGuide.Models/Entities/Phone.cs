@@ -10,5 +10,6 @@ namespace CareGuide.Models.Entities
         public required PhoneType Type { get; set; } = PhoneType.O;
 
         public ICollection<PersonPhone> PersonPhones { get; set; } = new List<PersonPhone>();
+        public ICollection<DoctorPhone> DoctorPhones { get; set; } = new List<DoctorPhone>();
     }
 }

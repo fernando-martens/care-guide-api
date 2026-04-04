@@ -9,5 +9,6 @@ namespace CareGuide.Models.Entities
         public string? Details { get; set; }
 
         public Person Person { get; set; } = null!;
+        public ICollection<DoctorPhone> DoctorPhones { get; set; } = new List<DoctorPhone>();
     }
 }
